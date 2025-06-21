@@ -2,6 +2,7 @@
 import { computed, isProxy, provide, reactive, toRaw } from 'vue'
 import { RouterView, useRoute, useRouter } from 'vue-router'
 import api from '@/util/api'
+import TopHeader from './components/app/TopHeader.vue'
 
 const router = useRouter()
 const route = useRoute()
@@ -12,7 +13,7 @@ const alertModal = reactive({
 	err: '',
 	cf: '',
 	confirm: null,
-	then: null
+	then: null,
 })
 const devCommandCenter = {
 	R: () => router.replace(route.path + '_refresh'),
@@ -20,12 +21,12 @@ const devCommandCenter = {
 
 const openAlertModal = computed(() => alertModal.info || alertModal.err || alertModal.cf)
 
-function devCommand() {
-	if (d) {
-		const command = prompt() || ''
-		devCommandCenter[command.toUpperCase()]()
-	}
-}
+// function devCommand() {
+// 	if (d) {
+// 		const command = prompt() || ''
+// 		devCommandCenter[command.toUpperCase()]()
+// 	}
+// }
 function initAlert() {
 	alertModal.cf = ''
 	alertModal.err = ''
@@ -108,12 +109,11 @@ provide('dcc', devCommandCenter)
 </script>
 
 <template>
-	<template v-if="d">
-		<!-- @contextmenu.prevent="devCommand" -->
+	<!-- <template v-if="d">
 		<span id="represent-dev" @click.ctrl.exact="devCommand">Now Dev</span>
-	</template>
+	</template> -->
 
-	<!-- <TopHeader /> -->
+	<TopHeader />
 
 	<RouterView />
 
