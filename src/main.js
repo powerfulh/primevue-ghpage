@@ -8,9 +8,11 @@ import PrimeVue from 'primevue/config'
 import Aura from '@primeuix/themes/aura'
 
 import 'primeicons/primeicons.css' // custom
+import { createPinia } from 'pinia'
 
 const app = createApp(App)
 
+app.use(createPinia()) // custom
 app.use(router)
 app.use(PrimeVue, { // custom
 	theme: {

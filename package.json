@@ -13,6 +13,8 @@
   "dependencies": {
     "@primeuix/themes": "^1.1.2",
     "@vue/eslint-config-prettier": "^10.2.0",
+    "pinia": "^3.0.3",
+    "powerful-api-vue3": "^1.0.4",
     "primeicons": "^7.0.0",
     "primevue": "^4.3.5",
     "sass": "^1.89.2",
