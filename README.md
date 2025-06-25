@@ -20,3 +20,4 @@ https://powerfulh.github.io/primevue-ghpage
 ### 이건 낫다!
 - 광고가 없다!
 - 회사로 검색 가능
+- 통계도 있다

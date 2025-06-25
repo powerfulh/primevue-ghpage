@@ -11,11 +11,6 @@ const r: routeMenu = {
 			path: '/blindpcchart',
 			component: () => import('@/components/views/menu0/bpcchart/Index.vue'),
 		},
-		// {
-		// 	name: 'Blindmobile',
-		// 	path: '/blindmobile',
-		// 	component: () => import('@/components/views/menu0/alert-confirm/Index.vue'),
-		// },
 	],
 	name: 'Menu0',
 }

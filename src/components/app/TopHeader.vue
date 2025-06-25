@@ -1,22 +1,33 @@
 <script setup lang="ts">
 import { Menubar } from 'primevue'
-import { ref } from 'vue'
-import { useRouter } from 'vue-router'
+import { computed } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 
 const router = useRouter()
+const route = useRoute()
 
-const items = ref([
-	{
-		label: 'pc커텐',
-		icon: 'pi pi-list',
-		command: () => router.push({name: 'Blindpc'})
-	},
-	{
-		label: 'pc커텐 통계',
-		icon: 'pi pi-chart-bar',
-		command: () => router.push({name: 'BlindpcChart'})
-	},
-])
+const items = computed(() =>
+	route.fullPath.includes('/common-root/mobile')
+		? [
+				{
+					label: '모바일 커텐',
+					icon: 'pi pi-list',
+					command: () => router.push({ name: 'Blindmobile' }),
+				},
+			]
+		: [
+				{
+					label: 'pc커텐',
+					icon: 'pi pi-list',
+					command: () => router.push({ name: 'Blindpc' }),
+				},
+				{
+					label: 'pc커텐 통계',
+					icon: 'pi pi-chart-bar',
+					command: () => router.push({ name: 'BlindpcChart' }),
+				},
+			],
+)
 </script>
 
 <template>
