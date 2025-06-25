@@ -114,7 +114,7 @@ provide('dcc', devCommandCenter)
 		<span id="represent-dev" @click.ctrl.exact="devCommand">Now Dev</span>
 	</template> -->
 
-	<TopHeader />
+	<TopHeader style="margin-bottom: 4px;"/>
 
 	<ScrollPanel style="height: calc(100vh - 60px)">
 		<RouterView />
