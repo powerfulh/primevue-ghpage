@@ -4,7 +4,12 @@ const r: routeMenu = {
 		{
 			name: 'Blindmobile',
 			path: '/blind',
-			component: () => import('@/components/views/menu0/bmo/Index.vue'),
+			component: () => import('@/components/views/mobile/bmo/Index.vue'),
+		},
+    {
+			name: 'BlindChartmobile',
+			path: '/blindchart',
+			component: () => import('@/components/views/mobile/chart/Index.vue'),
 		},
 	],
 	name: 'Mobile',

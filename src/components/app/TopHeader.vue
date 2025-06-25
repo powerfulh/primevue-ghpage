@@ -14,6 +14,11 @@ const items = computed(() =>
 					icon: 'pi pi-list',
 					command: () => router.push({ name: 'Blindmobile' }),
 				},
+        {
+					label: '모바일 커텐 통계',
+					icon: 'pi pi-chart-bar',
+					command: () => router.push({ name: 'BlindChartmobile' }),
+				},
 			]
 		: [
 				{

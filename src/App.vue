@@ -3,6 +3,7 @@ import { computed, isProxy, provide, reactive, toRaw } from 'vue'
 import { RouterView, useRoute, useRouter } from 'vue-router'
 import TopHeader from './components/app/TopHeader.vue'
 import api from 'powerful-api-vue3'
+import { ScrollPanel } from 'primevue'
 
 const router = useRouter()
 const route = useRoute()
@@ -115,7 +116,9 @@ provide('dcc', devCommandCenter)
 
 	<TopHeader />
 
-	<RouterView />
+	<ScrollPanel style="height: calc(100vh - 60px)">
+		<RouterView />
+	</ScrollPanel>
 
 	<c-m v-if="openAlertModal" :alert="openAlertModal" :confirm="alertModal.confirm" @close="initAlert"></c-m>
 </template>
