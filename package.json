@@ -13,6 +13,7 @@
   "dependencies": {
     "@primeuix/themes": "^1.1.2",
     "@vue/eslint-config-prettier": "^10.2.0",
+    "chart.js": "^4.5.0",
     "numeral-es6": "^1.0.0",
     "pinia": "^3.0.3",
     "powerful-api-vue3": "^1.0.6",
