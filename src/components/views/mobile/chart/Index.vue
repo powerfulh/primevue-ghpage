@@ -1,6 +1,19 @@
 <script setup lang="ts">
 import { numberFormat } from '@/util'
-import { Tab, TabList, TabPanel, TabPanels, Tabs } from 'primevue'
+import { Column, DataTable, Tab, TabList, TabPanel, TabPanels, Tabs } from 'primevue'
+
+const text = {
+	count: '총계',
+	date: '최근 수집일',
+}
+
+const testData = [
+	{
+		cpn: '새회사',
+		cpc: 1234,
+		cpd: '2025-06-26',
+	},
+]
 </script>
 
 <template>
@@ -12,10 +25,18 @@ import { Tab, TabList, TabPanel, TabPanels, Tabs } from 'primevue'
 			</TabList>
 			<TabPanels>
 				<TabPanel value="0">
-					<p>총계: {{ numberFormat(1234) }}</p>
-					<p>최근 수집일: 2025-06-26</p>
+					<p>{{ text.count }}: {{ numberFormat(1234) }}</p>
+					<p>{{ text.date }}: 2025-06-26</p>
 				</TabPanel>
-				<TabPanel value="1"> t </TabPanel>
+				<TabPanel value="1">
+					<DataTable :value="testData">
+						<Column field="cpn" header="회사" />
+						<Column :header="text.count">
+							<template #body="{ data }">{{ numberFormat(data.cpc) }}</template>
+						</Column>
+						<Column field="cpd" :header="text.date" />
+					</DataTable>
+				</TabPanel>
 			</TabPanels>
 		</Tabs>
 	</main>
