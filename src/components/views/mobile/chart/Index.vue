@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { numberFormat } from '@/util';
+import { numberFormat } from '@/util'
 import { Tab, TabList, TabPanel, TabPanels, Tabs } from 'primevue'
 </script>
 
