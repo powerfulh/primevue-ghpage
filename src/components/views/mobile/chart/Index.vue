@@ -60,6 +60,38 @@ const testData = [
 		cpd: '2025-06-26',
 	},
 ]
+const testTopic = [
+	{
+		cnn: '블라블라',
+		cnc: 1234,
+		cnd: '2025-06-26',
+	},
+	{
+		cnn: '블라블라',
+		cnc: 1234,
+		cnd: '2025-06-26',
+	},
+	{
+		cnn: '블라블라',
+		cnc: 1234,
+		cnd: '2025-06-26',
+	},
+	{
+		cnn: '블라블라',
+		cnc: 1234,
+		cnd: '2025-06-26',
+	},
+	{
+		cnn: '블라블라',
+		cnc: 1234,
+		cnd: '2025-06-26',
+	},
+	{
+		cnn: '블라블라',
+		cnc: 1234,
+		cnd: '2025-06-26',
+	},
+]
 </script>
 
 <template>
@@ -68,6 +100,7 @@ const testData = [
 			<TabList>
 				<Tab value="0">전체 글</Tab>
 				<Tab value="1">회사별</Tab>
+				<Tab value="2">토픽별</Tab>
 			</TabList>
 			<TabPanels>
 				<TabPanel value="0">
@@ -85,6 +118,18 @@ const testData = [
 					<Divider />
 					Top 3
 					<Chart type="pie" :data="{ labels: ['A', 'B', 'C'], datasets: [{ data: [50, 30, 20] }] }" />
+				</TabPanel>
+				<TabPanel value="2">
+					<DataTable :value="testTopic" scrollable scroll-height="300px">
+						<Column field="cnn" header="토픽" />
+						<Column :header="text.count">
+							<template #body="{ data }">{{ numberFormat(data.cnc) }}</template>
+						</Column>
+						<Column field="cnd" :header="text.date" />
+					</DataTable>
+					<Divider />
+					Top 3
+					<Chart type="pie" :data="{ labels: ['A', 'B', 'C'], datasets: [{ data: [45, 35, 20] }] }" />
 				</TabPanel>
 			</TabPanels>
 		</Tabs>
