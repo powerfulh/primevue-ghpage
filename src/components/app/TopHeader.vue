@@ -1,12 +1,17 @@
 <script setup lang="ts">
-import { Button, Menubar } from 'primevue'
-import { computed } from 'vue'
+import { useHeaderStore } from '@/stores/header'
+import { AutoComplete, Button, Menubar } from 'primevue'
+import { computed, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
 const d = import.meta.env.DEV
 
 const router = useRouter()
 const route = useRoute()
+const headerStore = useHeaderStore()
+
+const headerText = ref('')
+const suggestions = ref([])
 
 const mobile = computed(() => route.fullPath.includes('/common-root/mobile'))
 const items = computed(() =>
@@ -36,12 +41,37 @@ const items = computed(() =>
 				},
 			],
 )
+
+function onClickRed() {
+	headerText.value = ''
+	suggestions.value = []
+}
 </script>
 
 <template>
 	<Menubar :model="items">
-		<template v-if="d && mobile == false" #end>
-			<Button icon="pi pi-mobile" severity="secondary" @click="router.push({ name: 'Blindmobile' })" />
+		<template #end>
+			<AutoComplete
+				v-if="route.meta.autoComplete"
+				v-model="headerText"
+				:placeholder="headerStore.placeholder"
+				:suggestions="suggestions"
+				:input-style="{ width: '100%' }"
+				style="width: 68%"
+				@complete="({ query }) => (suggestions = headerStore.textList.filter(item => item.includes(query)))"
+			/>
+			<Button icon="pi pi-check" />
+			<Button icon="pi pi-times" severity="danger" @click="onClickRed" />
+			<Button v-if="d && mobile == false" icon="pi pi-mobile" severity="secondary" @click="router.push({ name: 'Blindmobile' })" />
 		</template>
 	</Menubar>
 </template>
+
+<style lang="scss">
+.p-menubar-end {
+	text-align: right;
+	> * {
+		margin-left: 2px;
+	}
+}
+</style>

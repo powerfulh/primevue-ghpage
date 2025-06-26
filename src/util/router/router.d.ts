@@ -1,6 +1,5 @@
 declare interface routeMeta {
-	login?: Boolean
-	// popup?: Boolean
+	autoComplete?: boolean
 }
 declare interface routeItem {
 	path: string

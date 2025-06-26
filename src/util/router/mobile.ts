@@ -5,6 +5,9 @@ const r: routeMenu = {
 			name: 'Blindmobile',
 			path: '/blind',
 			component: () => import('@/components/views/mobile/bmo/Index.vue'),
+      meta: {
+        autoComplete: true
+      }
 		},
     {
 			name: 'BlindChartmobile',

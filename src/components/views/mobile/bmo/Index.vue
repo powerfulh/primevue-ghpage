@@ -1,5 +1,8 @@
 <script setup lang="ts">
+import { useHeaderStore } from '@/stores/header'
 import { Card, Message } from 'primevue'
+
+const headerStore = useHeaderStore()
 
 const testData = [
 	{
@@ -27,6 +30,9 @@ const testData = [
 		b: '한방에 훅갈 수 있는 거야?',
 	},
 ]
+
+headerStore.placeholder = '회사로 검색'
+headerStore.textList = ['새회사', '헌회사']
 </script>
 
 <template>
