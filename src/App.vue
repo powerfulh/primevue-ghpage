@@ -1,13 +1,12 @@
 <script setup lang="ts">
 import { computed, isProxy, provide, reactive, toRaw } from 'vue'
-import { RouterView, useRoute, useRouter } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import TopHeader from './components/app/TopHeader.vue'
-import api, { getApiStore } from 'powerful-api-vue3'
-import { ProgressSpinner, ScrollPanel } from 'primevue'
+import api from 'powerful-api-vue3'
+import AppBody from './components/app/AppBody.vue'
 
 const router = useRouter()
 const route = useRoute()
-const apiStore = getApiStore()
 
 const d = import.meta.env.MODE == 'development'
 const alertModal = reactive({
@@ -115,12 +114,10 @@ provide('dcc', devCommandCenter)
 		<span id="represent-dev" @click.ctrl.exact="devCommand">Now Dev</span>
 	</template> -->
 
-	<TopHeader style="margin-bottom: 4px" />
-
-	<ScrollPanel style="height: calc(100vh - 60px)">
-		<ProgressSpinner v-if="apiStore.loadingStack" style="width: 100%; position: absolute; z-index: 1" />
-		<RouterView />
-	</ScrollPanel>
+	<div style="max-width: 800px">
+		<TopHeader style="margin-bottom: 4px" />
+		<AppBody />
+	</div>
 
 	<c-m v-if="openAlertModal" :alert="openAlertModal" :confirm="alertModal.confirm" @close="initAlert"></c-m>
 </template>
