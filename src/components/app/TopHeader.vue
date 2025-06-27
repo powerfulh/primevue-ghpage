@@ -10,7 +10,6 @@ const router = useRouter()
 const route = useRoute()
 const headerStore = useHeaderStore()
 
-const headerText = ref('')
 const suggestions = ref([])
 
 const mobile = computed(() => route.fullPath.includes('/common-root/mobile'))
@@ -48,7 +47,7 @@ const items = computed(() =>
 )
 
 function onClickRed() {
-	headerText.value = ''
+	headerStore.text = ''
 	suggestions.value = []
 }
 </script>
@@ -58,14 +57,14 @@ function onClickRed() {
 		<template #end>
 			<AutoComplete
 				v-if="route.meta.autoComplete"
-				v-model="headerText"
+				v-model="headerStore.text"
 				:placeholder="headerStore.placeholder"
 				:suggestions="suggestions"
 				:input-style="{ width: '100%' }"
 				style="width: 68%"
 				@complete="({ query }) => (suggestions = headerStore.textList.filter(item => item.includes(query)))"
 			/>
-			<Button :icon="'pi ' + (route.meta.btnIcon || 'pi-check')" />
+			<Button :icon="'pi ' + (route.meta.btnIcon || 'pi-check')" @click="headerStore.onClickGreen && headerStore.onClickGreen()" />
 			<Button icon="pi pi-times" severity="danger" @click="onClickRed" />
 			<Button v-if="d && mobile == false" icon="pi pi-mobile" severity="secondary" @click="router.push({ name: 'Blindmobile' })" />
 		</template>

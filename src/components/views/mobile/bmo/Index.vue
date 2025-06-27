@@ -3,17 +3,37 @@ import { useHeaderStore } from '@/stores/header'
 import { Message } from 'primevue'
 import ListItem from '../ListItem.vue'
 import { injectApi } from 'powerful-api-vue3'
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 
 const headerStore = useHeaderStore()
 const api = injectApi()
 
 const list = ref([])
 
+const q = computed(() => ({ company: headerStore.text }))
+
+function get() {
+	api.load('getCurtain')
+		.setWhenSuccess(res => (list.value = res))
+		.fire()
+}
+
 headerStore.placeholder = '회사로 검색'
-headerStore.textList = ['새회사', '헌회사']
-api.load('getCurtain')
-	.setWhenSuccess(res => (list.value = res))
+get()
+api.load('getCurtainChart')
+	.setWhenSuccess(res => {
+		headerStore.textList = res.comp.map(item => item.cpn)
+		headerStore.onClickGreen = () => {
+			if (headerStore.text.trim()) {
+				api.load('getCurtainComp')
+					.setParameter(q)
+					.setWhenSuccess(res => (list.value = res))
+					.fire()
+				return
+			}
+			get()
+		}
+	})
 	.fire()
 </script>
 

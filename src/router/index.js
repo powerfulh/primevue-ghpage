@@ -1,5 +1,6 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
 import routerUtil from '@/util/router'
+import { useHeaderStore } from '@/stores/header'
 
 const router = createRouter({
 	// history: createWebHistory(import.meta.env.BASE_URL),
@@ -7,6 +8,10 @@ const router = createRouter({
 	routes: [...routerUtil.routes],
 })
 
+router.beforeEach(() => {
+	const headerStore = useHeaderStore()
+	headerStore.onClickGreen = null
+})
 router.afterEach((to, from) => {
 	// 유효하지 않은 라우트는 이전 라우트로 이동 => 동 라우트 새로 고침으로도 활용
 	if (to.name == undefined) router.replace(from.fullPath)
