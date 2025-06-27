@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { useHeaderStore } from '@/stores/header'
-import { Card, Message } from 'primevue'
+import { Message } from 'primevue'
+import ListItem from '../ListItem.vue'
 
 const headerStore = useHeaderStore()
 
@@ -37,11 +38,7 @@ headerStore.textList = ['새회사', '헌회사']
 
 <template>
 	<main>
-		<Card v-for="(item, i) in testData" :key="i" style="margin-top: 4px">
-			<template #subtitle>Company · Nick · Channel · Date</template>
-			<template #title>{{ item.t }}</template>
-			<template #content>{{ item.b }}</template>
-		</Card>
+		<ListItem v-for="(item, i) in testData" :key="i" :item="item" />
 		<Message severity="contrast" icon="pi pi-check" style="margin-top: 4px">게시물은 최대 100개까지 조회됩니다</Message>
 	</main>
 </template>
