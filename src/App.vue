@@ -118,7 +118,7 @@ provide('dcc', devCommandCenter)
 	<TopHeader style="margin-bottom: 4px" />
 
 	<ScrollPanel style="height: calc(100vh - 60px)">
-		<ProgressSpinner v-if="apiStore.loadingStack" style="width: 100%; position: absolute" />
+		<ProgressSpinner v-if="apiStore.loadingStack" style="width: 100%; position: absolute; z-index: 1" />
 		<RouterView />
 	</ScrollPanel>
 
