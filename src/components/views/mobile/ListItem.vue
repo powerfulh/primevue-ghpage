@@ -1,17 +1,15 @@
 <script setup lang="ts">
+import { Curtain } from '@/api/operation'
 import { Card } from 'primevue'
 
 defineProps<{
-	item: {
-		t: string
-		b: string
-	}
+	item: Curtain
 }>()
 </script>
 
 <template>
 	<Card style="margin-top: 4px">
-		<template #subtitle>Company · Nick · Channel · Date</template>
+		<template #subtitle>{{ item.cp }} · {{ item.nn }} · {{ item.cn }} · {{ item.d.substring(2) }}</template>
 		<template #title>{{ item.t }}</template>
 		<template #content>{{ item.b }}</template>
 	</Card>
