@@ -38,7 +38,7 @@ headerStore.textList = ['새회사', '헌회사']
 <template>
 	<main>
 		<Card v-for="(item, i) in testData" :key="i" style="margin-top: 4px">
-			<template #subtitle>Company · Nick · Date</template>
+			<template #subtitle>Company · Nick · Channel · Date</template>
 			<template #title>{{ item.t }}</template>
 			<template #content>{{ item.b }}</template>
 		</Card>
