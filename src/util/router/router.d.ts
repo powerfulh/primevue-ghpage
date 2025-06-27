@@ -1,5 +1,6 @@
 declare interface routeMeta {
 	autoComplete?: boolean
+  btnIcon?: string
 }
 declare interface routeItem {
 	path: string

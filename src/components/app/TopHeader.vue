@@ -27,6 +27,11 @@ const items = computed(() =>
 					icon: 'pi pi-chart-bar',
 					command: () => router.push({ name: 'BlindChartmobile' }),
 				},
+				{
+					label: '모바일 커텐 랜덤',
+					icon: 'pi pi-list',
+					command: () => router.push({ name: 'Blindmobilerand' }),
+				},
 			]
 		: [
 				{
@@ -60,7 +65,7 @@ function onClickRed() {
 				style="width: 68%"
 				@complete="({ query }) => (suggestions = headerStore.textList.filter(item => item.includes(query)))"
 			/>
-			<Button icon="pi pi-check" />
+			<Button :icon="'pi ' + (route.meta.btnIcon || 'pi-check')" />
 			<Button icon="pi pi-times" severity="danger" @click="onClickRed" />
 			<Button v-if="d && mobile == false" icon="pi pi-mobile" severity="secondary" @click="router.push({ name: 'Blindmobile' })" />
 		</template>
