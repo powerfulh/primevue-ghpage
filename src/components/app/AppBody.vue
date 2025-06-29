@@ -7,7 +7,8 @@ const apiStore = getApiStore()
 
 <template>
 	<ScrollPanel style="height: calc(100vh - 60px)">
-		<ProgressSpinner v-if="apiStore.loadingStack" style="width: 100%; position: absolute; z-index: 1" />
+		<!-- .p-datatable-scrollable-table > .p-datatable-thead {z-index: 1} -->
+		<ProgressSpinner v-if="apiStore.loadingStack" style="position: fixed; z-index: 2; top: 40%; left: calc(50% - 50px)" />
 		<RouterView />
 	</ScrollPanel>
 </template>
