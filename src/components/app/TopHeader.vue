@@ -50,6 +50,9 @@ function onClickRed() {
 	headerStore.text = ''
 	suggestions.value = []
 }
+function onGreen() {
+	headerStore.onClickGreen && headerStore.onClickGreen()
+}
 </script>
 
 <template>
@@ -63,8 +66,9 @@ function onClickRed() {
 				:input-style="{ width: '100%' }"
 				style="width: 64%"
 				@complete="({ query }) => (suggestions = headerStore.textList.filter(item => item.includes(query)))"
+				@option-select="onGreen"
 			/>
-			<Button :icon="'pi ' + (route.meta.btnIcon || 'pi-check')" @click="headerStore.onClickGreen && headerStore.onClickGreen()" />
+			<Button :icon="'pi ' + (route.meta.btnIcon || 'pi-check')" @click="onGreen" />
 			<Button icon="pi pi-times" severity="danger" @click="onClickRed" />
 			<Button v-if="d && mobile == false" icon="pi pi-mobile" severity="secondary" @click="router.push({ name: 'Blindmobile' })" />
 		</template>
