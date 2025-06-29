@@ -52,4 +52,11 @@ export default defineConfig([
 	js.configs.recommended,
 	...pluginVue.configs['flat/essential'],
 	vueConfigPrettier, // custom
+	{
+		// custom
+		files: ['**/*.ts'],
+		rules: {
+			'no-unused-vars': 'off', // 함수 타입 정의 할때 인자를 안쓴다고 안하기
+		},
+	},
 ])

@@ -1,4 +1,4 @@
-import numeral from "numeral-es6"
+import numeral from 'numeral-es6'
 
 export interface Initializable<T = any> extends Array<T> {
 	init: (...item: Array<T>) => void
