@@ -13,4 +13,7 @@ export default defineConfig({
 		},
 	},
 	base: '/primevue-ghpage',
+	server: {
+		host: true, // 폰으로도 테스트하게
+	},
 })

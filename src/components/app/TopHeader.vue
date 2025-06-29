@@ -61,7 +61,7 @@ function onClickRed() {
 				:placeholder="headerStore.placeholder"
 				:suggestions="suggestions"
 				:input-style="{ width: '100%' }"
-				style="width: 68%"
+				style="width: 64%"
 				@complete="({ query }) => (suggestions = headerStore.textList.filter(item => item.includes(query)))"
 			/>
 			<Button :icon="'pi ' + (route.meta.btnIcon || 'pi-check')" @click="headerStore.onClickGreen && headerStore.onClickGreen()" />
