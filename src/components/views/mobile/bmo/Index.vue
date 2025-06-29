@@ -13,6 +13,13 @@ const list = ref([])
 const q = computed(() => ({ company: headerStore.text }))
 
 function get() {
+	if (headerStore.text.trim()) {
+		api.load('getCurtainComp')
+			.setParameter(q)
+			.setWhenSuccess(res => (list.value = res))
+			.fire()
+		return
+	}
 	api.load('getCurtain')
 		.setWhenSuccess(res => (list.value = res))
 		.fire()
@@ -23,16 +30,7 @@ get()
 api.load('getCurtainChart')
 	.setWhenSuccess(res => {
 		headerStore.textList = res.comp.map(item => item.cpn)
-		headerStore.onClickGreen = () => {
-			if (headerStore.text.trim()) {
-				api.load('getCurtainComp')
-					.setParameter(q)
-					.setWhenSuccess(res => (list.value = res))
-					.fire()
-				return
-			}
-			get()
-		}
+		headerStore.onClickGreen = get
 	})
 	.fire()
 </script>

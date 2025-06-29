@@ -8,9 +8,9 @@ const router = createRouter({
 	routes: [...routerUtil.routes],
 })
 
-router.beforeEach(() => {
+router.beforeEach((to, from) => {
 	const headerStore = useHeaderStore()
-	headerStore.onClickGreen = null
+	if (to.name != from.name) headerStore.onClickGreen = null
 })
 router.afterEach((to, from) => {
 	// 유효하지 않은 라우트는 이전 라우트로 이동 => 동 라우트 새로 고침으로도 활용

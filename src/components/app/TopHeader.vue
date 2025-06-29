@@ -52,7 +52,14 @@ function onClickRed() {
 }
 function onGreen() {
 	headerStore.onClickGreen && headerStore.onClickGreen()
+	router.replace({
+		query: {
+			headerText: headerStore.text,
+		},
+	})
 }
+
+if (route.query.headerText) headerStore.text = route.query.headerText.toString()
 </script>
 
 <template>

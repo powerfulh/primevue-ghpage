@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, isProxy, provide, reactive, toRaw } from 'vue'
+import { computed, isProxy, provide, reactive, ref, toRaw } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import TopHeader from './components/app/TopHeader.vue'
 import api from 'powerful-api-vue3'
@@ -19,6 +19,7 @@ const alertModal = reactive({
 const devCommandCenter = {
 	R: () => router.replace(route.path + '_refresh'),
 }
+const routerReady = ref(false)
 
 const openAlertModal = computed(() => alertModal.info || alertModal.err || alertModal.cf)
 
@@ -107,6 +108,7 @@ globalMode = d
 		}
 provide('api', api.getLauncher())
 provide('dcc', devCommandCenter)
+router.isReady().then(() => (routerReady.value = true))
 </script>
 
 <template>
@@ -114,7 +116,7 @@ provide('dcc', devCommandCenter)
 		<span id="represent-dev" @click.ctrl.exact="devCommand">Now Dev</span>
 	</template> -->
 
-	<div style="max-width: 800px">
+	<div v-if="routerReady" style="max-width: 800px">
 		<TopHeader style="margin-bottom: 4px" />
 		<AppBody />
 	</div>
