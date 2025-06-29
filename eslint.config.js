@@ -9,7 +9,7 @@ import vueParser from 'vue-eslint-parser'
 export default defineConfig([
 	{
 		name: 'app/files-to-lint',
-		files: ['**/*.{js,mjs,jsx,vue}'],
+		files: ['**/*.{js,mjs,jsx,vue,ts}'], // custom (Add ts)
 	},
 
 	globalIgnores(['**/dist/**', '**/dist-ssr/**', '**/coverage/**']),
