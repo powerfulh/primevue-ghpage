@@ -2,8 +2,8 @@
 import { useHeaderStore } from '@/stores/header'
 import { newPoke, Poke } from '@/util/poke'
 import { injectApi } from 'powerful-api-vue3'
-import { Card } from 'primevue'
-import { ref } from 'vue'
+import { Badge, Card, ProgressBar } from 'primevue'
+import { computed, ref } from 'vue'
 
 const headerStore = useHeaderStore()
 const api = injectApi()
@@ -11,6 +11,10 @@ const api = injectApi()
 const d = ref([])
 const myPoke = ref({} as Poke)
 const level = ref(0)
+const exp = ref(0)
+
+const expGoal = computed(() => 100 * (1 + level.value))
+const expVal = computed(() => (exp.value / expGoal.value) * 100)
 
 function startGame() {
 	api.load('getPokelist')
@@ -35,7 +39,10 @@ headerStore.onClickGreen = () => {
 			</template>
 			<template #title>{{ myPoke.name || '상단 오른쪽의 ✔ 버튼을 눌러 내 포켓몬을 받고 게임 시작하기 🔼' }}</template>
 			<template v-if="myPoke.name" #content>
-				<p>Level: {{ level }}</p>
+				<p>Level: <Badge :value="level" /></p>
+				<p>
+					<ProgressBar :value="expVal">{{ expVal }} / 100%</ProgressBar>
+				</p>
 			</template>
 		</Card>
 		{{ d }}
