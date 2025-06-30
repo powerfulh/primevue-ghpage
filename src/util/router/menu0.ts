@@ -7,9 +7,9 @@ const r: routeMenu = {
 			component: () => import('@/components/views/menu0/bpc/Index.vue'),
 		},
 		{
-			name: 'BlindpcChart',
-			path: '/blindpcchart',
-			component: () => import('@/components/views/menu0/bpcchart/Index.vue'),
+			name: 'Pokegame',
+			path: '/pokegame',
+			component: () => import('@/components/views/menu0/game/Index.vue'),
 		},
 	],
 	name: 'Menu0',

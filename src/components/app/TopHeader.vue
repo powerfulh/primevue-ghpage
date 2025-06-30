@@ -39,9 +39,9 @@ const items = computed(() =>
 					command: () => router.push({ name: 'Blindpc' }),
 				},
 				{
-					label: 'pc커텐 통계',
-					icon: 'pi pi-chart-bar',
-					command: () => router.push({ name: 'BlindpcChart' }),
+					label: '가챠겜',
+					icon: 'pi pi-crown',
+					command: () => router.push({ name: 'Pokegame' }),
 				},
 			],
 )

@@ -4,7 +4,7 @@ import { useHeaderStore } from '@/stores/header'
 
 const router = createRouter({
 	// history: createWebHistory(import.meta.env.BASE_URL),
-	history: createWebHashHistory(import.meta.env.BASE_URL), // 이러면 주소에 샾이 붙는데 지피티가 이러면 새로고침에 대응할 수 있다고 한다
+	history: createWebHashHistory(import.meta.env.BASE_URL), // 주소에 샾이 붙는데 지피티가 이러면 새로고침에 대응할 수 있다고 한다
 	routes: [...routerUtil.routes],
 })
 

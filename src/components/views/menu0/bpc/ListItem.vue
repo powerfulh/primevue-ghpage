@@ -1,11 +1,9 @@
 <script setup lang="ts">
+import { Curtain } from '@/api/operation'
 import { Divider } from 'primevue'
 
 defineProps<{
-	item: {
-		t: string
-		b: string
-	}
+	item: Curtain
 }>()
 </script>
 
@@ -15,12 +13,12 @@ defineProps<{
 	<div style="margin-top: auto">
 		<Divider />
 		<footer style="display: flex">
-			<div style="margin-right: 4px">Company</div>
+			<div style="margin-right: 4px">{{ item.cp }}</div>
 			·
-			<div style="margin-right: 4px; margin-left: 4px">Nick</div>
+			<div style="margin-right: 4px; margin-left: 4px">{{ item.nn }}</div>
 			·
-			<div style="margin-left: 4px">Channel</div>
-			<div style="margin-left: auto">Date</div>
+			<div style="margin-left: 4px">{{ item.cn }}</div>
+			<div style="margin-left: auto">{{ item.d }}</div>
 		</footer>
 	</div>
 </template>
