@@ -1,1 +1,0 @@
-import{t as n,C as o,D as c,j as i,o as r,p,z as l,u}from"./index-CQ1tHsAX.js";const d=n({__name:"Index",setup(_){const a=o(),e=c();function s(){a.load("apitest").setWhenSuccess(t=>e.value=t).fire()}return(t,f)=>(r(),i("main",null,[p("button",{onClick:s},"test"),l(" "+u(e.value),1)]))}});export{d as default};
