@@ -19,7 +19,7 @@ const expVal = computed(() => (exp.value / expGoal.value) * 100)
 function startGame() {
 	api.load('getPokelist')
 		.setWhenSuccess(res => {
-			newPoke(res.results[Math.floor(Math.random() * res.results.length)].url, myPoke.value)
+			newPoke(res.results[Math.floor(Math.random() * res.results.length)].url, myPoke.value, level, exp)
 		})
 		.fire()
 }

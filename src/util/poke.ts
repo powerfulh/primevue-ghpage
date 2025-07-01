@@ -1,5 +1,6 @@
 import axios from 'axios'
 import { getApiStore } from 'powerful-api-vue3'
+import { Ref } from 'vue'
 
 interface PokeType {
 	name: string
@@ -26,6 +27,8 @@ export interface Poke {
 	}
 }
 
+export let myPoke: MyPoke
+
 function startAxios(r) {
 	const apiStore = getApiStore()
 	apiStore.loadingStack++
@@ -44,7 +47,7 @@ function getRandomItem(target: Array<any>, count: number) {
 function koFinder(item: { language: { name: string } }) {
 	return item.language.name == 'ko'
 }
-export function newPoke(url: string, target: Poke) {
+export function newPoke(url: string, target: Poke, level: Ref<number>, exp: Ref<number>) {
 	axios.get(url).then(({ data }) => {
 		axios.get(data.species.url).then(({ data: spec }) => {
 			target.name = spec.names.find(koFinder).name
@@ -85,6 +88,30 @@ export function newPoke(url: string, target: Poke) {
 			5,
 		)
 	})
+	myPoke = new MyPoke(
+		target,
+		() => level.value,
+		() => exp.value,
+	)
+}
+
+export class MyPoke {
+	p: Poke
+	l: () => number
+	e: () => number
+
+	constructor(p, l, e) {
+		this.p = p
+		this.l = l
+		this.e = e
+	}
+
+	getAttack() {
+		return this.p.stats.attack * (1 + this.l() / 10)
+	}
+	getDefense() {
+		return this.p.stats.defense * (1 + this.l() / 10)
+	}
 }
 
 axios.interceptors.request.use(startAxios)

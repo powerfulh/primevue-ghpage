@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { Poke } from '@/util/poke'
-import { Card, Chip, Tag } from 'primevue'
+import { myPoke, Poke } from '@/util/poke'
+import { Card, Splitter, SplitterPanel, Tag } from 'primevue'
 import { computed } from 'vue'
 
 const props = defineProps<{
@@ -19,8 +19,25 @@ function getTypeTooltip(k: string) {
 		<template #title>Spec</template>
 		<template #subtitle>{{ item.species.flavor_text }}</template>
 		<template #content>
-			<Tag value="Type" icon="pi pi-box" />
-			<Chip :label="item.types.ko" v-tooltip="typeTooltip" />
+			<Splitter>
+				<SplitterPanel>
+					<Tag value="Type" icon="pi pi-box" />
+					<!-- <Chip :label="item.types.ko" v-tooltip="typeTooltip" /> -->
+					<span v-tooltip="typeTooltip">{{ item.types.ko }}</span>
+				</SplitterPanel>
+				<SplitterPanel>
+					<Tag value="HP" icon="pi pi-heart" />
+					<span>{{ item.stats.hp }}</span>
+				</SplitterPanel>
+				<SplitterPanel>
+					<Tag value="Attack" icon="pi pi-circle" />
+					<span v-tooltip="myPoke.getAttack().toString()">{{ item.stats.attack }}</span>
+				</SplitterPanel>
+				<SplitterPanel>
+					<Tag value="Defense" icon="pi pi-shield" />
+					<span v-tooltip="myPoke.getDefense().toString()">{{ item.stats.defense }}</span>
+				</SplitterPanel>
+			</Splitter>
 		</template>
 	</Card>
 </template>

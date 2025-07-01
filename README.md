@@ -5,7 +5,6 @@ https://powerfulh.github.io/primevue-ghpage
 ## 모바일
 ### Curtain
 - 직장인 익명 커뮤니티 블라인드를 모방하여 만든 프론트 토이 프로젝트
-- PC / 모바일 독립 제공
 - 통계 화면도 만들어 봄
 
 ## PC
