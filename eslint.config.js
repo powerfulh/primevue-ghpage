@@ -57,6 +57,7 @@ export default defineConfig([
 		files: ['**/*.ts'],
 		rules: {
 			'no-unused-vars': 'off', // 함수 타입 정의 할때 인자를 안쓴다고 안하기
+			'no-undef': 'off', // d.ts 에서 정의 했는데 못찾겠다고 안하기
 		},
 	},
 ])
