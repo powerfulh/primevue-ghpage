@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { myPoke, Poke } from '@/util/poke'
-import { Card, Splitter, SplitterPanel, Tag } from 'primevue'
+import { Card, Chip, Splitter, SplitterPanel, Tag } from 'primevue'
 import { computed } from 'vue'
 
 const props = defineProps<{
@@ -37,6 +37,7 @@ function getTypeTooltip(k: string) {
 					<span v-tooltip="myPoke.getDefense().toString()">{{ item.stats.defense }}</span>
 				</SplitterPanel>
 			</Splitter>
+			<Chip v-for="(mi, i) in item.move" :key="i" :label="mi.ko" v-tooltip="mi.category" style="margin: 2px" />
 		</template>
 	</Card>
 </template>

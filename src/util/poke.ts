@@ -22,7 +22,12 @@ export interface Poke {
 	}
 	move: Array<{
 		name: string
-		url: string
+		ko: string
+		ailment: {
+			name: string
+			ailment_chance: number
+		}
+		category: string
 	}>
 }
 
@@ -68,12 +73,21 @@ export async function newPoke(url: string, target: Poke, level: Ref<number>, exp
 		attack: p.stats.find(({ stat }) => stat.name == 'attack').base_stat,
 		defense: p.stats.find(({ stat }) => stat.name == 'defense').base_stat,
 	}
-	target.move = await replaceChain(
-		getRandomItem(
-			p.moves.map(item => item.move),
-			5,
-		),
-	)
+	target.move = (
+		await replaceChain(
+			getRandomItem(
+				p.moves.map(item => item.move),
+				5,
+			),
+		)
+	).map(item => ({
+		...item,
+		ailment: {
+			name: item.meta.ailment.name,
+			ailment_chance: item.meta.ailment_chance,
+		},
+		category: item.meta.category.name,
+	}))
 	myPoke = new MyPoke(
 		target,
 		() => level.value,
