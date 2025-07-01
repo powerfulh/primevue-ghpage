@@ -46,7 +46,7 @@ headerStore.onClickGreen = () => {
 		</Card>
 		<template v-if="myPoke.name">
 			<Divider />
-			<PokeSpec :item="myPoke" />
+			<PokeSpec v-if="myPoke.types" :item="myPoke" />
 		</template>
 	</main>
 </template>

@@ -6,22 +6,25 @@ import router from './router'
 import CommonModal from './components/CommonModal.vue'
 import PrimeVue from 'primevue/config'
 import Aura from '@primeuix/themes/aura'
+import { createPinia } from 'pinia'
+import Tooltip from 'primevue/tooltip'
 
 import 'primeicons/primeicons.css' // custom
-import { createPinia } from 'pinia'
 
 const app = createApp(App)
 
 app.use(createPinia()) // custom
 app.use(router)
-app.use(PrimeVue, { // custom
+// custom
+app.use(PrimeVue, {
 	theme: {
 		preset: Aura,
 		options: {
-			darkModeSelector: 'system'
-		}
-	}
+			darkModeSelector: 'system',
+		},
+	},
 })
 app.component('CM', CommonModal) // custom
+app.directive('tooltip', Tooltip) // custom
 
 app.mount('#app')
