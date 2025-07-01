@@ -18,6 +18,9 @@ export interface Poke {
 		name: string
 		url: string
 	}>
+	species: {
+		flavor_text: string
+	}
 }
 
 function startAxios(r) {
@@ -39,6 +42,9 @@ export function newPoke(url: string, target: Poke) {
 	axios.get(url).then(({ data }) => {
 		axios.get(data.species.url).then(({ data: spec }) => {
 			target.name = spec.names.find(item => item.language.name == 'ko').name
+			target.species = {
+				flavor_text: spec.flavor_text_entries.find(({ language }) => language.name == 'ko')?.flavor_text,
+			}
 		})
 		target.sprites = data.sprites.front_default
 		target.types = data.types[0].type

@@ -2,13 +2,13 @@
 import { useHeaderStore } from '@/stores/header'
 import { newPoke, Poke } from '@/util/poke'
 import { injectApi } from 'powerful-api-vue3'
-import { Badge, Card, ProgressBar } from 'primevue'
+import { Badge, Card, Divider, ProgressBar } from 'primevue'
 import { computed, ref } from 'vue'
+import PokeSpec from './PokeSpec.vue'
 
 const headerStore = useHeaderStore()
 const api = injectApi()
 
-const d = ref([])
 const myPoke = ref({} as Poke)
 const level = ref(0)
 const exp = ref(0)
@@ -19,7 +19,6 @@ const expVal = computed(() => (exp.value / expGoal.value) * 100)
 function startGame() {
 	api.load('getPokelist')
 		.setWhenSuccess(res => {
-			d.value = res.results
 			newPoke(res.results[Math.floor(Math.random() * res.results.length)].url, myPoke.value)
 		})
 		.fire()
@@ -45,6 +44,9 @@ headerStore.onClickGreen = () => {
 				</p>
 			</template>
 		</Card>
-		{{ d }}
+		<template v-if="myPoke.name">
+			<Divider />
+			<PokeSpec :item="myPoke" />
+		</template>
 	</main>
 </template>
