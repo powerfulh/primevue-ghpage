@@ -11,6 +11,11 @@ const r: routeMenu = {
 			path: '/pokegame',
 			component: () => import('@/components/views/menu0/game/Index.vue'),
 		},
+		{
+			name: 'Pokebattle',
+			path: '/pokebattle',
+			component: () => import('@/components/views/menu0/game/PokeBattle.vue'),
+		},
 	],
 	name: 'Menu0',
 }

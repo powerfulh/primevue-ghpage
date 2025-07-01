@@ -5,6 +5,7 @@ import { injectApi } from 'powerful-api-vue3'
 import { Badge, Card, Divider, ProgressBar } from 'primevue'
 import { computed, ref } from 'vue'
 import PokeSpec from './PokeSpec.vue'
+import PokeAction from './PokeAction.vue'
 
 const headerStore = useHeaderStore()
 const api = injectApi()
@@ -51,6 +52,8 @@ headerStore.onClickGreen = async () => {
 		<template v-if="myPoke.name">
 			<Divider />
 			<PokeSpec v-if="myPoke.move" :item="myPoke" />
+			<Divider />
+			<PokeAction />
 		</template>
 	</main>
 </template>
