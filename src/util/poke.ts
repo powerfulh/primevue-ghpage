@@ -10,7 +10,9 @@ interface PokeType {
 }
 export interface Poke {
 	name: string
+	ko: string
 	sprites: string
+	flavor_text: string
 	// 원래 배열인데 일단 첫번째만 취급해봄
 	types: PokeType
 	stats: {
@@ -22,19 +24,16 @@ export interface Poke {
 		name: string
 		url: string
 	}>
-	species: {
-		flavor_text: string
-	}
 }
 
 export let myPoke: MyPoke
 
-function startAxios(r) {
+function startAxios(r: any) {
 	const apiStore = getApiStore()
 	apiStore.loadingStack++
 	return r
 }
-function endAxios(r) {
+function endAxios(r: any) {
 	const apiStore = getApiStore()
 	if (apiStore.loadingStack > 0) apiStore.loadingStack--
 	return r
@@ -47,47 +46,34 @@ function getRandomItem(target: Array<any>, count: number) {
 function koFinder(item: { language: { name: string } }) {
 	return item.language.name == 'ko'
 }
-export function newPoke(url: string, target: Poke, level: Ref<number>, exp: Ref<number>) {
-	axios.get(url).then(({ data }) => {
-		axios.get(data.species.url).then(({ data: spec }) => {
-			target.name = spec.names.find(koFinder).name
-			target.species = {
-				flavor_text: spec.flavor_text_entries.find(koFinder)?.flavor_text,
-			}
-		})
-		target.sprites = data.sprites.front_default
-		axios.get(data.types[0].type.url).then(({ data: ty }) => {
-			target.types = {
-				name: ty.name,
-				ko: ty.names.find(koFinder).name,
-				double_damage_from: ty.damage_relations.double_damage_from.map(({ url }, i) =>
-					axios.get(url).then(({ data: df }) => {
-						target.types.double_damage_from[i] = {
-							name: df.name,
-							ko: df.names.find(koFinder).name,
-						}
-					}),
-				),
-				double_damage_to: ty.damage_relations.double_damage_to.map(({ url }, i) =>
-					axios.get(url).then(({ data: df }) => {
-						target.types.double_damage_to[i] = {
-							name: df.name,
-							ko: df.names.find(koFinder).name,
-						}
-					}),
-				),
-			}
-		})
-		target.stats = {
-			hp: data.stats.find(({ stat }) => stat.name == 'hp').base_stat,
-			attack: data.stats.find(({ stat }) => stat.name == 'attack').base_stat,
-			defense: data.stats.find(({ stat }) => stat.name == 'defense').base_stat,
-		}
-		target.move = getRandomItem(
-			data.moves.map(item => item.move),
+async function replaceChain(target: Array<{ url: string }>) {
+	return Promise.all(target.map(({ url }) => axios.get(url))).then(l => l.map(({ data }) => ({ ...data, ko: data.names.find(koFinder)?.name })))
+}
+export async function newPoke(url: string, target: Poke, level: Ref<number>, exp: Ref<number>) {
+	const p = (await axios.get(url)).data
+	const spec = (await axios.get(p.species.url)).data
+	target.name = spec.name
+	target.ko = spec.names.find(koFinder)?.name
+	target.flavor_text = spec.flavor_text_entries.find(koFinder)?.flavor_text
+	target.sprites = p.sprites.front_default
+	const t = (await axios.get(p.types[0].type.url)).data
+	target.types = {
+		name: t.name,
+		ko: t.names.find(koFinder).name,
+		double_damage_from: await replaceChain(t.damage_relations.double_damage_from),
+		double_damage_to: await replaceChain(t.damage_relations.double_damage_to),
+	}
+	target.stats = {
+		hp: p.stats.find(({ stat }) => stat.name == 'hp').base_stat,
+		attack: p.stats.find(({ stat }) => stat.name == 'attack').base_stat,
+		defense: p.stats.find(({ stat }) => stat.name == 'defense').base_stat,
+	}
+	target.move = await replaceChain(
+		getRandomItem(
+			p.moves.map(item => item.move),
 			5,
-		)
-	})
+		),
+	)
 	myPoke = new MyPoke(
 		target,
 		() => level.value,
@@ -100,7 +86,7 @@ export class MyPoke {
 	l: () => number
 	e: () => number
 
-	constructor(p, l, e) {
+	constructor(p: Poke, l: { (): number; (): number }, e: { (): number; (): number }) {
 		this.p = p
 		this.l = l
 		this.e = e

@@ -17,12 +17,11 @@ function getTypeTooltip(k: string) {
 <template>
 	<Card>
 		<template #title>Spec</template>
-		<template #subtitle>{{ item.species.flavor_text }}</template>
+		<template #subtitle>{{ item.flavor_text }}</template>
 		<template #content>
 			<Splitter>
 				<SplitterPanel>
 					<Tag value="Type" icon="pi pi-box" />
-					<!-- <Chip :label="item.types.ko" v-tooltip="typeTooltip" /> -->
 					<span v-tooltip="typeTooltip">{{ item.types.ko }}</span>
 				</SplitterPanel>
 				<SplitterPanel>

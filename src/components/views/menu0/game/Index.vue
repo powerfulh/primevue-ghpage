@@ -17,15 +17,19 @@ const expGoal = computed(() => 100 * (1 + level.value))
 const expVal = computed(() => (exp.value / expGoal.value) * 100)
 
 function startGame() {
-	api.load('getPokelist')
-		.setWhenSuccess(res => {
-			newPoke(res.results[Math.floor(Math.random() * res.results.length)].url, myPoke.value, level, exp)
-		})
-		.fire()
+	const p = new Promise(reso => {
+		api.load('getPokelist')
+			.setWhenSuccess(res => {
+				newPoke(res.results[Math.floor(Math.random() * res.results.length)].url, myPoke.value, level, exp)
+				reso(1)
+			})
+			.fire()
+	})
+	return p
 }
 
-headerStore.onClickGreen = () => {
-	startGame()
+headerStore.onClickGreen = async () => {
+	await startGame()
 	headerStore.onClickGreen = null
 }
 </script>
@@ -36,7 +40,7 @@ headerStore.onClickGreen = () => {
 			<template v-if="myPoke.sprites" #header>
 				<img :src="myPoke.sprites" alt="sprite" />
 			</template>
-			<template #title>{{ myPoke.name || '상단 오른쪽의 ✔ 버튼을 눌러 내 포켓몬을 받고 게임 시작하기 🔼' }}</template>
+			<template #title>{{ myPoke.ko || '상단 오른쪽의 ✔ 버튼을 눌러 내 포켓몬을 받고 게임 시작하기 🔼' }}</template>
 			<template v-if="myPoke.name" #content>
 				<p>Level: <Badge :value="level" /></p>
 				<p>
@@ -46,7 +50,7 @@ headerStore.onClickGreen = () => {
 		</Card>
 		<template v-if="myPoke.name">
 			<Divider />
-			<PokeSpec v-if="myPoke.types" :item="myPoke" />
+			<PokeSpec v-if="myPoke.move" :item="myPoke" />
 		</template>
 	</main>
 </template>
