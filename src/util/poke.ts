@@ -80,14 +80,16 @@ export async function newPoke(url: string, target: Poke, level: Ref<number>, exp
 				5,
 			),
 		)
-	).map(item => ({
-		...item,
-		ailment: {
-			name: item.meta.ailment.name,
-			ailment_chance: item.meta.ailment_chance,
-		},
-		category: item.meta.category.name,
-	}))
+	)
+		.filter(({ meta }) => meta) // 메타가 널인 경우가 발견됨 250702 https://pokeapi.co/api/v2/move/885
+		.map(item => ({
+			...item,
+			ailment: {
+				name: item.meta.ailment.name,
+				ailment_chance: item.meta.ailment_chance,
+			},
+			category: item.meta.category.name,
+		}))
 	myPoke = new MyPoke(
 		target,
 		() => level.value,

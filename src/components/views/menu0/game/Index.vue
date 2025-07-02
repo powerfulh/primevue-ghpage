@@ -6,8 +6,10 @@ import { Badge, Card, Divider, ProgressBar } from 'primevue'
 import { computed, ref } from 'vue'
 import PokeSpec from './PokeSpec.vue'
 import PokeAction from './PokeAction.vue'
+import { usePokeStore } from '@/stores/poke'
 
 const headerStore = useHeaderStore()
+const pokeStore = usePokeStore()
 const api = injectApi()
 
 const myPoke = ref({} as Poke)
@@ -31,7 +33,10 @@ function startGame() {
 
 headerStore.onClickGreen = async () => {
 	await startGame()
-	headerStore.onClickGreen = null
+	pokeStore.save(level.value, exp.value, myPoke.value)
+	headerStore.onClickGreen = () => {
+		pokeStore.save(level.value, exp.value, myPoke.value)
+	}
 }
 </script>
 
