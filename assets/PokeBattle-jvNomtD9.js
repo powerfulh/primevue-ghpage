@@ -1,0 +1,1 @@
+import{s as t}from"./index-BsUWCq8y.js";import{d as a,c as o,o as r,b as s,w as n,e as l,u as m}from"./index-BplRUxZn.js";const _=a({__name:"PokeBattle",setup(p){return(c,e)=>(r(),o("main",null,[s(m(t),null,{title:n(()=>e[0]||(e[0]=[l("VS")])),_:1})]))}});export{_ as default};
