@@ -38,6 +38,13 @@ function startGame() {
 }
 
 headerStore.onClickGreen = null
+if (pokeStore.loadable) {
+	pokeStore.load(level, exp, myPoke)
+	headerStore.onClickGreen = () => {
+		pokeStore.save(level.value, exp.value, myPoke.value)
+		toast.add({ detail: 'Saved', life: 2000 })
+	}
+}
 </script>
 
 <template>
