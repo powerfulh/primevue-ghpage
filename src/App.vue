@@ -4,6 +4,7 @@ import { useRoute, useRouter } from 'vue-router'
 import TopHeader from './components/app/TopHeader.vue'
 import api from 'powerful-api-vue3'
 import AppBody from './components/app/AppBody.vue'
+import { Toast } from 'primevue'
 
 const router = useRouter()
 const route = useRoute()
@@ -122,6 +123,7 @@ router.isReady().then(() => (routerReady.value = true))
 	</div>
 
 	<c-m v-if="openAlertModal" :alert="openAlertModal" :confirm="alertModal.confirm" @close="initAlert"></c-m>
+	<Toast />
 </template>
 
 <style scoped>

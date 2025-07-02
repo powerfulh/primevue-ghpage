@@ -2,7 +2,7 @@
 import { useHeaderStore } from '@/stores/header'
 import { newPoke, Poke } from '@/util/poke'
 import { injectApi } from 'powerful-api-vue3'
-import { Badge, Card, Divider, ProgressBar } from 'primevue'
+import { Badge, Button, Card, Divider, ProgressBar, useToast } from 'primevue'
 import { computed, ref } from 'vue'
 import PokeSpec from './PokeSpec.vue'
 import PokeAction from './PokeAction.vue'
@@ -11,6 +11,7 @@ import { usePokeStore } from '@/stores/poke'
 const headerStore = useHeaderStore()
 const pokeStore = usePokeStore()
 const api = injectApi()
+const toast = useToast()
 
 const myPoke = ref({} as Poke)
 const level = ref(0)
@@ -24,20 +25,19 @@ function startGame() {
 		api.load('getPokelist')
 			.setWhenSuccess(res => {
 				newPoke(res.results[Math.floor(Math.random() * res.results.length)].url, myPoke.value, level, exp)
+				pokeStore.save(level.value, exp.value, myPoke.value)
 				reso(1)
 			})
 			.fire()
 	})
+	headerStore.onClickGreen = () => {
+		pokeStore.save(level.value, exp.value, myPoke.value)
+		toast.add({ detail: 'Saved', life: 2000 })
+	}
 	return p
 }
 
-headerStore.onClickGreen = async () => {
-	await startGame()
-	pokeStore.save(level.value, exp.value, myPoke.value)
-	headerStore.onClickGreen = () => {
-		pokeStore.save(level.value, exp.value, myPoke.value)
-	}
-}
+headerStore.onClickGreen = null
 </script>
 
 <template>
@@ -46,7 +46,12 @@ headerStore.onClickGreen = async () => {
 			<template v-if="myPoke.sprites" #header>
 				<img :src="myPoke.sprites" alt="sprite" />
 			</template>
-			<template #title>{{ myPoke.ko || '상단 오른쪽의 ✔ 버튼을 눌러 내 포켓몬을 받고 게임 시작하기 🔼' }}</template>
+			<template v-if="myPoke.name" #title>{{ myPoke.ko }}</template>
+			<template v-else #title>
+				<div style="text-align: center">
+					<Button label="버튼을 눌러 내 포켓몬을 받고 게임 시작하기 ✔" @click="startGame" />
+				</div>
+			</template>
 			<template v-if="myPoke.name" #content>
 				<p>Level: <Badge :value="level" /></p>
 				<p>

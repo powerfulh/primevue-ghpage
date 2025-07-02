@@ -8,6 +8,7 @@ import PrimeVue from 'primevue/config'
 import Aura from '@primeuix/themes/aura'
 import { createPinia } from 'pinia'
 import Tooltip from 'primevue/tooltip'
+import ToastService from 'primevue/toastservice'
 
 import 'primeicons/primeicons.css' // custom
 
@@ -24,6 +25,7 @@ app.use(PrimeVue, {
 		},
 	},
 })
+app.use(ToastService) // custom
 app.component('CM', CommonModal) // custom
 app.directive('tooltip', Tooltip) // custom
 
