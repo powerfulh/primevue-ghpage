@@ -15,7 +15,7 @@ const hpProgress = computed(() => (props.hp / props.maxHp) * 100)
 
 <template>
 	<SplitterPanel :style="enemy ? 'text-align: right' : ''">
-		<img :src="sprite" :alt="name" :style="enemy ? '' : 'transform: scaleX(-1)'" />
+		<img :src="sprite" :alt="name" :style="enemy ? '' : 'transform: scaleX(-1)'" @load="$emit('sprite')" />
 		<ProgressBar :value="hpProgress">HP: {{ hp }} ({{ hpProgress }}%)</ProgressBar>
 	</SplitterPanel>
 </template>

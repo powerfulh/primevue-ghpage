@@ -90,11 +90,9 @@ export async function newPoke(url: string, target: Poke, level: Ref<number>, exp
 			},
 			category: item.meta.category.name,
 		}))
-	myPoke = new MyPoke(
-		target,
-		() => level.value,
-		() => exp.value,
-	)
+}
+export function setMyPoke(target: Poke, lGetter: () => number, eGetter: () => number) {
+	myPoke = new MyPoke(target, lGetter, eGetter)
 }
 
 export class MyPoke {

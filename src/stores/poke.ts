@@ -9,12 +9,14 @@ export const usePokeStore = defineStore('Poke', () => {
 	const name = computed(() => saveData.value.p.ko + ' Lv ' + saveData.value.l)
 	const sprite = computed(() => saveData.value.p.sprites)
 	const hp = computed(() => saveData.value.p.stats.hp)
+	const level = computed(() => saveData.value.l)
 
 	return {
 		loadable,
 		name,
 		sprite,
 		hp,
+		level,
 		save(l: number, e: number, p: Poke) {
 			saveData.value = {
 				l,
