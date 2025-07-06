@@ -3,12 +3,18 @@ import { defineStore } from 'pinia'
 import { computed, Ref, ref } from 'vue'
 
 export const usePokeStore = defineStore('Poke', () => {
-	const saveData = ref({ p: null, l: 0, e: 0 })
+	const saveData = ref({ p: null as Poke, l: 0, e: 0 })
 
 	const loadable = computed(() => saveData.value.p)
+	const name = computed(() => saveData.value.p.ko + ' Lv ' + saveData.value.l)
+	const sprite = computed(() => saveData.value.p.sprites)
+	const hp = computed(() => saveData.value.p.stats.hp)
 
 	return {
 		loadable,
+		name,
+		sprite,
+		hp,
 		save(l: number, e: number, p: Poke) {
 			saveData.value = {
 				l,
