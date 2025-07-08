@@ -31,7 +31,7 @@ export interface Poke {
 	}>
 }
 
-export let myPoke: MyPoke
+export let myPoke: BattleSpec
 
 function startAxios(r: any) {
 	const apiStore = getApiStore()
@@ -91,19 +91,17 @@ export async function newPoke(url: string, target: Poke, level: Ref<number>, exp
 			category: item.meta.category.name,
 		}))
 }
-export function setMyPoke(target: Poke, lGetter: () => number, eGetter: () => number) {
-	myPoke = new MyPoke(target, lGetter, eGetter)
+export function setMyPoke(target: Poke, lGetter: () => number) {
+	myPoke = new BattleSpec(target, lGetter)
 }
 
-export class MyPoke {
+export class BattleSpec {
 	p: Poke
 	l: () => number
-	e: () => number
 
-	constructor(p: Poke, l: { (): number; (): number }, e: { (): number; (): number }) {
+	constructor(p: Poke, l: { (): number; (): number }) {
 		this.p = p
 		this.l = l
-		this.e = e
 	}
 
 	getAttack() {
@@ -111,6 +109,29 @@ export class MyPoke {
 	}
 	getDefense() {
 		return this.p.stats.defense * (1 + this.l() / 10)
+	}
+	getDamage(enemy: BattleSpec) {
+		let d = this.getAttack()
+		if (this.p.types.double_damage_to.map(ddt => ddt.name).some(ddt => ddt == this.p.types.name)) d *= 2
+		if (enemy.p.types.double_damage_from.map(ddt => ddt.name).some(ddt => ddt == this.p.types.name)) d /= 2
+		d -= enemy.getDefense()
+		d = d > 0 ? d : 0
+		return d
+	}
+	getMoveList(enemy: BattleSpec) {
+		return this.p.move.map(item => ({
+			ko: item.ko,
+			category: item.category,
+			expectDamage: this.getDamage(enemy),
+			used: false,
+			select: (enemyHp: Ref<number>) => {
+				switch (item.category) {
+					case 'damage':
+						enemyHp.value -= this.getDamage(enemy)
+						return
+				}
+			},
+		}))
 	}
 }
 

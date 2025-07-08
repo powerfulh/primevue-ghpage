@@ -26,11 +26,7 @@ function startGame() {
 			.setWhenSuccess(res => {
 				newPoke(res.results[Math.floor(Math.random() * res.results.length)].url, currentPoke.value, level, exp)
 				pokeStore.save(level.value, exp.value, currentPoke.value)
-				setMyPoke(
-					currentPoke.value,
-					() => level.value,
-					() => exp.value,
-				)
+				setMyPoke(currentPoke.value, () => level.value)
 				reso(1)
 			})
 			.fire()
