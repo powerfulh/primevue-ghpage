@@ -1,14 +1,15 @@
 <script setup lang="ts">
 import { getApiStore } from 'powerful-api-vue3'
-import { ProgressSpinner, ScrollPanel } from 'primevue'
+import { Dialog, ProgressSpinner, ScrollPanel } from 'primevue'
 
 const apiStore = getApiStore()
 </script>
 
 <template>
 	<ScrollPanel style="height: calc(100vh - 60px)">
-		<!-- .p-datatable-scrollable-table > .p-datatable-thead {z-index: 1} -->
-		<ProgressSpinner v-if="apiStore.loadingStack" style="position: fixed; z-index: 2; top: 40%; left: calc(50% - 50px)" />
+		<Dialog :visible="apiStore.loadingStack > 0" modal>
+			<template #container><ProgressSpinner /></template>
+		</Dialog>
 		<RouterView />
 	</ScrollPanel>
 </template>
