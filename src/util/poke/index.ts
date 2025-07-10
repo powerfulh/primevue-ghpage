@@ -1,6 +1,8 @@
 import axios from 'axios'
 import { getApiStore } from 'powerful-api-vue3'
+import { ToastServiceMethods } from 'primevue'
 import { Ref } from 'vue'
+import { FollowedAliment, toDefined } from './ailment'
 
 interface PokeType {
 	name: string
@@ -24,10 +26,12 @@ export interface Poke {
 		name: string
 		ko: string
 		ailment: {
-			name: string
+			name: FollowedAliment
 			ailment_chance: number
 		}
 		category: string
+		max_turns?: number
+		min_turns?: number
 	}>
 }
 
@@ -91,17 +95,19 @@ export async function newPoke(url: string, target: Poke, level: Ref<number>, exp
 			category: item.meta.category.name,
 		}))
 }
-export function setMyPoke(target: Poke, lGetter: () => number) {
-	myPoke = new BattleSpec(target, lGetter)
+export function setMyPoke(target: Poke, lGetter: () => number, t: ToastServiceMethods) {
+	myPoke = new BattleSpec(target, lGetter, t)
 }
 
 export class BattleSpec {
 	p: Poke
 	l: () => number
+	toast: ToastServiceMethods
 
-	constructor(p: Poke, l: { (): number; (): number }) {
+	constructor(p: Poke, l: { (): number; (): number }, t: ToastServiceMethods) {
 		this.p = p
 		this.l = l
+		this.toast = t
 	}
 
 	getAttack() {
@@ -112,11 +118,32 @@ export class BattleSpec {
 	}
 	getDamage(enemy: BattleSpec) {
 		let d = this.getAttack()
-		if (this.p.types.double_damage_to.map(ddt => ddt.name).some(ddt => ddt == this.p.types.name)) d *= 2
-		if (enemy.p.types.double_damage_from.map(ddt => ddt.name).some(ddt => ddt == this.p.types.name)) d /= 2
+		if (this.p.types.double_damage_to.map(ddt => ddt.name).some(ddt => ddt == enemy.p.types.name)) d *= 2
+		if (this.p.types.double_damage_from.map(ddt => ddt.name).some(ddt => ddt == enemy.p.types.name)) d *= 2
 		d -= enemy.getDefense()
 		d = d > 0 ? d : 0
 		return d
+	}
+	getChance(a: Poke['move'][number]) {
+		// 누군진 못 봤는데 ailment 인 무브가 찬스가 0이길래 ailment는 확정인가보다 라고 생각 250710
+		return a.category == 'damage+ailment' ? a.ailment.ailment_chance : a.category == 'ailment' ? 100 : 0
+	}
+	getText(m: Poke['move'][number]) {
+		const period = Math.floor(((m.max_turns || 2) + (m.min_turns || 0)) / 2)
+		switch (toDefined(m.ailment.name)) {
+			case 'skip':
+				return `${this.getChance(m)}% 확률로 ${period}턴 생략`
+			case 'neutralize':
+				break
+			case 'dot':
+				return `${this.getChance(m)}% 확률로 ${period}턴간 지속 피해`
+			case 'no-defense':
+				break
+			case 'infatuation':
+				break
+			case 'nightmare':
+				break
+		}
 	}
 	getMoveList(enemy: BattleSpec) {
 		return this.p.move.map(item => ({
@@ -124,10 +151,19 @@ export class BattleSpec {
 			category: item.category,
 			expectDamage: this.getDamage(enemy),
 			used: false,
+			expectEffect: this.getText(item),
 			select: (enemyHp: Ref<number>) => {
+				const r = Math.random() * 100
 				switch (item.category) {
 					case 'damage':
 						enemyHp.value -= this.getDamage(enemy)
+						return
+					case 'damage+ailment':
+						enemyHp.value -= this.getDamage(enemy)
+						if (r < item.ailment.ailment_chance) {
+							enemyHp.value -= this.getAttack()
+							this.toast.add({ detail: `${item.ailment.ailment_chance}% 확률로 상태 이상 공격 성공✔`, life: 2000 })
+						}
 						return
 				}
 			},
