@@ -10,7 +10,7 @@ const props = defineProps<{
 	enemy?: boolean
 }>()
 
-const hpProgress = computed(() => (props.hp / props.maxHp) * 100)
+const hpProgress = computed(() => Math.floor((props.hp / props.maxHp) * 100))
 </script>
 
 <template>

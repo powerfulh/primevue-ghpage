@@ -29,7 +29,7 @@ export interface Poke {
 			name: FollowedAliment
 			ailment_chance: number
 		}
-		category: string
+		category: 'damage' | 'damage+ailment' | 'ailment'
 		max_turns?: number
 		min_turns?: number
 	}>
@@ -99,6 +99,14 @@ export function setMyPoke(target: Poke, lGetter: () => number, t: ToastServiceMe
 	myPoke = new BattleSpec(target, lGetter, t)
 }
 
+export interface BattleMove {
+	ko: string
+	category: string
+	expectDamage: number
+	expectEffect: string
+	used: boolean
+	select: (hp: Ref<number>) => void
+}
 export class BattleSpec {
 	p: Poke
 	l: () => number
@@ -145,7 +153,7 @@ export class BattleSpec {
 				break
 		}
 	}
-	getMoveList(enemy: BattleSpec) {
+	getMoveList(enemy: BattleSpec): Array<BattleMove> {
 		return this.p.move.map(item => ({
 			ko: item.ko,
 			category: item.category,

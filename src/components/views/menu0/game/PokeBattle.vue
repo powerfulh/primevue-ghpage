@@ -3,7 +3,7 @@ import { usePokeStore } from '@/stores/poke'
 import { Button, Card, Divider, Message, Splitter, useToast } from 'primevue'
 import { reactive, ref } from 'vue'
 import BattlePanel from './BattlePanel.vue'
-import { BattleSpec, myPoke, newPoke, Poke } from '@/util/poke'
+import { BattleMove, BattleSpec, myPoke, newPoke, Poke } from '@/util/poke'
 import { injectApi } from 'powerful-api-vue3'
 
 const pokeStore = usePokeStore()
@@ -14,13 +14,16 @@ const hp = ref(0)
 const enemyPoke = ref({} as Poke)
 const enemyHp = ref(0)
 const enemyReady = ref(false)
-const moves = reactive([])
+const moves = reactive([] as Array<BattleMove>)
 
 function fillMyHp() {
 	hp.value = pokeStore.hp
 }
 function fillEnemyHp() {
 	enemyHp.value = enemyPoke.value.stats.hp
+}
+function onClickMove(m: BattleMove) {
+	m.select(enemyHp)
 }
 
 api.load('getPokelist')
@@ -51,13 +54,15 @@ api.load('getPokelist')
 		<Card>
 			<template #content>
 				<div style="display: flex; justify-content: space-around">
-					<Button v-for="(item, i) in moves" :key="i" variant="outlined" :disabled="item.used">
+					<Button v-for="(item, i) in moves" :key="i" variant="outlined" :disabled="item.used" @click="onClickMove(item)">
 						<div>
 							{{ item.ko }}
 							<Divider />
 							{{ item.category }}
-							<Divider />
-							예상 데미지: {{ item.expectDamage }}
+							<template v-if="item.category.includes('damage')">
+								<Divider />
+								예상 데미지: {{ item.expectDamage }}
+							</template>
 							<template v-if="item.expectEffect">
 								<Divider />
 								효과: {{ item.expectEffect }}
