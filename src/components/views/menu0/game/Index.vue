@@ -1,12 +1,13 @@
 <script setup lang="ts">
 import { useHeaderStore } from '@/stores/header'
-import { newPoke, Poke, setMyPoke } from '@/util/poke'
+import { newPoke, setMyPoke } from '@/util/poke'
 import { injectApi } from 'powerful-api-vue3'
 import { Badge, Button, Card, Divider, ProgressBar, useToast } from 'primevue'
 import { computed, ref } from 'vue'
 import PokeSpec from './PokeSpec.vue'
 import PokeAction from './PokeAction.vue'
 import { usePokeStore } from '@/stores/poke'
+import { Poke } from '@/util/poke/t'
 
 const headerStore = useHeaderStore()
 const pokeStore = usePokeStore()

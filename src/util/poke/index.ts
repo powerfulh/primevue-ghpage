@@ -2,38 +2,8 @@ import axios from 'axios'
 import { getApiStore } from 'powerful-api-vue3'
 import { ToastServiceMethods } from 'primevue'
 import { Ref } from 'vue'
-import { FollowedAliment, toDefined } from './ailment'
-
-interface PokeType {
-	name: string
-	ko: string
-	double_damage_from?: Array<PokeType>
-	double_damage_to?: Array<PokeType>
-}
-export interface Poke {
-	name: string
-	ko: string
-	sprites: string
-	flavor_text: string
-	// 원래 배열인데 일단 첫번째만 취급해봄
-	types: PokeType
-	stats: {
-		hp: number
-		attack: number
-		defense: number
-	}
-	move: Array<{
-		name: string
-		ko: string
-		ailment: {
-			name: FollowedAliment
-			ailment_chance: number
-		}
-		category: 'damage' | 'damage+ailment' | 'ailment'
-		max_turns?: number
-		min_turns?: number
-	}>
-}
+import { apply, toDefined } from './ailment'
+import { BattleMove, Poke } from './t'
 
 export let myPoke: BattleSpec
 
@@ -99,23 +69,17 @@ export function setMyPoke(target: Poke, lGetter: () => number, t: ToastServiceMe
 	myPoke = new BattleSpec(target, lGetter, t)
 }
 
-export interface BattleMove {
-	ko: string
-	category: string
-	expectDamage: number
-	expectEffect: string
-	used: boolean
-	select: (hp: Ref<number>) => void
-}
 export class BattleSpec {
 	p: Poke
 	l: () => number
 	toast: ToastServiceMethods
+	skip: number
 
 	constructor(p: Poke, l: { (): number; (): number }, t: ToastServiceMethods) {
 		this.p = p
 		this.l = l
 		this.toast = t
+		this.skip = 0
 	}
 
 	getAttack() {
@@ -137,7 +101,7 @@ export class BattleSpec {
 		return a.category == 'damage+ailment' ? a.ailment.ailment_chance : a.category == 'ailment' ? 100 : 0
 	}
 	getText(m: Poke['move'][number]) {
-		const period = Math.floor(((m.max_turns || 2) + (m.min_turns || 0)) / 2)
+		const period = Math.floor(((m.max_turns || 2) + (m.min_turns || 0)) / 2) // todo 클라스 게터
 		switch (toDefined(m.ailment.name)) {
 			case 'skip':
 				return `${this.getChance(m)}% 확률로 ${period}턴 생략`
@@ -169,8 +133,9 @@ export class BattleSpec {
 					case 'damage+ailment':
 						enemyHp.value -= this.getDamage(enemy)
 						if (r < item.ailment.ailment_chance) {
-							enemyHp.value -= this.getAttack()
-							this.toast.add({ detail: `${item.ailment.ailment_chance}% 확률로 상태 이상 공격 성공✔`, life: 2000 })
+							apply(item)
+							// enemyHp.value -= this.getAttack()
+							this.toast.add({ detail: `${this.getChance(item)}% 확률로 상태 이상 공격 성공✔`, life: 2000 })
 						}
 						return
 				}

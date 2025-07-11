@@ -3,8 +3,9 @@ import { usePokeStore } from '@/stores/poke'
 import { Button, Card, Divider, Message, Splitter, useToast } from 'primevue'
 import { reactive, ref } from 'vue'
 import BattlePanel from './BattlePanel.vue'
-import { BattleMove, BattleSpec, myPoke, newPoke, Poke } from '@/util/poke'
+import { BattleSpec, myPoke, newPoke } from '@/util/poke'
 import { injectApi } from 'powerful-api-vue3'
+import { BattleMove, Poke } from '@/util/poke/t'
 
 const pokeStore = usePokeStore()
 const api = injectApi()
@@ -24,6 +25,7 @@ function fillEnemyHp() {
 }
 function onClickMove(m: BattleMove) {
 	m.select(enemyHp)
+	m.used = true
 }
 
 api.load('getPokelist')

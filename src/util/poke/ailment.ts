@@ -1,3 +1,5 @@
+import { Poke } from './t'
+
 export type FollowedAliment = 'paralysis' | 'sleep' | 'freeze' | 'burn' | 'poison' | 'confusion' | 'infatuation' | 'trap' | 'nightmare' | 'torment' | 'disable'
 type CustomDefined = 'skip' | 'neutralize' | 'dot' | 'no-defense' | 'infatuation' | 'nightmare'
 
@@ -22,8 +24,8 @@ export function toDefined(a: FollowedAliment): CustomDefined {
 			return 'nightmare' // 턴 생략, 지속 딜
 	}
 }
-export function apply(a: FollowedAliment) {
-	switch (toDefined(a)) {
+export function apply(m: Poke['move'][number]) {
+	switch (toDefined(m.ailment.name)) {
 		case 'skip':
 			break
 		case 'neutralize':
