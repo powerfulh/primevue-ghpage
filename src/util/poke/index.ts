@@ -26,8 +26,8 @@ function koFinder(item: { language: { name: string } }) {
 	return item.language.name == 'ko'
 }
 async function replaceChain(target: Array<{ url: string }>) {
-	const turl = 'https://pokeapi.co/api/v2/move/7' // test todo
-	return Promise.all(target.map(({ url }) => axios.get(turl))).then(l => l.map(({ data }) => ({ ...data, ko: data.names.find(koFinder)?.name })))
+	// const turl = 'https://pokeapi.co/api/v2/move/7' // test todo
+	return Promise.all(target.map(({ url }) => axios.get(url))).then(l => l.map(({ data }) => ({ ...data, ko: data.names.find(koFinder)?.name })))
 }
 export async function newPoke(url: string, target: Poke) {
 	const p = (await axios.get(url)).data
