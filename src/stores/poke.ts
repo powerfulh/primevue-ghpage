@@ -1,4 +1,4 @@
-import { Poke } from '@/util/poke'
+import { Poke } from '@/util/poke/t'
 import { defineStore } from 'pinia'
 import { computed, Ref, ref } from 'vue'
 

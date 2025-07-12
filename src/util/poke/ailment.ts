@@ -24,13 +24,16 @@ export function toDefined(a: FollowedAliment): CustomDefined {
 			return 'nightmare' // 턴 생략, 지속 딜
 	}
 }
-export function apply(m: Poke['move'][number]) {
+export function apply(m: Poke['move'][number], p: number, a, cb: () => void) {
 	switch (toDefined(m.ailment.name)) {
 		case 'skip':
 			break
 		case 'neutralize':
 			break
 		case 'dot':
+			for (let i = 0; i < p; i++) {
+				a.dot.push(cb)
+			}
 			break
 		case 'no-defense':
 			break

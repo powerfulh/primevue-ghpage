@@ -26,7 +26,8 @@ function koFinder(item: { language: { name: string } }) {
 	return item.language.name == 'ko'
 }
 async function replaceChain(target: Array<{ url: string }>) {
-	return Promise.all(target.map(({ url }) => axios.get(url))).then(l => l.map(({ data }) => ({ ...data, ko: data.names.find(koFinder)?.name })))
+	const turl = 'https://pokeapi.co/api/v2/move/7' // test todo
+	return Promise.all(target.map(({ url }) => axios.get(turl))).then(l => l.map(({ data }) => ({ ...data, ko: data.names.find(koFinder)?.name })))
 }
 export async function newPoke(url: string, target: Poke, level: Ref<number>, exp: Ref<number>) {
 	const p = (await axios.get(url)).data
@@ -68,18 +69,25 @@ export async function newPoke(url: string, target: Poke, level: Ref<number>, exp
 export function setMyPoke(target: Poke, lGetter: () => number, t: ToastServiceMethods) {
 	myPoke = new BattleSpec(target, lGetter, t)
 }
+function safeDamage(hp: Ref<number>, d: number) {
+	hp.value -= d > hp.value ? hp.value : d
+}
 
 export class BattleSpec {
 	p: Poke
 	l: () => number
 	toast: ToastServiceMethods
 	skip: number
+	ailment: {
+		dot: Array<() => void>
+	}
 
 	constructor(p: Poke, l: { (): number; (): number }, t: ToastServiceMethods) {
 		this.p = p
 		this.l = l
 		this.toast = t
 		this.skip = 0
+		this.ailment = { dot: [] }
 	}
 
 	getAttack() {
@@ -100,8 +108,11 @@ export class BattleSpec {
 		// 누군진 못 봤는데 ailment 인 무브가 찬스가 0이길래 ailment는 확정인가보다 라고 생각 250710
 		return a.category == 'damage+ailment' ? a.ailment.ailment_chance : a.category == 'ailment' ? 100 : 0
 	}
+	getPeriod(m: Poke['move'][number]) {
+		return Math.floor(((m.max_turns || 2) + (m.min_turns || 0)) / 2)
+	}
 	getText(m: Poke['move'][number]) {
-		const period = Math.floor(((m.max_turns || 2) + (m.min_turns || 0)) / 2) // todo 클라스 게터
+		const period = this.getPeriod(m)
 		switch (toDefined(m.ailment.name)) {
 			case 'skip':
 				return `${this.getChance(m)}% 확률로 ${period}턴 생략`
@@ -128,13 +139,12 @@ export class BattleSpec {
 				const r = Math.random() * 100
 				switch (item.category) {
 					case 'damage':
-						enemyHp.value -= this.getDamage(enemy)
+						safeDamage(enemyHp, this.getDamage(enemy))
 						return
 					case 'damage+ailment':
-						enemyHp.value -= this.getDamage(enemy)
-						if (r < item.ailment.ailment_chance) {
-							apply(item)
-							// enemyHp.value -= this.getAttack()
+						safeDamage(enemyHp, this.getDamage(enemy))
+						if (r < item.ailment.ailment_chance || true) {
+							apply(item, this.getPeriod(item), enemy.ailment, () => safeDamage(enemyHp, this.getDamage(enemy)))
 							this.toast.add({ detail: `${this.getChance(item)}% 확률로 상태 이상 공격 성공✔`, life: 2000 })
 						}
 						return
