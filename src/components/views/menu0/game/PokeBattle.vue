@@ -19,6 +19,8 @@ const moves = reactive([] as Array<BattleMove>)
 const myTurn = ref(true)
 let enemy: BattleSpec
 const waitAliment = ref(false)
+const waitMove = ref(false)
+const enemyMoves = reactive([] as Array<BattleMove>)
 
 function fillMyHp() {
 	hp.value = pokeStore.hp
@@ -26,26 +28,47 @@ function fillMyHp() {
 function fillEnemyHp() {
 	enemyHp.value = enemyPoke.value.stats.hp
 }
-function onClickMove(m: BattleMove) {
+async function applyAilment(target: BattleSpec) {
+	waitAliment.value = true
+	const p = new Promise(reso => {
+		setTimeout(() => {
+			target.ailment.dot[0]()
+			toast.add({ detail: '지속 피해 적용🔥', life: 2000 })
+			target.ailment.dot.shift()
+			waitAliment.value = false
+			reso(1)
+		}, 1000)
+	})
+	return p
+}
+function enemyMove() {
+	waitMove.value = true
+	const current = enemyMoves[0]
+	setTimeout(() => {
+		enemyMoves.push(...enemyMoves.splice(0, 1))
+		current.select(hp)
+		myTurn.value = true
+		if (myPoke.ailment.dot.length) applyAilment(myPoke)
+	}, 1000)
+}
+async function onClickMove(m: BattleMove) {
 	m.select(enemyHp)
 	m.used = true
 	myTurn.value = false
 	if (enemy.ailment.dot.length) {
-		waitAliment.value = true
-		setTimeout(() => {
-			enemy.ailment.dot[0]()
-			toast.add({ detail: '지속 피해 적용🔥', life: 2000 })
-			enemy.ailment.dot.shift()
-			waitAliment.value = false
-		}, 1000)
+		await applyAilment(enemy)
+		enemyMove()
+	} else {
+		enemyMove()
 	}
 }
 
 api.load('getPokelist')
 	.setWhenSuccess(async res => {
-		await newPoke(res.results[Math.floor(Math.random() * res.results.length)].url, enemyPoke.value, ref(pokeStore.level), ref(0))
+		await newPoke(res.results[Math.floor(Math.random() * res.results.length)].url, enemyPoke.value)
 		enemy = new BattleSpec(enemyPoke.value, () => pokeStore.level, toast)
 		moves.push(...myPoke.getMoveList(enemy))
+		enemyMoves.push(...enemy.getMoveList(myPoke))
 		enemyReady.value = true
 	})
 	.fire()
@@ -69,7 +92,8 @@ api.load('getPokelist')
 		<Divider />
 		<Card>
 			<template #content>
-				<div v-if="myTurn" style="display: flex; justify-content: space-around">
+				<span v-if="waitAliment">지속 피해 계산중..</span>
+				<div v-else-if="myTurn" style="display: flex; justify-content: space-around">
 					<Button v-for="(item, i) in moves" :key="i" variant="outlined" :disabled="item.used" @click="onClickMove(item)">
 						<div>
 							{{ item.ko }}
@@ -86,7 +110,7 @@ api.load('getPokelist')
 						</div>
 					</Button>
 				</div>
-				<span v-else-if="waitAliment">지속 피해 계산중..</span>
+				<span v-else-if="waitMove">Action 선택중..</span>
 			</template>
 		</Card>
 	</main>

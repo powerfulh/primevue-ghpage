@@ -1,4 +1,4 @@
-import axios from 'axios'
+import axios, { AxiosResponse, InternalAxiosRequestConfig } from 'axios'
 import { getApiStore } from 'powerful-api-vue3'
 import { ToastServiceMethods } from 'primevue'
 import { Ref } from 'vue'
@@ -7,17 +7,17 @@ import { BattleMove, Poke } from './t'
 
 export let myPoke: BattleSpec
 
-function startAxios(r: any) {
+function startAxios(r: InternalAxiosRequestConfig) {
 	const apiStore = getApiStore()
 	apiStore.loadingStack++
 	return r
 }
-function endAxios(r: any) {
+function endAxios(r: AxiosResponse) {
 	const apiStore = getApiStore()
 	if (apiStore.loadingStack > 0) apiStore.loadingStack--
 	return r
 }
-function getRandomItem(target: Array<any>, count: number) {
+function getRandomItem(target: Array<{ url: string }>, count: number) {
 	if (target.length < count) return target
 	const shuffled = [...target].sort(() => Math.random() - 0.5)
 	return shuffled.slice(0, count)
@@ -29,7 +29,7 @@ async function replaceChain(target: Array<{ url: string }>) {
 	const turl = 'https://pokeapi.co/api/v2/move/7' // test todo
 	return Promise.all(target.map(({ url }) => axios.get(turl))).then(l => l.map(({ data }) => ({ ...data, ko: data.names.find(koFinder)?.name })))
 }
-export async function newPoke(url: string, target: Poke, level: Ref<number>, exp: Ref<number>) {
+export async function newPoke(url: string, target: Poke) {
 	const p = (await axios.get(url)).data
 	const spec = (await axios.get(p.species.url)).data
 	target.name = spec.name
@@ -70,7 +70,8 @@ export function setMyPoke(target: Poke, lGetter: () => number, t: ToastServiceMe
 	myPoke = new BattleSpec(target, lGetter, t)
 }
 function safeDamage(hp: Ref<number>, d: number) {
-	hp.value -= d > hp.value ? hp.value : d
+	// hp.value -= d > hp.value ? hp.value : d
+	hp.value -= 1
 }
 
 export class BattleSpec {
