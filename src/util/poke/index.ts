@@ -170,6 +170,7 @@ export class BattleSpec {
 							this.toast.add({ detail: `${this.getChance(item)}% 확률로 상태 이상 공격 성공✔`, life: 2000 })
 						}
 						return
+					// todo net-good-stats 아무 캐이스 하나만 고정시켜서 해보고 ailment 도 곧 하자
 				}
 			},
 		}))
