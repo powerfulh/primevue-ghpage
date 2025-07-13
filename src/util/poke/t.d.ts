@@ -1,5 +1,6 @@
 import { Ref } from 'vue'
 import { FollowedAliment } from './ailment'
+import { definedMoveCategory } from './const'
 
 interface PokeType {
 	name: string
@@ -26,9 +27,11 @@ interface Poke {
 			name: FollowedAliment
 			ailment_chance: number
 		}
-		category: 'damage' | 'damage+ailment' | 'ailment'
+		category: (typeof definedMoveCategory)[number]
 		max_turns?: number
 		min_turns?: number
+		change?: number
+		stat?: 'attack' | 'evasion'
 	}>
 }
 interface BattleMove {

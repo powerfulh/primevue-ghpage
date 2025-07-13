@@ -4,6 +4,7 @@ import { ToastServiceMethods } from 'primevue'
 import { Ref } from 'vue'
 import { apply, toDefined } from './ailment'
 import { BattleMove, Poke } from './t'
+import { definedMoveCategory, statMultiply } from './const'
 
 export let myPoke: BattleSpec
 
@@ -57,13 +58,17 @@ export async function newPoke(url: string, target: Poke) {
 		)
 	)
 		.filter(({ meta }) => meta) // 메타가 널인 경우가 발견됨 250702 https://pokeapi.co/api/v2/move/885
+		.filter(({ meta }) => definedMoveCategory.includes(meta.category.name))
 		.map(item => ({
-			...item,
+			name: item.name,
+			ko: item.ko,
 			ailment: {
 				name: item.meta.ailment.name,
 				ailment_chance: item.meta.ailment_chance,
 			},
 			category: item.meta.category.name,
+			change: item.stat_changes[0]?.change,
+			stat: item.stat_changes[0]?.stat.name,
 		}))
 }
 export function setMyPoke(target: Poke, lGetter: () => number, t: ToastServiceMethods) {
@@ -82,6 +87,7 @@ export class BattleSpec {
 	ailment: {
 		dot: Array<() => void>
 	}
+	evasion: number // 회피
 
 	constructor(p: Poke, l: { (): number; (): number }, t: ToastServiceMethods) {
 		this.p = p
@@ -89,6 +95,7 @@ export class BattleSpec {
 		this.toast = t
 		this.skip = 0
 		this.ailment = { dot: [] }
+		this.evasion = 0
 	}
 
 	getAttack() {
@@ -112,7 +119,7 @@ export class BattleSpec {
 	getPeriod(m: Poke['move'][number]) {
 		return Math.floor(((m.max_turns || 2) + (m.min_turns || 0)) / 2)
 	}
-	getText(m: Poke['move'][number]) {
+	getAilmentText(m: Poke['move'][number]) {
 		const period = this.getPeriod(m)
 		switch (toDefined(m.ailment.name)) {
 			case 'skip':
@@ -128,6 +135,20 @@ export class BattleSpec {
 			case 'nightmare':
 				break
 		}
+	}
+	getStatText(m: Poke['move'][number]) {
+		const buff = m.change > 0 // 원래는 대상이 누구인지 필드가 있지만 그냥 양수면 내 버프 아니면 상대 디버프로 퉁치기
+		return `${buff ? '' : '적의 '} ${m.stat} 능력치를 ${m.change * statMultiply}% 증감시킨다`
+	}
+	getText(m: Poke['move'][number]) {
+		switch (m.category) {
+			case 'ailment':
+			case 'damage+ailment':
+				return this.getAilmentText(m)
+			case 'net-good-stats':
+				return this.getStatText(m)
+		}
+		return ''
 	}
 	getMoveList(enemy: BattleSpec): Array<BattleMove> {
 		return this.p.move.map(item => ({
