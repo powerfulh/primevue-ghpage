@@ -94,7 +94,7 @@ async function onClickMove(m: BattleMove) {
 
 api.load('getPokelist')
 	.setWhenSuccess(async res => {
-		await newPoke(res.results[Math.floor(Math.random() * res.results.length)].url, enemyPoke.value, 'https://pokeapi.co/api/v2/move/9')
+		await newPoke(res.results[Math.floor(Math.random() * res.results.length)].url, enemyPoke.value, 'https://pokeapi.co/api/v2/move/1')
 		enemy = new BattleSpec(enemyPoke.value, () => pokeStore.level, toast)
 		moves.push(...myPoke.getMoveList(enemy))
 		enemyMoves.push(...enemy.getMoveList(myPoke))

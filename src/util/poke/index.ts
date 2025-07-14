@@ -165,7 +165,7 @@ export class BattleSpec {
 						return
 					case 'damage+ailment':
 						safeDamage(enemyHp, this.getDamage(enemy))
-						if (r < item.ailment.ailment_chance || true) {
+						if (r < item.ailment.ailment_chance) {
 							apply(item, this.getPeriod(item), enemy.ailment, () => safeDamage(enemyHp, this.getDamage(enemy)))
 							this.toast.add({ detail: `${this.getChance(item)}% 확률로 상태 이상 공격 성공✔`, life: 2000 })
 						}
@@ -173,6 +173,12 @@ export class BattleSpec {
 					case 'net-good-stats':
 						enemy.stat[item.stat] += item.change * statMultiply
 						this.toast.add({ detail: `증감된 ${item.stat} 능력치: ${enemy.stat[item.stat]}✔`, life: 2000 })
+						return
+					case 'ailment':
+						if (r < item.ailment.ailment_chance || true) {
+							apply(item, this.getPeriod(item), enemy.ailment, () => safeDamage(enemyHp, this.getDamage(enemy)))
+							this.toast.add({ detail: `${this.getChance(item)}% 확률로 상태 이상 공격 성공✔`, life: 2000 })
+						}
 						return
 				}
 			},
