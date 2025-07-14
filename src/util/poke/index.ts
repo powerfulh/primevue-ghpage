@@ -26,11 +26,10 @@ function getRandomItem(target: Array<{ url: string }>, count: number) {
 function koFinder(item: { language: { name: string } }) {
 	return item.language.name == 'ko'
 }
-async function replaceChain(target: Array<{ url: string }>) {
-	const turl = 'https://pokeapi.co/api/v2/move/9'
-	return Promise.all(target.map(({ url }) => axios.get(turl))).then(l => l.map(({ data }) => ({ ...data, ko: data.names.find(koFinder)?.name })))
+async function replaceChain(target: Array<{ url: string }>, testUrl?: string) {
+	return Promise.all(target.map(({ url }) => axios.get(testUrl || url))).then(l => l.map(({ data }) => ({ ...data, ko: data.names.find(koFinder)?.name })))
 }
-export async function newPoke(url: string, target: Poke) {
+export async function newPoke(url: string, target: Poke, testUrl?: string) {
 	const p = (await axios.get(url)).data
 	const spec = (await axios.get(p.species.url)).data
 	target.name = spec.name
@@ -55,6 +54,7 @@ export async function newPoke(url: string, target: Poke) {
 				p.moves.map(item => item.move),
 				5,
 			),
+			testUrl,
 		)
 	)
 		.filter(({ meta }) => meta) // 메타가 널인 경우가 발견됨 250702 https://pokeapi.co/api/v2/move/885

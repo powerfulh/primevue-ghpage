@@ -59,21 +59,21 @@ function enemyMove() {
 				toast.add({ detail: '지속 피해 적용🔥', life: 2000 })
 				myPoke.ailment.dot.shift()
 			})
-			if (myPoke.ailment.skip > 0) {
+		}
+		if (myPoke.ailment.skip > 0) {
+			await applyAilment(() => {
+				myPoke.ailment.skip--
+				toast.add({ detail: '턴 생략 적용⏰', life: 2000 })
+			})
+			myTurn.value = false
+			if (enemy.ailment.dot.length) {
 				await applyAilment(() => {
-					myPoke.ailment.skip--
-					toast.add({ detail: '턴 생략 적용⏰', life: 2000 })
+					enemy.ailment.dot[0]()
+					toast.add({ detail: '지속 피해 적용🔥', life: 2000 })
+					enemy.ailment.dot.shift()
 				})
-				myTurn.value = false
-				if (enemy.ailment.dot.length) {
-					await applyAilment(() => {
-						enemy.ailment.dot[0]()
-						toast.add({ detail: '지속 피해 적용🔥', life: 2000 })
-						enemy.ailment.dot.shift()
-					})
-				}
-				enemyMove()
 			}
+			enemyMove()
 		}
 	}, 1000)
 }
@@ -93,7 +93,7 @@ async function onClickMove(m: BattleMove) {
 
 api.load('getPokelist')
 	.setWhenSuccess(async res => {
-		await newPoke(res.results[Math.floor(Math.random() * res.results.length)].url, enemyPoke.value)
+		await newPoke(res.results[Math.floor(Math.random() * res.results.length)].url, enemyPoke.value, 'https://pokeapi.co/api/v2/move/9')
 		enemy = new BattleSpec(enemyPoke.value, () => pokeStore.level, toast)
 		moves.push(...myPoke.getMoveList(enemy))
 		enemyMoves.push(...enemy.getMoveList(myPoke))
