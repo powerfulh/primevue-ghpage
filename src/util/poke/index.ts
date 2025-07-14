@@ -2,7 +2,7 @@ import axios, { AxiosResponse, InternalAxiosRequestConfig } from 'axios'
 import { getApiStore } from 'powerful-api-vue3'
 import { ToastServiceMethods } from 'primevue'
 import { Ref } from 'vue'
-import { apply, toDefined } from './ailment'
+import { AilmentSpec, apply, toDefined } from './ailment'
 import { BattleMove, Poke } from './t'
 import { definedMoveCategory, statMultiply } from './const'
 
@@ -27,7 +27,7 @@ function koFinder(item: { language: { name: string } }) {
 	return item.language.name == 'ko'
 }
 async function replaceChain(target: Array<{ url: string }>) {
-	const turl = 'https://pokeapi.co/api/v2/move/14'
+	const turl = 'https://pokeapi.co/api/v2/move/9'
 	return Promise.all(target.map(({ url }) => axios.get(turl))).then(l => l.map(({ data }) => ({ ...data, ko: data.names.find(koFinder)?.name })))
 }
 export async function newPoke(url: string, target: Poke) {
@@ -83,10 +83,7 @@ export class BattleSpec {
 	p: Poke
 	l: () => number
 	toast: ToastServiceMethods
-	ailment: {
-		dot: Array<() => void>
-		skip: number
-	}
+	ailment: AilmentSpec
 	stat: {
 		evasion: number // 회피
 		attack: number

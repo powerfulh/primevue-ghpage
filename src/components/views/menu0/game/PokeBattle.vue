@@ -28,13 +28,11 @@ function fillMyHp() {
 function fillEnemyHp() {
 	enemyHp.value = enemyPoke.value.stats.hp
 }
-async function applyAilment(target: BattleSpec) {
+async function applyAilment(acb: Function) {
 	waitAliment.value = true
 	const p = new Promise(reso => {
 		setTimeout(() => {
-			target.ailment.dot[0]()
-			toast.add({ detail: '지속 피해 적용🔥', life: 2000 })
-			target.ailment.dot.shift()
+			acb()
 			waitAliment.value = false
 			reso(1)
 		}, 1000)
@@ -44,11 +42,39 @@ async function applyAilment(target: BattleSpec) {
 function enemyMove() {
 	waitMove.value = true
 	const current = enemyMoves[0]
-	setTimeout(() => {
-		enemyMoves.push(...enemyMoves.splice(0, 1))
-		current.select(hp)
+	setTimeout(async () => {
+		if (enemy.ailment.skip > 0) {
+			await applyAilment(() => {
+				enemy.ailment.skip--
+				toast.add({ detail: '턴 생략 적용⏰', life: 2000 })
+			})
+		} else {
+			enemyMoves.push(...enemyMoves.splice(0, 1))
+			current.select(hp)
+		}
 		myTurn.value = true
-		if (myPoke.ailment.dot.length) applyAilment(myPoke)
+		if (myPoke.ailment.dot.length) {
+			await applyAilment(() => {
+				myPoke.ailment.dot[0]()
+				toast.add({ detail: '지속 피해 적용🔥', life: 2000 })
+				myPoke.ailment.dot.shift()
+			})
+			if (myPoke.ailment.skip > 0) {
+				await applyAilment(() => {
+					myPoke.ailment.skip--
+					toast.add({ detail: '턴 생략 적용⏰', life: 2000 })
+				})
+				myTurn.value = false
+				if (enemy.ailment.dot.length) {
+					await applyAilment(() => {
+						enemy.ailment.dot[0]()
+						toast.add({ detail: '지속 피해 적용🔥', life: 2000 })
+						enemy.ailment.dot.shift()
+					})
+				}
+				enemyMove()
+			}
+		}
 	}, 1000)
 }
 async function onClickMove(m: BattleMove) {
@@ -56,11 +82,13 @@ async function onClickMove(m: BattleMove) {
 	m.used = true
 	myTurn.value = false
 	if (enemy.ailment.dot.length) {
-		await applyAilment(enemy)
-		enemyMove()
-	} else {
-		enemyMove()
+		await applyAilment(() => {
+			enemy.ailment.dot[0]()
+			toast.add({ detail: '지속 피해 적용🔥', life: 2000 })
+			enemy.ailment.dot.shift()
+		})
 	}
+	enemyMove()
 }
 
 api.load('getPokelist')

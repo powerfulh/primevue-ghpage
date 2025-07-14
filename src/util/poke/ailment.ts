@@ -3,6 +3,11 @@ import { Poke } from './t'
 export type FollowedAliment = 'paralysis' | 'sleep' | 'freeze' | 'burn' | 'poison' | 'confusion' | 'infatuation' | 'trap' | 'nightmare' | 'torment' | 'disable'
 type CustomDefined = 'skip' | 'neutralize' | 'dot' | 'no-defense' | 'infatuation' | 'nightmare'
 
+export interface AilmentSpec {
+	dot: Array<() => void>
+	skip: number
+}
+
 export function toDefined(a: FollowedAliment): CustomDefined {
 	switch (a) {
 		case 'paralysis': // 마비
@@ -24,22 +29,23 @@ export function toDefined(a: FollowedAliment): CustomDefined {
 			return 'nightmare' // 턴 생략, 지속 딜
 	}
 }
-export function apply(m: Poke['move'][number], p: number, a, cb: () => void) {
-	switch (toDefined(m.ailment.name)) {
-		case 'skip':
-			break
-		case 'neutralize':
-			break
-		case 'dot':
-			for (let i = 0; i < p; i++) {
+export function apply(m: Poke['move'][number], p: number, a: AilmentSpec, cb: () => void) {
+	for (let i = 0; i < p; i++) {
+		switch (toDefined(m.ailment.name)) {
+			case 'skip':
+				a.skip++
+				break
+			case 'neutralize':
+				break
+			case 'dot':
 				a.dot.push(cb)
-			}
-			break
-		case 'no-defense':
-			break
-		case 'infatuation':
-			break
-		case 'nightmare':
-			break
+				break
+			case 'no-defense':
+				break
+			case 'infatuation':
+				break
+			case 'nightmare':
+				break
+		}
 	}
 }
