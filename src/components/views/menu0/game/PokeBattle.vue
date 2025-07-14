@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { usePokeStore } from '@/stores/poke'
 import { Button, Card, Divider, Message, Splitter, useToast } from 'primevue'
-import { reactive, ref } from 'vue'
+import { onUnmounted, reactive, ref } from 'vue'
 import BattlePanel from './BattlePanel.vue'
 import { BattleSpec, myPoke, newPoke } from '@/util/poke'
 import { injectApi } from 'powerful-api-vue3'
@@ -21,6 +21,7 @@ let enemy: BattleSpec
 const waitAliment = ref(false)
 const waitMove = ref(false)
 const enemyMoves = reactive([] as Array<BattleMove>)
+let currentTimeout
 
 function fillMyHp() {
 	hp.value = pokeStore.hp
@@ -31,7 +32,7 @@ function fillEnemyHp() {
 async function applyAilment(acb: Function) {
 	waitAliment.value = true
 	const p = new Promise(reso => {
-		setTimeout(() => {
+		currentTimeout = setTimeout(() => {
 			acb()
 			waitAliment.value = false
 			reso(1)
@@ -42,7 +43,7 @@ async function applyAilment(acb: Function) {
 function enemyMove() {
 	waitMove.value = true
 	const current = enemyMoves[0]
-	setTimeout(async () => {
+	currentTimeout = setTimeout(async () => {
 		if (enemy.ailment.skip > 0) {
 			await applyAilment(() => {
 				enemy.ailment.skip--
@@ -100,6 +101,8 @@ api.load('getPokelist')
 		enemyReady.value = true
 	})
 	.fire()
+
+onUnmounted(() => clearTimeout(currentTimeout))
 </script>
 
 <template>
