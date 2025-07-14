@@ -82,6 +82,7 @@ function enemyMove() {
 async function onClickMove(m: BattleMove) {
 	m.select(enemyHp)
 	m.used = true
+	if (moves.map(item => item.used).every(item => item)) moves.forEach(item => (item.used = false))
 	myTurn.value = false
 	if (enemy.ailment.neutralize > 0) enemy.ailment.neutralize--
 	if (enemy.ailment.dot.length) {
@@ -96,7 +97,7 @@ async function onClickMove(m: BattleMove) {
 
 api.load('getPokelist')
 	.setWhenSuccess(async res => {
-		await newPoke(res.results[Math.floor(Math.random() * res.results.length)].url, enemyPoke.value, 'https://pokeapi.co/api/v2/move/1')
+		await newPoke(res.results[Math.floor(Math.random() * res.results.length)].url, enemyPoke.value)
 		enemy = new BattleSpec(enemyPoke.value, () => pokeStore.level, toast)
 		moves.push(...myPoke.getMoveList(enemy))
 		enemyMoves.push(...enemy.getMoveList(myPoke))

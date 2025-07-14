@@ -110,7 +110,6 @@ export class BattleSpec {
 		let d = this.getAttack() * (this.stat.attack / 100)
 		if (this.p.types.double_damage_to.map(ddt => ddt.name).some(ddt => ddt == enemy.p.types.name)) d *= 2
 		if (this.p.types.double_damage_from.map(ddt => ddt.name).some(ddt => ddt == enemy.p.types.name)) d *= 2
-		d = 5 // test
 		if (neutralize == 0) d -= enemy.getDefense() * (enemy.stat.defense / 100)
 		d = d > 0 ? d : 0
 		return d
