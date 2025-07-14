@@ -27,7 +27,8 @@ function koFinder(item: { language: { name: string } }) {
 	return item.language.name == 'ko'
 }
 async function replaceChain(target: Array<{ url: string }>, testUrl?: string) {
-	return Promise.all(target.map(({ url }) => axios.get(testUrl || url))).then(l => l.map(({ data }) => ({ ...data, ko: data.names.find(koFinder)?.name })))
+	if (testUrl) target[0].url = testUrl
+	return Promise.all(target.map(({ url }) => axios.get(url))).then(l => l.map(({ data }) => ({ ...data, ko: data.names.find(koFinder)?.name })))
 }
 export async function newPoke(url: string, target: Poke, testUrl?: string) {
 	const p = (await axios.get(url)).data
@@ -67,6 +68,8 @@ export async function newPoke(url: string, target: Poke, testUrl?: string) {
 				ailment_chance: item.meta.ailment_chance,
 			},
 			category: item.meta.category.name,
+			max_turns: item.meta.max_turns,
+			min_turns: item.meta.min_turns,
 			change: item.stat_changes[0]?.change,
 			stat: item.stat_changes[0]?.stat.name,
 		}))
@@ -75,8 +78,7 @@ export function setMyPoke(target: Poke, lGetter: () => number, t: ToastServiceMe
 	myPoke = new BattleSpec(target, lGetter, t)
 }
 function safeDamage(hp: Ref<number>, d: number) {
-	// hp.value -= d > hp.value ? hp.value : d
-	hp.value -= 1
+	hp.value -= d > hp.value ? hp.value : d
 }
 
 export class BattleSpec {
@@ -94,7 +96,7 @@ export class BattleSpec {
 		this.p = p
 		this.l = l
 		this.toast = t
-		this.ailment = { dot: [], skip: 0 }
+		this.ailment = { dot: [], skip: 0, neutralize: 0 }
 		this.stat = { evasion: 0, attack: 100, defense: 100 }
 	}
 
@@ -104,11 +106,12 @@ export class BattleSpec {
 	getDefense() {
 		return this.p.stats.defense * (1 + this.l() / 10)
 	}
-	getDamage(enemy: BattleSpec) {
+	getDamage(enemy: BattleSpec, neutralize = 0) {
 		let d = this.getAttack() * (this.stat.attack / 100)
 		if (this.p.types.double_damage_to.map(ddt => ddt.name).some(ddt => ddt == enemy.p.types.name)) d *= 2
 		if (this.p.types.double_damage_from.map(ddt => ddt.name).some(ddt => ddt == enemy.p.types.name)) d *= 2
-		d -= enemy.getDefense() * (enemy.stat.defense / 100)
+		d = 5 // test
+		if (neutralize == 0) d -= enemy.getDefense() * (enemy.stat.defense / 100)
 		d = d > 0 ? d : 0
 		return d
 	}
@@ -125,7 +128,7 @@ export class BattleSpec {
 			case 'skip':
 				return `${this.getChance(m)}% 확률로 ${period}턴 생략`
 			case 'neutralize':
-				break
+				return `${this.getChance(m)}% 확률로 ${period}턴간 방어 무효`
 			case 'dot':
 				return `${this.getChance(m)}% 확률로 ${period}턴간 지속 피해`
 			case 'no-defense':
@@ -161,10 +164,10 @@ export class BattleSpec {
 				const r = Math.random() * 100
 				switch (item.category) {
 					case 'damage':
-						safeDamage(enemyHp, this.getDamage(enemy))
+						safeDamage(enemyHp, this.getDamage(enemy, enemy.ailment.neutralize))
 						return
 					case 'damage+ailment':
-						safeDamage(enemyHp, this.getDamage(enemy))
+						safeDamage(enemyHp, this.getDamage(enemy, enemy.ailment.neutralize))
 						if (r < item.ailment.ailment_chance) {
 							apply(item, this.getPeriod(item), enemy.ailment, () => safeDamage(enemyHp, this.getDamage(enemy)))
 							this.toast.add({ detail: `${this.getChance(item)}% 확률로 상태 이상 공격 성공✔`, life: 2000 })
