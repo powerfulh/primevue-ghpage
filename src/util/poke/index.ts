@@ -27,8 +27,8 @@ function koFinder(item: { language: { name: string } }) {
 	return item.language.name == 'ko'
 }
 async function replaceChain(target: Array<{ url: string }>) {
-	// const turl = 'https://pokeapi.co/api/v2/move/7' // test todo
-	return Promise.all(target.map(({ url }) => axios.get(url))).then(l => l.map(({ data }) => ({ ...data, ko: data.names.find(koFinder)?.name })))
+	const turl = 'https://pokeapi.co/api/v2/move/14'
+	return Promise.all(target.map(({ url }) => axios.get(turl))).then(l => l.map(({ data }) => ({ ...data, ko: data.names.find(koFinder)?.name })))
 }
 export async function newPoke(url: string, target: Poke) {
 	const p = (await axios.get(url)).data
@@ -83,19 +83,22 @@ export class BattleSpec {
 	p: Poke
 	l: () => number
 	toast: ToastServiceMethods
-	skip: number
 	ailment: {
 		dot: Array<() => void>
+		skip: number
 	}
-	evasion: number // 회피
+	stat: {
+		evasion: number // 회피
+		attack: number
+		defense: number
+	}
 
 	constructor(p: Poke, l: { (): number; (): number }, t: ToastServiceMethods) {
 		this.p = p
 		this.l = l
 		this.toast = t
-		this.skip = 0
-		this.ailment = { dot: [] }
-		this.evasion = 0
+		this.ailment = { dot: [], skip: 0 }
+		this.stat = { evasion: 0, attack: 100, defense: 100 }
 	}
 
 	getAttack() {
@@ -105,10 +108,10 @@ export class BattleSpec {
 		return this.p.stats.defense * (1 + this.l() / 10)
 	}
 	getDamage(enemy: BattleSpec) {
-		let d = this.getAttack()
+		let d = this.getAttack() * (this.stat.attack / 100)
 		if (this.p.types.double_damage_to.map(ddt => ddt.name).some(ddt => ddt == enemy.p.types.name)) d *= 2
 		if (this.p.types.double_damage_from.map(ddt => ddt.name).some(ddt => ddt == enemy.p.types.name)) d *= 2
-		d -= enemy.getDefense()
+		d -= enemy.getDefense() * (enemy.stat.defense / 100)
 		d = d > 0 ? d : 0
 		return d
 	}
@@ -170,7 +173,10 @@ export class BattleSpec {
 							this.toast.add({ detail: `${this.getChance(item)}% 확률로 상태 이상 공격 성공✔`, life: 2000 })
 						}
 						return
-					// todo net-good-stats 아무 캐이스 하나만 고정시켜서 해보고 ailment 도 곧 하자
+					case 'net-good-stats':
+						enemy.stat[item.stat] += item.change * statMultiply
+						this.toast.add({ detail: `증감된 ${item.stat} 능력치: ${enemy.stat[item.stat]}✔`, life: 2000 })
+						return
 				}
 			},
 		}))
