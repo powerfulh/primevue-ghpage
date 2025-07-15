@@ -42,5 +42,5 @@ interface BattleMove {
 	expectDamage: number
 	expectEffect: string
 	used: boolean
-	select: (hp: Ref<number>) => void
+	select: (hp: Ref<number>) => Promise<unknown>
 }

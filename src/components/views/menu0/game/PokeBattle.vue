@@ -51,8 +51,9 @@ function enemyMove() {
 			})
 		} else {
 			enemyMoves.push(...enemyMoves.splice(0, 1))
-			current.select(hp)
+			await current.select(enemy.ailment.infatuation ? enemyHp : hp)
 		}
+		if (enemy.ailment.infatuation > 0) enemy.ailment.infatuation--
 		myTurn.value = true
 		if (myPoke.ailment.defenseless > 0) myPoke.ailment.defenseless--
 		if (myPoke.ailment.dot.length) {
@@ -80,9 +81,10 @@ function enemyMove() {
 	}, 1000)
 }
 async function onClickMove(m: BattleMove) {
-	m.select(enemyHp)
+	await m.select(myPoke.ailment.infatuation ? hp : enemyHp)
 	m.used = true
 	if (moves.map(item => item.used).every(item => item)) moves.forEach(item => (item.used = false))
+	if (myPoke.ailment.infatuation > 0) myPoke.ailment.infatuation--
 	myTurn.value = false
 	if (enemy.ailment.defenseless > 0) enemy.ailment.defenseless--
 	if (enemy.ailment.dot.length) {

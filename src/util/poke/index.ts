@@ -80,6 +80,9 @@ export function setMyPoke(target: Poke, lGetter: () => number, t: ToastServiceMe
 function safeDamage(hp: Ref<number>, d: number) {
 	hp.value -= d > hp.value ? hp.value : d
 }
+function sleep() {
+	return new Promise(resolve => setTimeout(resolve, 1000))
+}
 
 export class BattleSpec {
 	p: Poke
@@ -96,7 +99,7 @@ export class BattleSpec {
 		this.p = p
 		this.l = l
 		this.toast = t
-		this.ailment = { dot: [], skip: 0, defenseless: 0 }
+		this.ailment = { dot: [], skip: 0, defenseless: 0, infatuation: 0 }
 		this.stat = { evasion: 0, attack: 100, defense: 100 }
 	}
 
@@ -133,7 +136,7 @@ export class BattleSpec {
 			case 'no-defense':
 				return `${this.getChance(m)}% 확률로 ${period}턴간 방어 무효`
 			case 'infatuation':
-				break
+				return `${this.getChance(m)}% 확률로 ${period}턴간 매혹`
 			case 'nightmare':
 				break
 		}
@@ -159,30 +162,44 @@ export class BattleSpec {
 			expectDamage: this.getDamage(enemy),
 			used: false,
 			expectEffect: this.getText(item),
-			select: (enemyHp: Ref<number>) => {
+			select: async (targetHp: Ref<number>) => {
+				let pk: (value: unknown) => void
+				const p = new Promise(reso => (pk = reso))
+				let moveTarget = enemy
+				if (this.ailment.infatuation) {
+					this.toast.add({ detail: `매혹을 당해 스스로를 공격 목표로 삼습니다🤩`, life: 2000 })
+					moveTarget = this
+					await sleep()
+				}
 				const r = Math.random() * 100
 				switch (item.category) {
 					case 'damage':
-						safeDamage(enemyHp, this.getDamage(enemy, enemy.ailment.defenseless))
-						return
+						safeDamage(targetHp, this.getDamage(moveTarget, moveTarget.ailment.defenseless))
+						pk('')
+						break
 					case 'damage+ailment':
-						safeDamage(enemyHp, this.getDamage(enemy, enemy.ailment.defenseless))
+						safeDamage(targetHp, this.getDamage(moveTarget, moveTarget.ailment.defenseless))
 						if (r < item.ailment.ailment_chance) {
-							apply(item, this.getPeriod(item), enemy.ailment, () => safeDamage(enemyHp, this.getDamage(enemy)))
+							apply(item, this.getPeriod(item), moveTarget.ailment, () => safeDamage(targetHp, this.getDamage(moveTarget)))
 							this.toast.add({ detail: `${this.getChance(item)}% 확률로 상태 이상 공격 성공✔`, life: 2000 })
 						}
-						return
+						pk('')
+						break
 					case 'net-good-stats':
-						enemy.stat[item.stat] += item.change * statMultiply
-						this.toast.add({ detail: `증감된 ${item.stat} 능력치: ${enemy.stat[item.stat]}✔`, life: 2000 })
-						return
+						if (item.change > 0) moveTarget = this
+						moveTarget.stat[item.stat] += item.change * statMultiply
+						this.toast.add({ detail: `증감된 ${item.stat} 능력치: ${moveTarget.stat[item.stat]}✔`, life: 2000 })
+						pk('')
+						break
 					case 'ailment':
 						if (r < item.ailment.ailment_chance || true) {
-							apply(item, this.getPeriod(item), enemy.ailment, () => safeDamage(enemyHp, this.getDamage(enemy)))
+							apply(item, this.getPeriod(item), moveTarget.ailment, () => safeDamage(targetHp, this.getDamage(moveTarget)))
 							this.toast.add({ detail: `${this.getChance(item)}% 확률로 상태 이상 공격 성공✔`, life: 2000 })
 						}
-						return
+						pk('')
+						break
 				}
+				return p
 			},
 		}))
 	}

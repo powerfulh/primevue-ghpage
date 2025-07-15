@@ -7,6 +7,7 @@ export interface AilmentSpec {
 	dot: Array<() => void>
 	skip: number
 	defenseless: number
+	infatuation: number
 }
 
 export function toDefined(a: FollowedAliment): CustomDefined {
@@ -49,6 +50,7 @@ export function apply(m: Poke['move'][number], p: number, a: AilmentSpec, cb: ()
 				if (a.defenseless == 1) a.defenseless++
 				break
 			case 'infatuation':
+				a.infatuation++
 				break
 			case 'nightmare':
 				break
