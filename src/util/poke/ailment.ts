@@ -37,6 +37,7 @@ export function apply(m: Poke['move'][number], p: number, a: AilmentSpec, cb: ()
 				a.skip++
 				break
 			case 'neutralize':
+				a.skip++
 				a.neutralize++
 				if (a.neutralize == 1) a.neutralize++
 				break

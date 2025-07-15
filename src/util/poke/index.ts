@@ -127,11 +127,11 @@ export class BattleSpec {
 			case 'skip':
 				return `${this.getChance(m)}% 확률로 ${period}턴 생략`
 			case 'neutralize':
-				return `${this.getChance(m)}% 확률로 ${period}턴간 방어 무효`
+				return `${this.getChance(m)}% 확률로 ${period}턴 생략 및 방어 무효`
 			case 'dot':
 				return `${this.getChance(m)}% 확률로 ${period}턴간 지속 피해`
 			case 'no-defense':
-				break
+				return `${this.getChance(m)}% 확률로 ${period}턴간 방어 무효`
 			case 'infatuation':
 				break
 			case 'nightmare':
