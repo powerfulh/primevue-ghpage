@@ -54,7 +54,7 @@ function enemyMove() {
 			current.select(hp)
 		}
 		myTurn.value = true
-		if (myPoke.ailment.neutralize > 0) myPoke.ailment.neutralize--
+		if (myPoke.ailment.defenseless > 0) myPoke.ailment.defenseless--
 		if (myPoke.ailment.dot.length) {
 			await applyAilment(() => {
 				myPoke.ailment.dot[0]()
@@ -84,7 +84,7 @@ async function onClickMove(m: BattleMove) {
 	m.used = true
 	if (moves.map(item => item.used).every(item => item)) moves.forEach(item => (item.used = false))
 	myTurn.value = false
-	if (enemy.ailment.neutralize > 0) enemy.ailment.neutralize--
+	if (enemy.ailment.defenseless > 0) enemy.ailment.defenseless--
 	if (enemy.ailment.dot.length) {
 		await applyAilment(() => {
 			enemy.ailment.dot[0]()

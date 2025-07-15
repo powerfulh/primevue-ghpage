@@ -96,7 +96,7 @@ export class BattleSpec {
 		this.p = p
 		this.l = l
 		this.toast = t
-		this.ailment = { dot: [], skip: 0, neutralize: 0 }
+		this.ailment = { dot: [], skip: 0, defenseless: 0 }
 		this.stat = { evasion: 0, attack: 100, defense: 100 }
 	}
 
@@ -106,11 +106,11 @@ export class BattleSpec {
 	getDefense() {
 		return this.p.stats.defense * (1 + this.l() / 10)
 	}
-	getDamage(enemy: BattleSpec, neutralize = 0) {
+	getDamage(enemy: BattleSpec, defenseless = 0) {
 		let d = this.getAttack() * (this.stat.attack / 100)
 		if (this.p.types.double_damage_to.map(ddt => ddt.name).some(ddt => ddt == enemy.p.types.name)) d *= 2
 		if (this.p.types.double_damage_from.map(ddt => ddt.name).some(ddt => ddt == enemy.p.types.name)) d *= 2
-		if (neutralize == 0) d -= enemy.getDefense() * (enemy.stat.defense / 100)
+		if (defenseless == 0) d -= enemy.getDefense() * (enemy.stat.defense / 100)
 		d = d > 0 ? d : 0
 		return d
 	}
@@ -163,10 +163,10 @@ export class BattleSpec {
 				const r = Math.random() * 100
 				switch (item.category) {
 					case 'damage':
-						safeDamage(enemyHp, this.getDamage(enemy, enemy.ailment.neutralize))
+						safeDamage(enemyHp, this.getDamage(enemy, enemy.ailment.defenseless))
 						return
 					case 'damage+ailment':
-						safeDamage(enemyHp, this.getDamage(enemy, enemy.ailment.neutralize))
+						safeDamage(enemyHp, this.getDamage(enemy, enemy.ailment.defenseless))
 						if (r < item.ailment.ailment_chance) {
 							apply(item, this.getPeriod(item), enemy.ailment, () => safeDamage(enemyHp, this.getDamage(enemy)))
 							this.toast.add({ detail: `${this.getChance(item)}% 확률로 상태 이상 공격 성공✔`, life: 2000 })

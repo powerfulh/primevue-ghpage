@@ -6,7 +6,7 @@ type CustomDefined = 'skip' | 'neutralize' | 'dot' | 'no-defense' | 'infatuation
 export interface AilmentSpec {
 	dot: Array<() => void>
 	skip: number
-	neutralize: number
+	defenseless: number
 }
 
 export function toDefined(a: FollowedAliment): CustomDefined {
@@ -38,8 +38,8 @@ export function apply(m: Poke['move'][number], p: number, a: AilmentSpec, cb: ()
 				break
 			case 'neutralize':
 				a.skip++
-				a.neutralize++
-				if (a.neutralize == 1) a.neutralize++
+				a.defenseless++
+				if (a.defenseless == 1) a.defenseless++
 				break
 			case 'dot':
 				a.dot.push(cb)
