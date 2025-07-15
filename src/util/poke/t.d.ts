@@ -33,7 +33,7 @@ interface Poke {
 		max_turns?: number
 		min_turns?: number
 		change?: number
-		stat?: 'attack' | 'evasion'
+		stat?: 'attack' | 'defense' | 'special-attack' | 'special-defense'
 	}>
 }
 interface BattleMove {

@@ -90,9 +90,9 @@ export class BattleSpec {
 	toast: ToastServiceMethods
 	ailment: AilmentSpec
 	stat: {
-		evasion: number // 회피
 		attack: number
 		defense: number
+		evasion: number // 회피
 	}
 
 	constructor(p: Poke, l: { (): number; (): number }, t: ToastServiceMethods) {
@@ -141,9 +141,23 @@ export class BattleSpec {
 				return `${this.getChance(m)}% 확률로 ${period}턴 생략 및 지속 피해`
 		}
 	}
+	getMultiply(m: Poke['move'][number]) {
+		let multiply = statMultiply
+		// 이 겜은 특공방 없다 ㅋ 대신 증감 두배
+		if (m.stat == 'special-attack') {
+			m.stat = 'attack'
+			multiply *= 2
+		}
+		if (m.stat == 'special-defense') {
+			m.stat = 'defense'
+			multiply *= 2
+		}
+		return multiply
+	}
 	getStatText(m: Poke['move'][number]) {
 		const buff = m.change > 0 // 원래는 대상이 누구인지 필드가 있지만 그냥 양수면 내 버프 아니면 상대 디버프로 퉁치기
-		return `${buff ? '' : '적의 '} ${m.stat} 능력치를 ${m.change * statMultiply}% 증감시킨다`
+		let multiply = this.getMultiply(m)
+		return `${buff ? '' : '적의 '} ${m.stat} 능력치를 ${m.change * multiply}% 증감시킨다`
 	}
 	getText(m: Poke['move'][number]) {
 		switch (m.category) {
@@ -187,7 +201,7 @@ export class BattleSpec {
 						break
 					case 'net-good-stats':
 						if (item.change > 0) moveTarget = this
-						moveTarget.stat[item.stat] += item.change * statMultiply
+						moveTarget.stat[item.stat] += item.change * this.getMultiply(item)
 						this.toast.add({ detail: `증감된 ${item.stat} 능력치: ${moveTarget.stat[item.stat]}✔`, life: 2000 })
 						pk('')
 						break
