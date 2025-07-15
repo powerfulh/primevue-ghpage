@@ -138,7 +138,7 @@ export class BattleSpec {
 			case 'infatuation':
 				return `${this.getChance(m)}% 확률로 ${period}턴간 매혹`
 			case 'nightmare':
-				break
+				return `${this.getChance(m)}% 확률로 ${period}턴 생략 및 지속 피해`
 		}
 	}
 	getStatText(m: Poke['move'][number]) {
@@ -192,7 +192,7 @@ export class BattleSpec {
 						pk('')
 						break
 					case 'ailment':
-						if (r < item.ailment.ailment_chance || true) {
+						if (r < item.ailment.ailment_chance) {
 							apply(item, this.getPeriod(item), moveTarget.ailment, () => safeDamage(targetHp, this.getDamage(moveTarget)))
 							this.toast.add({ detail: `${this.getChance(item)}% 확률로 상태 이상 공격 성공✔`, life: 2000 })
 						}

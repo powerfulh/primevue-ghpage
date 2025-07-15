@@ -53,6 +53,8 @@ export function apply(m: Poke['move'][number], p: number, a: AilmentSpec, cb: ()
 				a.infatuation++
 				break
 			case 'nightmare':
+				a.skip++
+				a.dot.push(cb)
 				break
 		}
 	}
