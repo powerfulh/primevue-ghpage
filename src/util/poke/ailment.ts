@@ -45,6 +45,8 @@ export function apply(m: Poke['move'][number], p: number, a: AilmentSpec, cb: ()
 				a.dot.push(cb)
 				break
 			case 'no-defense':
+				a.defenseless++
+				if (a.defenseless == 1) a.defenseless++
 				break
 			case 'infatuation':
 				break

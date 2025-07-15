@@ -25,7 +25,7 @@ function startGame() {
 	const p = new Promise(reso => {
 		api.load('getPokelist')
 			.setWhenSuccess(res => {
-				newPoke(res.results[Math.floor(Math.random() * res.results.length)].url, currentPoke.value, 'https://pokeapi.co/api/v2/move/20')
+				newPoke(res.results[Math.floor(Math.random() * res.results.length)].url, currentPoke.value, 'https://pokeapi.co/api/v2/move/48')
 				pokeStore.save(level.value, exp.value, currentPoke.value)
 				setMyPoke(currentPoke.value, () => level.value, toast)
 				reso(1)
