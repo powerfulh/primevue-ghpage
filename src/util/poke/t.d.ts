@@ -34,6 +34,7 @@ interface Poke {
 		min_turns?: number
 		change?: number
 		stat?: 'attack' | 'defense' | 'special-attack' | 'special-defense'
+		accuracy?: number
 	}>
 }
 interface BattleMove {
@@ -42,5 +43,6 @@ interface BattleMove {
 	expectDamage: number
 	expectEffect: string
 	used: boolean
+	expectRate: number
 	select: (hp: Ref<number>) => Promise<unknown>
 }

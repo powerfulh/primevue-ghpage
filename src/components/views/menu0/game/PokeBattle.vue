@@ -135,6 +135,8 @@ onUnmounted(() => clearTimeout(currentTimeout))
 							{{ item.ko }}
 							<Divider />
 							{{ item.category }}
+							<Divider />
+							성공률: {{ item.expectRate }}%
 							<template v-if="item.category.includes('damage')">
 								<Divider />
 								예상 데미지: {{ item.expectDamage }}

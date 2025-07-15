@@ -72,6 +72,7 @@ export async function newPoke(url: string, target: Poke, testUrl?: string) {
 			min_turns: item.meta.min_turns,
 			change: item.stat_changes[0]?.change,
 			stat: item.stat_changes[0]?.stat.name,
+			accuracy: item.accuracy,
 		}))
 }
 export function setMyPoke(target: Poke, lGetter: () => number, t: ToastServiceMethods) {
@@ -176,6 +177,7 @@ export class BattleSpec {
 			expectDamage: this.getDamage(enemy),
 			used: false,
 			expectEffect: this.getText(item),
+			expectRate: item.accuracy ?? 100,
 			select: async (targetHp: Ref<number>) => {
 				let pk: (value: unknown) => void
 				const p = new Promise(reso => (pk = reso))
