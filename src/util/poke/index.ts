@@ -94,6 +94,7 @@ export class BattleSpec {
 		attack: number
 		defense: number
 		speed: number
+		accuracy: number
 		evasion: number // 회피
 	}
 
@@ -102,7 +103,7 @@ export class BattleSpec {
 		this.l = l
 		this.toast = t
 		this.ailment = { dot: [], skip: 0, defenseless: 0, infatuation: 0 }
-		this.stat = { evasion: 0, attack: 100, defense: 100, speed: 0 }
+		this.stat = { evasion: 0, attack: 100, defense: 100, speed: 0, accuracy: 0 }
 	}
 
 	getAttack() {
@@ -172,7 +173,7 @@ export class BattleSpec {
 		return ''
 	}
 	getAccuracy(m: Poke['move'][number]) {
-		return (m.accuracy ?? 100) + this.stat.speed
+		return (m.accuracy ?? 100) + this.stat.speed + this.stat.accuracy
 	}
 	getMoveList(enemy: BattleSpec): Array<BattleMove> {
 		return this.p.move.map(item => ({
