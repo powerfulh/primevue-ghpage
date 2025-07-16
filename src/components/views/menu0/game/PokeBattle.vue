@@ -25,7 +25,7 @@ const waitMove = ref(false)
 const enemyMoves = reactive([] as Array<BattleMove>)
 let currentTimeout
 const win = ref(null as boolean)
-let battleExp = 10
+let battleExp = 15
 
 const result = computed(() => win.value != null)
 
@@ -79,6 +79,7 @@ function enemyMove() {
 				toast.add({ detail: '지속 피해 적용🔥', life: 2000 })
 				myPoke.ailment.dot.shift()
 			})
+			if (checkWhowin()) return
 		}
 		if (myPoke.ailment.skip > 0) {
 			await applyAilment(() => {
@@ -112,6 +113,7 @@ async function onClickMove(m: BattleMove) {
 			toast.add({ detail: '지속 피해 적용🔥', life: 2000 })
 			enemy.ailment.dot.shift()
 		})
+		if (checkWhowin()) return
 	}
 	enemyMove()
 }
