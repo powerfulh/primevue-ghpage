@@ -213,7 +213,7 @@ export class BattleSpec {
 						break
 					case 'damage+ailment':
 						safeDamage(targetHp, this.getDamage(moveTarget, moveTarget.ailment.defenseless))
-						if (r < item.ailment.ailment_chance) {
+						if (r < this.getChance(item)) {
 							apply(item, this.getPeriod(item), moveTarget.ailment, () => safeDamage(targetHp, this.getDamage(moveTarget)))
 							this.toast.add({ detail: `${this.getChance(item)}% 확률로 상태 이상 공격 성공✔`, life: 2000 })
 						}
@@ -226,7 +226,7 @@ export class BattleSpec {
 						pk('')
 						break
 					case 'ailment':
-						if (r < item.ailment.ailment_chance) {
+						if (r < this.getChance(item)) {
 							apply(item, this.getPeriod(item), moveTarget.ailment, () => safeDamage(targetHp, this.getDamage(moveTarget)))
 							this.toast.add({ detail: `${this.getChance(item)}% 확률로 상태 이상 공격 성공✔`, life: 2000 })
 						}
