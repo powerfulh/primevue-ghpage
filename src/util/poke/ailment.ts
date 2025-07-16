@@ -1,6 +1,18 @@
 import { Poke } from './t'
 
-export type FollowedAliment = 'paralysis' | 'sleep' | 'freeze' | 'burn' | 'poison' | 'confusion' | 'infatuation' | 'trap' | 'nightmare' | 'torment' | 'disable'
+export type FollowedAliment =
+	| 'paralysis'
+	| 'sleep'
+	| 'freeze'
+	| 'burn'
+	| 'poison'
+	| 'confusion'
+	| 'infatuation'
+	| 'trap'
+	| 'nightmare'
+	| 'torment'
+	| 'disable'
+	| 'no-type-immunity'
 type CustomDefined = 'skip' | 'neutralize' | 'dot' | 'no-defense' | 'infatuation' | 'nightmare'
 
 export interface AilmentSpec {
@@ -18,6 +30,7 @@ export function toDefined(a: FollowedAliment): CustomDefined {
 			return 'skip' // 턴 생략
 		case 'sleep':
 		case 'trap':
+		case 'no-type-immunity':
 			return 'neutralize' // 턴 생략, 방어 무효
 		case 'burn':
 		case 'poison':

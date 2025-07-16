@@ -64,7 +64,7 @@ if (pokeStore.loadable) {
 			<template v-if="currentPoke.name" #content>
 				<p>Level: <Badge :value="level" /></p>
 				<p>
-					<ProgressBar :value="expVal">{{ expVal }} / 100%</ProgressBar>
+					<ProgressBar :value="expVal" style="height: 2rem">{{ expVal }} / 100%</ProgressBar>
 				</p>
 			</template>
 		</Card>

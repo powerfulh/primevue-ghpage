@@ -30,5 +30,13 @@ export const usePokeStore = defineStore('Poke', () => {
 			e.value = saveData.value.e
 			p.value = saveData.value.p
 		},
+		earnExp(e: number) {
+			saveData.value.e += e
+			if (saveData.value.e >= 100) {
+				saveData.value.e = saveData.value.e - 100
+				saveData.value.l++
+			}
+			this.save(saveData.value.l, saveData.value.e, saveData.value.p)
+		},
 	}
 })

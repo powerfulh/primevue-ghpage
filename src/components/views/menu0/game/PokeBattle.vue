@@ -1,12 +1,14 @@
 <script setup lang="ts">
 import { usePokeStore } from '@/stores/poke'
-import { Button, Card, Divider, Message, Splitter, useToast } from 'primevue'
-import { onUnmounted, reactive, ref } from 'vue'
+import { Button, Card, Dialog, Divider, Message, Splitter, useToast } from 'primevue'
+import { computed, onUnmounted, reactive, ref } from 'vue'
 import BattlePanel from './BattlePanel.vue'
 import { BattleSpec, myPoke, newPoke } from '@/util/poke'
 import { injectApi } from 'powerful-api-vue3'
 import { BattleMove, Poke } from '@/util/poke/t'
+import { useRouter } from 'vue-router'
 
+const router = useRouter()
 const pokeStore = usePokeStore()
 const api = injectApi()
 const toast = useToast()
@@ -22,6 +24,10 @@ const waitAliment = ref(false)
 const waitMove = ref(false)
 const enemyMoves = reactive([] as Array<BattleMove>)
 let currentTimeout
+const win = ref(null as boolean)
+let battleExp = 10
+
+const result = computed(() => win.value != null)
 
 function fillMyHp() {
 	hp.value = pokeStore.hp
@@ -40,6 +46,16 @@ async function applyAilment(acb: Function) {
 	})
 	return p
 }
+function checkWhowin() {
+	if (hp.value <= 0) {
+		win.value = false
+		battleExp /= 2
+		return true
+	} else if (enemyHp.value <= 0) {
+		win.value = true
+		return true
+	}
+}
 function enemyMove() {
 	waitMove.value = true
 	const current = enemyMoves[0]
@@ -54,6 +70,7 @@ function enemyMove() {
 			await current.select(enemy.ailment.infatuation ? enemyHp : hp)
 		}
 		if (enemy.ailment.infatuation > 0) enemy.ailment.infatuation--
+		if (checkWhowin()) return
 		myTurn.value = true
 		if (myPoke.ailment.defenseless > 0) myPoke.ailment.defenseless--
 		if (myPoke.ailment.dot.length) {
@@ -81,10 +98,12 @@ function enemyMove() {
 	}, 1000)
 }
 async function onClickMove(m: BattleMove) {
+	battleExp++
 	await m.select(myPoke.ailment.infatuation ? hp : enemyHp)
 	m.used = true
 	if (moves.map(item => item.used).every(item => item)) moves.forEach(item => (item.used = false))
 	if (myPoke.ailment.infatuation > 0) myPoke.ailment.infatuation--
+	if (checkWhowin()) return
 	myTurn.value = false
 	if (enemy.ailment.defenseless > 0) enemy.ailment.defenseless--
 	if (enemy.ailment.dot.length) {
@@ -95,6 +114,10 @@ async function onClickMove(m: BattleMove) {
 		})
 	}
 	enemyMove()
+}
+function onClickResult() {
+	pokeStore.earnExp(battleExp)
+	router.back()
 }
 
 api.load('getPokelist')
@@ -151,5 +174,18 @@ onUnmounted(() => clearTimeout(currentTimeout))
 				<span v-else-if="waitMove">Action 선택중..</span>
 			</template>
 		</Card>
+
+		<Dialog v-model:visible="result" modal :header="win ? '승리✌' : '패배😑'">
+			<template #container>
+				<Card>
+					<template #title>{{ win ? '승리✌' : '패배😑' }}</template>
+					<template #content>
+						얻은 경험치: {{ battleExp }}
+						<Divider />
+						<Button icon="pi pi-check" @click="onClickResult" />
+					</template>
+				</Card>
+			</template>
+		</Dialog>
 	</main>
 </template>
