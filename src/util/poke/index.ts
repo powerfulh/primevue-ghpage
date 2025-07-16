@@ -175,6 +175,9 @@ export class BattleSpec {
 	getAccuracy(m: Poke['move'][number]) {
 		return (m.accuracy ?? 100) + this.stat.speed + this.stat.accuracy
 	}
+	getEvasion() {
+		return this.stat.speed + this.stat.evasion
+	}
 	getMoveList(enemy: BattleSpec): Array<BattleMove> {
 		return this.p.move.map(item => ({
 			ko: item.ko,
@@ -195,6 +198,11 @@ export class BattleSpec {
 				const r = Math.random() * 100
 				if (r > this.getAccuracy(item)) {
 					this.toast.add({ detail: `공격이 빗나가 무효화😥`, life: 2000 })
+					pk('')
+					return
+				}
+				if (r < enemy.getEvasion()) {
+					this.toast.add({ detail: `공격을 회피했다😎`, life: 2000 })
 					pk('')
 					return
 				}
