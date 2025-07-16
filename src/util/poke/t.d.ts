@@ -30,6 +30,7 @@ interface Poke {
 			ailment_chance: number
 		}
 		category: CustomDefinedMove
+		healing: number
 		max_turns?: number
 		min_turns?: number
 		change?: number
@@ -43,5 +44,5 @@ interface BattleMove {
 	expectEffect: string
 	used: boolean
 	expectRate: number
-	select: (hp: Ref<number>) => Promise<unknown>
+	select: (hp: Ref<number>, healTarget: Ref<number>) => Promise<unknown>
 }

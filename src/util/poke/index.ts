@@ -73,6 +73,7 @@ export async function newPoke(url: string, target: Poke, testUrl?: string) {
 			change: item.stat_changes[0]?.change,
 			stat: item.stat_changes[0]?.stat.name,
 			accuracy: item.accuracy,
+			healing: item.meta.healing,
 		}))
 }
 export function setMyPoke(target: Poke, lGetter: () => number, t: ToastServiceMethods) {
@@ -115,6 +116,9 @@ export class BattleSpec {
 	}
 	getDefense() {
 		return this.p.stats.defense * (1 + this.l() / 10)
+	}
+	getMaxhp() {
+		return this.p.stats.hp * (1 + this.l() / 10)
 	}
 	getDamage(enemy: BattleSpec, defenseless = 0) {
 		let d = this.getAttack() * (this.stat.attack / 100)
@@ -173,6 +177,8 @@ export class BattleSpec {
 				return this.getAilmentText(m)
 			case 'net-good-stats':
 				return this.getStatText(m)
+			case 'heal':
+				return `HP ${m.healing}% 회복`
 		}
 		return ''
 	}
@@ -189,7 +195,7 @@ export class BattleSpec {
 			used: false,
 			expectEffect: this.getText(item),
 			expectRate: this.getAccuracy(item),
-			select: async (targetHp: Ref<number>) => {
+			select: async (targetHp: Ref<number>, healTarget: Ref<number>) => {
 				let pk: (value: unknown) => void
 				const p = new Promise(reso => (pk = reso))
 				let moveTarget = enemy
@@ -233,6 +239,11 @@ export class BattleSpec {
 							apply(item, this.getPeriod(item), moveTarget.ailment, () => safeDamage(targetHp, this.getDamage(moveTarget)))
 							this.toast.add({ detail: `${this.getChance(item)}% 확률로 상태 이상 공격 성공✔`, life: 2000 })
 						}
+						pk('')
+						break
+					case 'heal':
+						healTarget.value += this.getMaxhp() * (item.healing / 100)
+						if (healTarget.value > this.getMaxhp()) healTarget.value = this.getMaxhp()
 						pk('')
 						break
 				}

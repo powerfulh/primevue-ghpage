@@ -30,10 +30,10 @@ let battleExp = 15
 const result = computed(() => win.value != null)
 
 function fillMyHp() {
-	hp.value = pokeStore.hp
+	hp.value = myPoke.getMaxhp()
 }
 function fillEnemyHp() {
-	enemyHp.value = enemyPoke.value.stats.hp
+	enemyHp.value = enemy.getMaxhp()
 }
 async function applyAilment(acb: Function) {
 	waitAliment.value = true
@@ -67,7 +67,7 @@ function enemyMove() {
 			})
 		} else {
 			enemyMoves.push(...enemyMoves.splice(0, 1))
-			await current.select(enemy.ailment.infatuation ? enemyHp : hp)
+			await current.select(enemy.ailment.infatuation ? enemyHp : hp, enemyHp)
 		}
 		if (enemy.ailment.infatuation > 0) enemy.ailment.infatuation--
 		if (checkWhowin()) return
@@ -100,7 +100,7 @@ function enemyMove() {
 }
 async function onClickMove(m: BattleMove) {
 	battleExp++
-	await m.select(myPoke.ailment.infatuation ? hp : enemyHp)
+	await m.select(myPoke.ailment.infatuation ? hp : enemyHp, hp)
 	m.used = true
 	if (moves.map(item => item.used).every(item => item)) moves.forEach(item => (item.used = false))
 	if (myPoke.ailment.infatuation > 0) myPoke.ailment.infatuation--
@@ -146,8 +146,8 @@ onUnmounted(() => clearTimeout(currentTimeout))
 			>
 			<template #content>
 				<Splitter v-if="enemyReady">
-					<BattlePanel :sprite="pokeStore.sprite" :name="pokeStore.name" :hp="hp" :max-hp="pokeStore.hp" @sprite="fillMyHp" />
-					<BattlePanel :sprite="enemyPoke.sprites" :name="enemyPoke.ko" :hp="enemyHp" :max-hp="enemyPoke.stats.hp" enemy @sprite="fillEnemyHp" />
+					<BattlePanel :sprite="pokeStore.sprite" :name="pokeStore.name" :hp="hp" :max-hp="myPoke.getMaxhp()" @sprite="fillMyHp" />
+					<BattlePanel :sprite="enemyPoke.sprites" :name="enemyPoke.ko" :hp="enemyHp" :max-hp="enemy.getMaxhp()" enemy @sprite="fillEnemyHp" />
 				</Splitter>
 			</template>
 		</Card>

@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { myPoke, Poke } from '@/util/poke'
+import { myPoke } from '@/util/poke'
+import { Poke } from '@/util/poke/t'
 import { Card, Chip, Splitter, SplitterPanel, Tag } from 'primevue'
 import { computed } from 'vue'
 
@@ -26,7 +27,7 @@ function getTypeTooltip(k: string) {
 				</SplitterPanel>
 				<SplitterPanel>
 					<Tag value="HP" icon="pi pi-heart" />
-					<span>{{ item.stats.hp }}</span>
+					<span v-tooltip="myPoke.getMaxhp().toString()">{{ item.stats.hp }}</span>
 				</SplitterPanel>
 				<SplitterPanel>
 					<Tag value="Attack" icon="pi pi-circle" />
