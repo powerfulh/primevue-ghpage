@@ -93,6 +93,7 @@ export class BattleSpec {
 	stat: {
 		attack: number
 		defense: number
+		speed: number
 		evasion: number // 회피
 	}
 
@@ -101,7 +102,7 @@ export class BattleSpec {
 		this.l = l
 		this.toast = t
 		this.ailment = { dot: [], skip: 0, defenseless: 0, infatuation: 0 }
-		this.stat = { evasion: 0, attack: 100, defense: 100 }
+		this.stat = { evasion: 0, attack: 100, defense: 100, speed: 0 }
 	}
 
 	getAttack() {
@@ -170,6 +171,9 @@ export class BattleSpec {
 		}
 		return ''
 	}
+	getAccuracy(m: Poke['move'][number]) {
+		return (m.accuracy ?? 100) + this.stat.speed
+	}
 	getMoveList(enemy: BattleSpec): Array<BattleMove> {
 		return this.p.move.map(item => ({
 			ko: item.ko,
@@ -177,7 +181,7 @@ export class BattleSpec {
 			expectDamage: this.getDamage(enemy),
 			used: false,
 			expectEffect: this.getText(item),
-			expectRate: item.accuracy ?? 100,
+			expectRate: this.getAccuracy(item),
 			select: async (targetHp: Ref<number>) => {
 				let pk: (value: unknown) => void
 				const p = new Promise(reso => (pk = reso))
@@ -188,7 +192,7 @@ export class BattleSpec {
 					await sleep()
 				}
 				const r = Math.random() * 100
-				if (r > item.accuracy) {
+				if (r > this.getAccuracy(item)) {
 					this.toast.add({ detail: `공격이 빗나가 무효화😥`, life: 2000 })
 					pk('')
 					return
