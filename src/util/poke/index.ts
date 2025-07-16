@@ -188,6 +188,11 @@ export class BattleSpec {
 					await sleep()
 				}
 				const r = Math.random() * 100
+				if (r > item.accuracy) {
+					this.toast.add({ detail: `공격이 빗나가 무효화😥`, life: 2000 })
+					pk('')
+					return
+				}
 				switch (item.category) {
 					case 'damage':
 						safeDamage(targetHp, this.getDamage(moveTarget, moveTarget.ailment.defenseless))
