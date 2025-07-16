@@ -120,6 +120,7 @@ function onClickResult() {
 	router.back()
 }
 
+myPoke.init()
 api.load('getPokelist')
 	.setWhenSuccess(async res => {
 		await newPoke(res.results[Math.floor(Math.random() * res.results.length)].url, enemyPoke.value)
@@ -162,7 +163,7 @@ onUnmounted(() => clearTimeout(currentTimeout))
 							성공률: {{ item.expectRate }}%
 							<template v-if="item.category.includes('damage')">
 								<Divider />
-								예상 데미지: {{ item.expectDamage }}
+								예상 데미지: {{ myPoke.getDamage(enemy, enemy.ailment.defenseless) }}
 							</template>
 							<template v-if="item.expectEffect">
 								<Divider />

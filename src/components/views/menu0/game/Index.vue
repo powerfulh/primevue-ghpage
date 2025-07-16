@@ -19,7 +19,7 @@ const level = ref(0)
 const exp = ref(0)
 
 const expGoal = computed(() => 100 * (1 + level.value))
-const expVal = computed(() => (exp.value / expGoal.value) * 100)
+const expVal = computed(() => Math.floor((exp.value / expGoal.value) * 100))
 
 function startGame() {
 	const p = new Promise(reso => {

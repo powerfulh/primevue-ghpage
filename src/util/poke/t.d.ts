@@ -40,7 +40,6 @@ interface Poke {
 interface BattleMove {
 	ko: string
 	category: CustomDefinedMove
-	expectDamage: number
 	expectEffect: string
 	used: boolean
 	expectRate: number

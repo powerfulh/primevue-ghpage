@@ -106,6 +106,10 @@ export class BattleSpec {
 		this.stat = { evasion: 0, attack: 100, defense: 100, speed: 0, accuracy: 0 }
 	}
 
+	init() {
+		this.ailment = { dot: [], skip: 0, defenseless: 0, infatuation: 0 }
+		this.stat = { evasion: 0, attack: 100, defense: 100, speed: 0, accuracy: 0 }
+	}
 	getAttack() {
 		return this.p.stats.attack * (1 + this.l() / 10)
 	}
@@ -182,7 +186,6 @@ export class BattleSpec {
 		return this.p.move.map(item => ({
 			ko: item.ko,
 			category: item.category,
-			expectDamage: this.getDamage(enemy),
 			used: false,
 			expectEffect: this.getText(item),
 			expectRate: this.getAccuracy(item),
