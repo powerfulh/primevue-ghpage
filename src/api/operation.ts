@@ -48,5 +48,17 @@ export default {
 			},
 		],
 	} as ApiOperation<Array<Curtain>>,
+	authenticate: {
+		type: 'post',
+		url: 'https://port-0-powerful-spring-boot-5o1j2llh1wq9rp.sel4.cloudtype.app/powerful/authenticate',
+		param: [
+			{
+				name: 'id',
+			},
+			{
+				name: 'pw',
+			},
+		],
+	} as ApiOperation<boolean>,
 	...poke,
 }

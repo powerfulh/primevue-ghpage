@@ -8,6 +8,7 @@ import PokeSpec from './PokeSpec.vue'
 import PokeAction from './PokeAction.vue'
 import { usePokeStore } from '@/stores/poke'
 import { Poke } from '@/util/poke/t'
+import LoginDialog from '../../LoginDialog.vue'
 
 const headerStore = useHeaderStore()
 const pokeStore = usePokeStore()
@@ -74,5 +75,7 @@ if (pokeStore.loadable) {
 			<Divider />
 			<PokeAction />
 		</template>
+
+		<LoginDialog />
 	</main>
 </template>
