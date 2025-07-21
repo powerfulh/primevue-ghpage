@@ -82,6 +82,6 @@ if (pokeStore.loadable) {
 			<PokeAction />
 		</template>
 
-		<LoginDialog />
+		<LoginDialog v-if="headerStore.login == false" />
 	</main>
 </template>

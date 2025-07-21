@@ -19,7 +19,7 @@ function authencicate() {
 		.setParameter(param)
 		.setWhenSuccess(res => {
 			headerStore.login = res
-			if (res == false) toast.add({ detail: 'Login fail', life: 2000 })
+			if (res == false) toast.add({ detail: 'Login fail', life: 2000, severity: 'error' })
 		})
 		.fire({ loading: true, noConfirm: true })
 }
@@ -27,9 +27,11 @@ function authencicate() {
 
 <template>
 	<Dialog v-model:visible="visible" modal header="Login">
-		<InputText v-model="param.id" placeholder="ID" maxlength="9" minlength="3" @keypress.enter="authencicate" />
+		<InputText v-model.trim="param.id" placeholder="ID" maxlength="9" minlength="3" @keypress.enter="authencicate" />
 		<Password v-model="param.pw" placeholder="Password" maxlength="11" minlength="4" :feedback="false" @keypress.enter="authencicate" />
-		<Message v-if="param.pw.length > 11" severity="error">Too long Password</Message>
+		<Message v-if="param.id.length == 0" severity="error">Input ID</Message>
+		<Message v-else-if="param.pw.length == 0" severity="error">Input Password</Message>
+		<Message v-else-if="param.pw.length > 11" severity="error">Too long Password</Message>
 		<Button v-else icon="pi pi-check" @click="authencicate"></Button>
 	</Dialog>
 </template>
