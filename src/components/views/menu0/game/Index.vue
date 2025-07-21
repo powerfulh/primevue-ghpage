@@ -9,7 +9,9 @@ import PokeAction from './PokeAction.vue'
 import { usePokeStore } from '@/stores/poke'
 import { Poke } from '@/util/poke/t'
 import LoginDialog from '../../LoginDialog.vue'
+import { useRouter } from 'vue-router'
 
+const router = useRouter()
 const headerStore = useHeaderStore()
 const pokeStore = usePokeStore()
 const api = injectApi()
@@ -23,6 +25,10 @@ const expGoal = computed(() => 100 * (1 + level.value))
 const expVal = computed(() => Math.floor((exp.value / expGoal.value) * 100))
 
 function startGame() {
+	if (headerStore.login == false) {
+		router.push('_refresh')
+		return
+	}
 	const p = new Promise(reso => {
 		api.load('getPokelist')
 			.setWhenSuccess(res => {

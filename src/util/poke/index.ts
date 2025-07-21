@@ -6,6 +6,8 @@ import { AilmentSpec, apply, toDefined } from './ailment'
 import { BattleMove, Poke } from './t'
 import { definedMoveCategory, statMultiply } from './const'
 
+const naturalAxios = axios.create()
+
 export let myPoke: BattleSpec
 
 function startAxios(r: InternalAxiosRequestConfig) {
@@ -28,16 +30,16 @@ function koFinder(item: { language: { name: string } }) {
 }
 async function replaceChain(target: Array<{ url: string }>, testUrl?: string) {
 	if (testUrl) target[0].url = testUrl
-	return Promise.all(target.map(({ url }) => axios.get(url))).then(l => l.map(({ data }) => ({ ...data, ko: data.names.find(koFinder)?.name })))
+	return Promise.all(target.map(({ url }) => naturalAxios.get(url))).then(l => l.map(({ data }) => ({ ...data, ko: data.names.find(koFinder)?.name })))
 }
 export async function newPoke(url: string, target: Poke, testUrl?: string) {
-	const p = (await axios.get(url)).data
-	const spec = (await axios.get(p.species.url)).data
+	const p = (await naturalAxios.get(url)).data
+	const spec = (await naturalAxios.get(p.species.url)).data
 	target.name = spec.name
 	target.ko = spec.names.find(koFinder)?.name
 	target.flavor_text = spec.flavor_text_entries.find(koFinder)?.flavor_text
 	target.sprites = p.sprites.front_default
-	const t = (await axios.get(p.types[0].type.url)).data
+	const t = (await naturalAxios.get(p.types[0].type.url)).data
 	target.types = {
 		name: t.name,
 		ko: t.names.find(koFinder).name,
@@ -253,5 +255,5 @@ export class BattleSpec {
 	}
 }
 
-axios.interceptors.request.use(startAxios)
-axios.interceptors.response.use(endAxios)
+naturalAxios.interceptors.request.use(startAxios)
+naturalAxios.interceptors.response.use(endAxios)
