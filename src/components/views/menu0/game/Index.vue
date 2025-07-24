@@ -29,21 +29,31 @@ function startGame() {
 		router.push('_refresh')
 		return
 	}
-	const p = new Promise(reso => {
-		api.load('getPokelist')
-			.setWhenSuccess(res => {
-				newPoke(res.results[Math.floor(Math.random() * res.results.length)].url, currentPoke.value, 'https://pokeapi.co/api/v2/move/105')
+	api.load('getPapi')
+		.setWhenSuccess(res => {
+			const pd = res.find(item => item.name == 'poke')
+			if (pd) {
+				const d = JSON.parse(pd.data)
+				currentPoke.value = d.poke
+				level.value = d.level
+				exp.value = d.exp
 				pokeStore.save(level.value, exp.value, currentPoke.value)
 				setMyPoke(currentPoke.value, () => level.value, toast)
-				reso(1)
-			})
-			.fire()
-	})
+			} else {
+				api.load('getPokelist')
+					.setWhenSuccess(res => {
+						newPoke(res.results[Math.floor(Math.random() * res.results.length)].url, currentPoke.value)
+						pokeStore.save(level.value, exp.value, currentPoke.value)
+						setMyPoke(currentPoke.value, () => level.value, toast)
+					})
+					.fire()
+			}
+		})
+		.fire()
 	headerStore.onClickGreen = () => {
 		pokeStore.save(level.value, exp.value, currentPoke.value)
 		toast.add({ detail: 'Saved', life: 2000 })
 	}
-	return p
 }
 
 headerStore.onClickGreen = null
