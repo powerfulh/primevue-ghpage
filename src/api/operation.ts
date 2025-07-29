@@ -51,7 +51,10 @@ export default {
 	} as ApiOperation<Array<Curtain>>,
 	authenticate: {
 		type: 'post',
-		url: 'https://port-0-powerful-spring-boot-5o1j2llh1wq9rp.sel4.cloudtype.app/powerful/authenticate',
+		// url: 'https://port-0-powerful-spring-boot-5o1j2llh1wq9rp.sel4.cloudtype.app/powerful/authenticate',
+		// 임시 2군 서버 (파워풀 JPA)
+		// url: 'https://port-0-jpa-5o1j2llh1wq9rp.sel4.cloudtype.app/authentication',
+		url: 'http://localhost:8080/authentication',
 		param: [
 			{
 				name: 'id',
