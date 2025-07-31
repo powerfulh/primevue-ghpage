@@ -2,7 +2,7 @@
 import { useHeaderStore } from '@/stores/header'
 import { injectApi } from 'powerful-api-vue3'
 import { Button, Dialog, InputText, Message, Password, useToast } from 'primevue'
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 
 const headerStore = useHeaderStore()
 const api = injectApi()
@@ -14,7 +14,10 @@ const param = ref({
 	pw: '',
 })
 
+const invalid = computed(() => param.value.id.length == 0 || param.value.pw.length == 0 || param.value.pw.length > 11)
+
 function authencicate() {
+	if (invalid.value) return
 	api.load('authenticate')
 		.setParameter(param)
 		.setWhenSuccess(res => {
