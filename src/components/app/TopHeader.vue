@@ -31,6 +31,11 @@ const items = computed(() =>
 					icon: 'pi pi-list',
 					command: () => router.push({ name: 'Blindmobilerand' }),
 				},
+				{
+					label: '방치형 게임',
+					icon: 'pi pi-microchip',
+					command: () => router.push({ name: 'IdleGame' }),
+				},
 			]
 		: [
 				{

@@ -24,7 +24,7 @@ function authencicate() {
 			headerStore.login = res
 			if (res == false) toast.add({ detail: 'Login fail', life: 2000, severity: 'error' })
 		})
-		.fire({ loading: true, noConfirm: true })
+		.fire({ loading: true, credentials: true })
 }
 </script>
 
