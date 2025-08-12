@@ -1,5 +1,7 @@
 import numeral from 'numeral-es6'
 
+let globalSeq = 0
+
 export interface Initializable<T = any> extends Array<T> {
 	init: (...item: Array<T>) => void
 }
@@ -15,4 +17,7 @@ export function initializableList() {
 export function numberFormat(n: any) {
 	if (typeof n == 'number') return numeral(n).format(Number.isInteger(n) ? '0,0' : '0.00')
 	return n
+}
+export function getGlobalSeq() {
+	return globalSeq++
 }

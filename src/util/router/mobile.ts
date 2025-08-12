@@ -23,8 +23,8 @@ const r: routeMenu = {
 			},
 		},
 		{
-			name: 'IdleGame',
-			path: '/idlegame',
+			name: 'TestGame',
+			path: '/testgame',
 			component: () => import('@/components/views/mobile/game/Index.vue'),
 		},
 	],
