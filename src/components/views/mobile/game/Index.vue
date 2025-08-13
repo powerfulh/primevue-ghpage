@@ -6,6 +6,7 @@ import { computed, ref } from 'vue'
 const tileList = ref([] as Array<Tile>)
 const playing = ref(false)
 const currentStep = ref(0)
+let currentInterval
 
 const coloredList = computed(() =>
 	tileList.value.map(item => ({
@@ -19,20 +20,33 @@ function rgbVal(target: number) {
 }
 function onClickPlay() {
 	playing.value = true
-	setInterval(() => {
+	currentInterval = setInterval(() => {
 		step(tileList.value)
 		currentStep.value++
 	}, 500)
 }
-
-for (let i = 0; i < 3; i++) {
-	tileList.value.push({
-		n: i,
-		el: getElement('oxygen'),
-		g: 500,
-		temper: 0 + i * 10,
-	})
+function init() {
+	tileList.value.length = 0
+	for (let i = 0; i < 16; i++) {
+		tileList.value.push({
+			n: i,
+			el: getElement('oxygen'),
+			g: 500 + i * 20,
+			temper: -25 + i * 10,
+		})
+	}
 }
+function onClickReset() {
+	clearInterval(currentInterval)
+	currentStep.value = 0
+	init()
+}
+function onClickStep() {
+	step(tileList.value)
+	currentStep.value++
+}
+
+init()
 </script>
 
 <template>
@@ -51,6 +65,8 @@ for (let i = 0; i < 3; i++) {
 						{{ item.el.name }}
 						<br />
 						{{ item.temper.toFixed(1) }} 🌡
+						<br />
+						{{ item.g }}g
 					</div>
 				</div>
 			</template>
@@ -59,7 +75,8 @@ for (let i = 0; i < 3; i++) {
 			<template #title>Step: {{ currentStep }}</template>
 			<template #content>
 				<button @click="onClickPlay">▶</button>
-				<button v-if="playing == false" @click="step(tileList)">👞</button>
+				<button v-if="playing == false" @click="onClickStep">👞</button>
+				<button @click="onClickReset">🔄</button>
 			</template>
 		</Card>
 	</main>

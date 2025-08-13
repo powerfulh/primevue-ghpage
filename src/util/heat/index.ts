@@ -42,6 +42,11 @@ export function step(list: Array<Tile>) {
 			.map(k => exists[k])
 			.forEach((tradeTarget: Tile) => {
 				if (tradeTarget == undefined) return
+				if (item.el.name == tradeTarget.el.name && Math.abs(item.g - tradeTarget.g) > 2) {
+					const [taker, takee] = [item, tradeTarget].sort((a, b) => (a.g > b.g ? 1 : -1))
+					taker.g++
+					takee.g--
+				}
 				// 지피티야 도와줘!
 				const temperDiff = item.temper - tradeTarget.temper
 				if (temperDiff < 1) return
