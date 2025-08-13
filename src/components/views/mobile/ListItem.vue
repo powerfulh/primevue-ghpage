@@ -8,7 +8,7 @@ defineProps<{
 </script>
 
 <template>
-	<Card style="margin-top: 4px">
+	<Card>
 		<template #subtitle>{{ item.cp }} · {{ item.nn }} · {{ item.cn }} · {{ item.d.substring(2) }}</template>
 		<template #title>{{ item.t }}</template>
 		<template #content>{{ item.b }}</template>

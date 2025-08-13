@@ -13,3 +13,6 @@
 		}
 	}
 }
+main > * {
+  margin-bottom: 4px;
+}
