@@ -35,6 +35,18 @@ const elementList: Array<Element> = (
 			heatCapacity: 14.3,
 			conductivity: 1,
 		},
+		{
+			name: 'metal tile',
+			state: 'solid',
+			heatCapacity: 1,
+			conductivity: 5,
+		},
+		{
+			name: 'wood tile',
+			state: 'solid',
+			heatCapacity: 1,
+			conductivity: 0.5,
+		},
 	] as const
 ).map(item => ({ ...item, heatCapacity: item.heatCapacity }))
 
