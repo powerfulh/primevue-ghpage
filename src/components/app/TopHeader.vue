@@ -32,9 +32,9 @@ const items = computed(() =>
 					command: () => router.push({ name: 'Blindmobilerand' }),
 				},
 				{
-					label: '방치형 게임',
+					label: '게임',
 					icon: 'pi pi-microchip',
-					command: () => router.push({ name: 'IdleGame' }),
+					command: () => router.push({ name: 'TestGame' }),
 				},
 			]
 		: [
