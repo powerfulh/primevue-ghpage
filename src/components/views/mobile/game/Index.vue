@@ -6,7 +6,9 @@ import { computed, ref } from 'vue'
 const tileList = ref([] as Array<Tile>)
 const playing = ref(false)
 const currentStep = ref(0)
-let currentInterval
+let currentInterval: number
+let fastMode = false
+let stepToggle = false
 
 const coloredList = computed(() =>
 	tileList.value.map(item => ({
@@ -18,12 +20,16 @@ const coloredList = computed(() =>
 function rgbVal(target: number) {
 	return target > 255 ? 255 : target < 0 ? 0 : target
 }
-function onClickPlay() {
+function onClickPlay(f = false) {
+	fastMode = f
+	clearInterval(currentInterval)
 	playing.value = true
 	currentInterval = setInterval(() => {
+		stepToggle = !stepToggle
+		if (fastMode == false && stepToggle) return
 		step(tileList.value)
 		currentStep.value++
-	}, 500)
+	}, 250)
 }
 function init() {
 	tileList.value.length = 0
@@ -74,7 +80,8 @@ init()
 		<Card>
 			<template #title>Step: {{ currentStep }}</template>
 			<template #content>
-				<button @click="onClickPlay">▶</button>
+				<button @click="onClickPlay()">▶</button>
+				<button @click="onClickPlay(true)">⏩</button>
 				<button v-if="playing == false" @click="onClickStep">👞</button>
 				<button @click="onClickReset">🔄</button>
 			</template>
