@@ -69,7 +69,6 @@ init()
 const popover = ref()
 
 function onClickCell(e, i) {
-	if (playing.value) return
 	currentCell = i
 	popover.value.toggle(e)
 }
@@ -112,7 +111,7 @@ function onClickCell(e, i) {
 		</Card>
 
 		<Popover ref="popover">
-			<select :value="tileList[currentCell].el.name" @change="onChangeEl">
+			<select :value="tileList[currentCell].el.name" :disabled="playing" style="font-size: large" @change="onChangeEl">
 				<option v-for="(item, i) in getElementNameList()" :key="i">
 					{{ item }}
 				</option>
@@ -123,9 +122,9 @@ function onClickCell(e, i) {
 				<br />
 				TC: {{ tileList[currentCell].el.conductivity }}
 			</div>
-			Temper: <input v-model.number="tileList[currentCell].temper" />
+			Temper: <input v-model.number="tileList[currentCell].temper" :disabled="playing" />
 			<br />
-			Mass: <input v-model.number="tileList[currentCell].g" />
+			Mass: <input v-model.number="tileList[currentCell].g" :disabled="playing" />
 		</Popover>
 	</main>
 </template>
