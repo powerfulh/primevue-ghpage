@@ -12,6 +12,7 @@ export interface Tile {
 	el: Element
 	g: number
 	temper: number
+	deactivate?: boolean
 }
 
 const elementList: Array<Element> = (
@@ -38,6 +39,7 @@ export function step(list: Array<Tile>) {
 	// const len = list.length
 	const widthMax = 4
 	list.forEach((item, i) => {
+		if (item.deactivate) return
 		const exists = {
 			up: i - widthMax < 0 ? undefined : list[i - widthMax],
 			down: list[i + widthMax],
@@ -46,8 +48,8 @@ export function step(list: Array<Tile>) {
 		}
 		Object.keys(exists)
 			.map(k => exists[k])
+			.filter((tradeTarget: Tile) => tradeTarget && tradeTarget.deactivate != true)
 			.forEach((tradeTarget: Tile) => {
-				if (tradeTarget == undefined) return
 				if (item.el.name == tradeTarget.el.name && Math.abs(item.g - tradeTarget.g) > 2) {
 					const [taker, takee] = [item, tradeTarget].sort((a, b) => (a.g > b.g ? 1 : -1))
 					taker.g++

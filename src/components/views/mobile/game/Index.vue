@@ -59,6 +59,9 @@ function onClickStep() {
 function onChangeEl({ target }) {
 	tileList.value[currentCell].el = getElement(target.value)
 }
+function onChangeActivate({ target }) {
+	tileList.value[currentCell].deactivate = target.checked != true
+}
 
 init()
 
@@ -83,14 +86,17 @@ function onClickCell(e, i) {
 						v-for="(item, i) in coloredList"
 						:key="i"
 						class="tile"
+						:class="{ deactivate: item.deactivate }"
 						:style="`background-color: rgb(${item.rgb[0]}, ${item.rgb[1]}, ${item.rgb[2]}); color: rgb(${255 - item.rgb[0]}, ${255 - item.rgb[1]}, ${255 - item.rgb[2]})`"
 						@click="e => onClickCell(e, i)"
 					>
-						{{ item.el.name }}
-						<br />
-						{{ Number(item.temper).toFixed(1) }} 🌡
-						<br />
-						{{ item.g }}g
+						<template v-if="item.deactivate != true">
+							{{ item.el.name }}
+							<br />
+							{{ Number(item.temper).toFixed(1) }} 🌡
+							<br />
+							{{ item.g }}g
+						</template>
 					</div>
 				</div>
 			</template>
@@ -111,6 +117,7 @@ function onClickCell(e, i) {
 					{{ item }}
 				</option>
 			</select>
+			<input :checked="tileList[currentCell].deactivate != true" type="checkbox" style="transform: scale(2); float: right" @change="onChangeActivate" />
 			<div style="font-size: small">
 				CP: {{ tileList[currentCell].el.heatCapacity }}
 				<br />
@@ -130,6 +137,11 @@ function onClickCell(e, i) {
 	aspect-ratio: 1/1;
 	// font-size: small;
 	padding: 4px;
+
+	&.deactivate {
+		opacity: 0.1;
+		border-radius: 20px;
+	}
 }
 button {
 	margin-right: 4px;
