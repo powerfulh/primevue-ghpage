@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { getElement, step, Tile } from '@/util/heat'
+import { getElement, getElementNameList, step, Tile } from '@/util/heat'
 import { Card, Popover } from 'primevue'
 import { computed, ref } from 'vue'
 
@@ -39,8 +39,10 @@ function init() {
 		tileList.value.push({
 			n: i,
 			el: getElement('oxygen'),
-			g: 500 + i * 20,
-			temper: -25 + i * 10,
+			// g: 500 + i * 20,
+			g: 500,
+			// temper: -25 + i * 10,
+			temper: 25,
 		})
 	}
 }
@@ -53,6 +55,9 @@ function onClickReset() {
 function onClickStep() {
 	step(tileList.value)
 	currentStep.value++
+}
+function onChangeEl({ target }) {
+	tileList.value[currentCell].el = getElement(target.value)
 }
 
 init()
@@ -73,7 +78,7 @@ function onClickCell(e, i) {
 			<!-- <template #title>열</template> -->
 			<!-- <template #subtitle></template> -->
 			<template #content>
-				<div style="display: flex; flex-wrap: wrap">
+				<div style="display: flex; flex-wrap: wrap; justify-content: center">
 					<div
 						v-for="(item, i) in coloredList"
 						:key="i"
@@ -101,9 +106,19 @@ function onClickCell(e, i) {
 		</Card>
 
 		<Popover ref="popover">
-			🌡: <input v-model.number="tileList[currentCell].temper" />
+			<select :value="tileList[currentCell].el.name" @change="onChangeEl">
+				<option v-for="(item, i) in getElementNameList()" :key="i">
+					{{ item }}
+				</option>
+			</select>
+			<div style="font-size: small">
+				CP: {{ tileList[currentCell].el.heatCapacity }}
+				<br />
+				TC: {{ tileList[currentCell].el.conductivity }}
+			</div>
+			Temper: <input v-model.number="tileList[currentCell].temper" />
 			<br />
-			g: <input v-model.number="tileList[currentCell].g" />
+			Mass: <input v-model.number="tileList[currentCell].g" />
 		</Popover>
 	</main>
 </template>
@@ -113,7 +128,7 @@ function onClickCell(e, i) {
 	border: 1px solid white;
 	width: 24%;
 	aspect-ratio: 1/1;
-	font-size: small;
+	// font-size: small;
 	padding: 4px;
 }
 button {

@@ -22,6 +22,12 @@ const elementList: Array<Element> = (
 			heatCapacity: 0.918,
 			conductivity: 1,
 		},
+		{
+			name: 'carbon dioxide',
+			state: 'gas',
+			heatCapacity: 0.844,
+			conductivity: 1,
+		},
 	] as const
 ).map(item => ({ ...item, heatCapacity: item.heatCapacity }))
 
@@ -62,4 +68,7 @@ export function step(list: Array<Tile>) {
 				tradeTarget.temper += dTNeighbor
 			})
 	})
+}
+export function getElementNameList() {
+	return elementList.map(item => item.name)
 }
