@@ -28,7 +28,7 @@ const emit = defineEmits(['change-el', 'change-activate'])
 		<br />
 		TC: {{ tileList[currentCell].el.conductivity }}
 	</div>
-	Temper: <input v-model.number="temper" :disabled="playing" />
+	Temper: <input v-model="temper" type="number" :disabled="playing" />
 	<br />
-	Mass: <input v-model.number="g" :disabled="playing" />
+	Mass: <input v-model="g" type="number" :disabled="playing" />
 </template>
