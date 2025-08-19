@@ -118,7 +118,7 @@ router.isReady().then(() => (routerReady.value = true))
 	</template> -->
 
 	<div v-if="routerReady" style="max-width: 800px">
-		<TopHeader style="margin-bottom: 4px" />
+		<TopHeader v-if="route.meta.solo != true" style="margin-bottom: 4px" />
 		<AppBody />
 	</div>
 
