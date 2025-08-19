@@ -115,6 +115,7 @@ function onClickCell(e, i) {
 			<TileDetail
 				v-model:temper="tileList[currentCell].temper"
 				v-model:g="tileList[currentCell].g"
+				v-model:dir="tileList[currentCell].direction"
 				:tile-list="tileList"
 				:current-cell="currentCell"
 				:playing="playing"
