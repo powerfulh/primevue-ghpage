@@ -48,9 +48,8 @@ function init() {
 	}
 }
 function onClickReset() {
-	clearInterval(currentInterval)
+	onClickPause()
 	currentStep.value = 0
-	playing.value = false
 	init()
 }
 function onClickStep() {
@@ -62,6 +61,10 @@ function onChangeEl({ target }) {
 }
 function onChangeActivate({ target }) {
 	tileList.value[currentCell].deactivate = target.checked != true
+}
+function onClickPause() {
+	clearInterval(currentInterval)
+	playing.value = false
 }
 
 init()
@@ -106,7 +109,8 @@ function onClickCell(e, i) {
 			<template #content>
 				<button :disabled="invalid" @click="onClickPlay()">▶</button>
 				<button :disabled="invalid" @click="onClickPlay(true)">⏩</button>
-				<button v-if="playing == false" :disabled="invalid" @click="onClickStep">👞</button>
+				<button v-if="playing" :disabled="invalid" @click="onClickPause">⏸</button>
+				<button v-else :disabled="invalid" @click="onClickStep">👞</button>
 				<button @click="onClickReset">🔄</button>
 			</template>
 		</Card>
