@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import { getElement, getElementNameList, step, Tile } from '@/util/heat'
+import { getElement, step, Tile } from '@/util/heat'
 import { Card, Popover } from 'primevue'
 import { computed, ref } from 'vue'
+import TileDetail from './TileDetail.vue'
 
 const tileList = ref([] as Array<Tile>)
 const playing = ref(false)
@@ -111,20 +112,15 @@ function onClickCell(e, i) {
 		</Card>
 
 		<Popover ref="popover">
-			<select :value="tileList[currentCell].el.name" :disabled="playing" style="font-size: large" @change="onChangeEl">
-				<option v-for="(item, i) in getElementNameList()" :key="i">
-					{{ item }}
-				</option>
-			</select>
-			<input :checked="tileList[currentCell].deactivate != true" type="checkbox" style="transform: scale(2); float: right" @change="onChangeActivate" />
-			<div style="font-size: small">
-				CP: {{ tileList[currentCell].el.heatCapacity }}
-				<br />
-				TC: {{ tileList[currentCell].el.conductivity }}
-			</div>
-			Temper: <input v-model.number="tileList[currentCell].temper" :disabled="playing" />
-			<br />
-			Mass: <input v-model.number="tileList[currentCell].g" :disabled="playing" />
+			<TileDetail
+				v-model:temper="tileList[currentCell].temper"
+				v-model:g="tileList[currentCell].g"
+				:tile-list="tileList"
+				:current-cell="currentCell"
+				:playing="playing"
+				@change-el="onChangeEl"
+				@change-activate="onChangeActivate"
+			/>
 		</Popover>
 	</main>
 </template>

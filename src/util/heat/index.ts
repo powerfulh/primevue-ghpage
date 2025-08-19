@@ -13,6 +13,7 @@ export interface Tile {
 	g: number
 	temper: number
 	deactivate?: boolean
+	direction?: 'u' | 'd' | 'l' | 'r'
 }
 
 const elementList: Array<Element> = (
