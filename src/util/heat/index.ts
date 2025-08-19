@@ -15,6 +15,12 @@ export interface Tile {
 	deactivate?: boolean
 	direction?: 'u' | 'd' | 'l' | 'r'
 }
+interface NearTile {
+	up: Tile
+	down: Tile
+	left: Tile
+	right: Tile
+}
 
 const elementList: Array<Element> = (
 	[
@@ -54,6 +60,14 @@ const elementList: Array<Element> = (
 export function getElement(name: Element['name']) {
 	return elementList.find(item => item.name == name)
 }
+function itemDirection(item: Tile, exists: NearTile, tradeTarget: Tile) {
+	return (
+		(item.direction == 'u' && exists.up == tradeTarget) ||
+		(item.direction == 'd' && exists.down == tradeTarget) ||
+		(item.direction == 'l' && exists.left == tradeTarget) ||
+		(item.direction == 'r' && exists.right == tradeTarget)
+	)
+}
 export function step(list: Array<Tile>) {
 	// const len = list.length
 	const widthMax = 4
@@ -73,6 +87,10 @@ export function step(list: Array<Tile>) {
 					const [taker, takee] = [item, tradeTarget].sort((a, b) => (a.g > b.g ? 1 : -1))
 					taker.g++
 					takee.g--
+					if (itemDirection(item, exists, tradeTarget)) {
+						tradeTarget.g++
+						item.g--
+					}
 				}
 				// 지피티야 도와줘!
 				const temperDiff = item.temper - tradeTarget.temper
