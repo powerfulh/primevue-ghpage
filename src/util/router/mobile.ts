@@ -26,6 +26,9 @@ const r: routeMenu = {
 			name: 'TestGame',
 			path: '/testgame',
 			component: () => import('@/components/views/mobile/game/Index.vue'),
+			meta: {
+				solo: true,
+			},
 		},
 	],
 	name: 'Mobile',

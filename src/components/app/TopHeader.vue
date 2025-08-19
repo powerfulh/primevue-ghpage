@@ -13,43 +13,45 @@ const headerStore = useHeaderStore()
 const suggestions = ref([])
 
 const mobile = computed(() => route.fullPath.includes('/common-root/mobile'))
-const items = computed(() =>
-	mobile.value
-		? [
-				{
-					label: '모바일 커텐',
-					icon: 'pi pi-list',
-					command: () => router.push({ name: 'Blindmobile' }),
-				},
-				{
-					label: '모바일 커텐 통계',
-					icon: 'pi pi-chart-bar',
-					command: () => router.push({ name: 'BlindChartmobile' }),
-				},
-				{
-					label: '모바일 커텐 랜덤',
-					icon: 'pi pi-list',
-					command: () => router.push({ name: 'Blindmobilerand' }),
-				},
-				{
-					label: '게임',
-					icon: 'pi pi-microchip',
-					command: () => router.push({ name: 'TestGame' }),
-				},
-			]
-		: [
-				{
-					label: 'pc커텐',
-					icon: 'pi pi-list',
-					command: () => router.push({ name: 'Blindpc' }),
-				},
-				{
-					label: '가챠겜',
-					icon: 'pi pi-crown',
-					command: () => router.push({ name: 'Pokegame' }),
-				},
-			],
-)
+const items = computed(() => {
+	return route.meta.solo
+		? []
+		: mobile.value
+			? [
+					{
+						label: '모바일 커텐',
+						icon: 'pi pi-list',
+						command: () => router.push({ name: 'Blindmobile' }),
+					},
+					{
+						label: '모바일 커텐 통계',
+						icon: 'pi pi-chart-bar',
+						command: () => router.push({ name: 'BlindChartmobile' }),
+					},
+					{
+						label: '모바일 커텐 랜덤',
+						icon: 'pi pi-list',
+						command: () => router.push({ name: 'Blindmobilerand' }),
+					},
+					{
+						label: '게임',
+						icon: 'pi pi-microchip',
+						command: () => router.push({ name: 'TestGame' }),
+					},
+				]
+			: [
+					{
+						label: 'pc커텐',
+						icon: 'pi pi-list',
+						command: () => router.push({ name: 'Blindpc' }),
+					},
+					{
+						label: '가챠겜',
+						icon: 'pi pi-crown',
+						command: () => router.push({ name: 'Pokegame' }),
+					},
+				]
+})
 
 function onClickRed() {
 	headerStore.text = ''
