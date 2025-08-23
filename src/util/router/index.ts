@@ -11,7 +11,7 @@ const list: Array<routeItem | routeMenu> = [
 	{
 		path: '/',
 		name: 'Home',
-		redirect: '/common-root/mobile/testgame',
+		redirect: '/common-root/mobile/plm',
 	},
 ]
 
