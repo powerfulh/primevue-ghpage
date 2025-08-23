@@ -10,6 +10,11 @@ const r: routeMenu = {
 			},
 		},
 		{
+			name: 'Plm',
+			path: '/plm',
+			component: () => import('@/components/views/mobile/plm/Index.vue'),
+		},
+		{
 			name: 'BlindChartmobile',
 			path: '/blindchart',
 			component: () => import('@/components/views/mobile/chart/Index.vue'),
