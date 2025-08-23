@@ -1,6 +1,7 @@
 import { ApiOperation } from 'powerful-api-vue3/npmdist/apis'
 import poke from './poke'
 import powerful from './powerful'
+import plm from '@/api/plm'
 
 export interface Curtain {
 	nn: string
@@ -66,4 +67,5 @@ export default {
 	} as ApiOperation<boolean>,
 	...poke,
 	...powerful,
+	...plm,
 }
