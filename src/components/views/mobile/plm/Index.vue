@@ -25,7 +25,7 @@ function onClickGet() {
 				<DataTable :value="w">
 					<Column field="n" header="🆔" />
 					<Column field="word" header="🆎" />
-					<Column field="type" header="Type" />
+					<Column field="type" header="🏷" />
 					<Column field="memo" header="📝" />
 				</DataTable>
 			</template>
