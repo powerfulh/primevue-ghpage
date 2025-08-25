@@ -23,6 +23,9 @@ const r: routeMenu = {
 			name: 'PowerfulApi',
 			path: '/papi',
 			component: () => import('@/components/views/mobile/papi/Index.vue'),
+			meta: {
+				btnIcon: 'pi-save',
+			},
 		},
 		{
 			name: 'BlindChartmobile',
