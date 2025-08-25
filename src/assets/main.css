@@ -1,5 +1,10 @@
 @import './base.css';
 
+body {
+  /* 모바일에서 넘치길래 줄임 */
+  --p-toast-width: 20rem;
+}
+
 .powerful-modal-wrap {
 	z-index: 100;
 	background: rgba(53, 54, 65, 0.5);
