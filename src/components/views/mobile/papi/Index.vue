@@ -12,6 +12,9 @@ const toast = useToast()
 const model = ref({})
 const dataKey = 'primevue'
 const newItemKey = 'Define me'
+const err250825 = ref('')
+const err250825h = ref({})
+const err250825c = ref({})
 
 const addable = computed(() => model.value[newItemKey] ?? true)
 const param = computed(() => ({
@@ -30,6 +33,11 @@ function init() {
 					.setWhenSuccess(init)
 					.fire({ credentials: true })
 			}
+		})
+		.setWhenError(err => {
+			err250825.value = JSON.stringify(err)
+			err250825h.value = err.request
+			err250825c.value = err.config
 		})
 		.fire({ credentials: true })
 }
@@ -66,6 +74,9 @@ headerStore.onClickGreen = () => {
 			</template>
 		</Card>
 		{{ model }}
+		<div style="font-size: large; color: red">{{ err250825 }}</div>
+		<div style="font-size: large; color: red">{{ err250825h }}</div>
+		<div style="font-size: large; color: red">{{ err250825c }}</div>
 
 		<LoginDialog @login="init" />
 	</main>
