@@ -28,10 +28,10 @@ function init() {
 				api.load('postPapi')
 					.setParameter(ref({ name: dataKey }))
 					.setWhenSuccess(init)
-					.fire()
+					.fire({ credentials: true })
 			}
 		})
-		.fire()
+		.fire({ credentials: true })
 }
 function onClickChip(k: string) {
 	const nk = prompt('What is new keyword:')
@@ -50,7 +50,7 @@ headerStore.onClickGreen = () => {
 		.setWhenSuccess(() => {
 			toast.add({ detail: `Save ✔`, life: 2000 })
 		})
-		.fire()
+		.fire({ credentials: true })
 }
 </script>
 

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import LoginDialog from '@/components/views/LoginDialog.vue'
 import { injectApi } from 'powerful-api-vue3'
 import { Button, Card, InputText, Select, useToast } from 'primevue'
 import { ref } from 'vue'
@@ -19,7 +20,7 @@ function onClickPost() {
 		.setWhenSuccess(() => {
 			toast.add({ detail: `Post ✔`, life: 2000 })
 		})
-		.fire()
+		.fire({ credentials: true })
 }
 </script>
 
@@ -36,5 +37,7 @@ function onClickPost() {
 			</template>
 		</Card>
 		{{ model }}
+
+		<LoginDialog />
 	</main>
 </template>
