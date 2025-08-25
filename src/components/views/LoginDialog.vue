@@ -29,7 +29,7 @@ function authencicate() {
 				emit('login')
 			} else toast.add({ detail: 'Login fail', life: 2000, severity: 'error' })
 		})
-		.fire()
+		.fire({ credentials: true })
 }
 
 if (headerStore.login) emit('login')
