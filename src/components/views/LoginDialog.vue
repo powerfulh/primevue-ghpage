@@ -4,6 +4,8 @@ import { injectApi } from 'powerful-api-vue3'
 import { Button, Dialog, InputText, Message, Password, useToast } from 'primevue'
 import { computed, ref } from 'vue'
 
+const emit = defineEmits(['login'])
+
 const headerStore = useHeaderStore()
 const api = injectApi()
 const toast = useToast()
@@ -22,9 +24,12 @@ function authencicate() {
 		.setParameter(param)
 		.setWhenSuccess(res => {
 			headerStore.login = res
-			if (res == false) toast.add({ detail: 'Login fail', life: 2000, severity: 'error' })
+			if (res) {
+				visible.value = false
+				emit('login')
+			} else toast.add({ detail: 'Login fail', life: 2000, severity: 'error' })
 		})
-		.fire({ loading: true, credentials: true })
+		.fire()
 }
 </script>
 

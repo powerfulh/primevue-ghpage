@@ -2,7 +2,7 @@
 import { computed, isProxy, provide, reactive, ref, toRaw } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import TopHeader from './components/app/TopHeader.vue'
-import api from 'powerful-api-vue3'
+import api, { getApiStore } from 'powerful-api-vue3'
 import AppBody from './components/app/AppBody.vue'
 import { Toast } from 'primevue'
 
@@ -110,6 +110,7 @@ globalMode = d
 provide('api', api.getLauncher())
 provide('dcc', devCommandCenter)
 router.isReady().then(() => (routerReady.value = true))
+getApiStore().globalOption.credentials = true
 </script>
 
 <template>
