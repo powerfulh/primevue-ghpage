@@ -15,6 +15,11 @@ const r: routeMenu = {
 			component: () => import('@/components/views/mobile/plm/Index.vue'),
 		},
 		{
+			name: 'PlmAdmin',
+			path: '/plmadmin',
+			component: () => import('@/components/views/mobile/plm/admin/Index.vue'),
+		},
+		{
 			name: 'BlindChartmobile',
 			path: '/blindchart',
 			component: () => import('@/components/views/mobile/chart/Index.vue'),
