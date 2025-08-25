@@ -4,11 +4,16 @@ export default {
 	getWord: {
 		type: 'get',
 		url: 'https://port-0-powerful-spring-boot-5o1j2llh1wq9rp.sel4.cloudtype.app/plm/word',
-		param:[{name: 's'}]
+		param: [{ name: 's' }],
 	} as ApiOperation<
 		Array<{
 			word: string
 			type: string
 		}>
 	>,
+	postWord: {
+		type: 'post',
+		url: 'https://port-0-powerful-spring-boot-5o1j2llh1wq9rp.sel4.cloudtype.app/plm/word',
+		param: [{ name: 'word' }, { name: 'type' }, { name: 'memo' }],
+	} as ApiOperation<void>,
 }
