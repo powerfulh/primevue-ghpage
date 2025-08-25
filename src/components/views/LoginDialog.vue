@@ -31,6 +31,8 @@ function authencicate() {
 		})
 		.fire()
 }
+
+if (headerStore.login) emit('login')
 </script>
 
 <template>
