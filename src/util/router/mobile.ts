@@ -20,6 +20,11 @@ const r: routeMenu = {
 			component: () => import('@/components/views/mobile/plm/admin/Index.vue'),
 		},
 		{
+			name: 'PowerfulApi',
+			path: '/papi',
+			component: () => import('@/components/views/mobile/papi/Index.vue'),
+		},
+		{
 			name: 'BlindChartmobile',
 			path: '/blindchart',
 			component: () => import('@/components/views/mobile/chart/Index.vue'),

@@ -32,6 +32,11 @@ const items = computed(() => {
 					command: () => router.push({ name: 'PlmAdmin' }),
 				},
 				{
+					label: '강력한 데이타',
+					icon: 'pi pi-database',
+					command: () => router.push({ name: 'PowerfulApi' }),
+				},
+				{
 					label: '모바일 커텐 통계',
 					icon: 'pi pi-chart-bar',
 					command: () => router.push({ name: 'BlindChartmobile' }),
