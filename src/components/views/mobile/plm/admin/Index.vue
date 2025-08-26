@@ -13,12 +13,15 @@ const model = ref({
 	memo: '',
 })
 const options = ['무엇', '결합', '어미', '0', '조사', '기호', '접속', '부사', '대명사']
+const justPost = ref('')
 
 function onClickPost() {
 	api.load('postWord')
 		.setParameter(model)
 		.setWhenSuccess(() => {
 			toast.add({ detail: `Post ✔`, life: 2000 })
+			justPost.value = [model.value.word, model.value.type, model.value.memo].filter(item => item).join()
+			model.value.word = model.value.memo = ''
 		})
 		.fire({ credentials: true })
 }
@@ -36,7 +39,12 @@ function onClickPost() {
 				<footer style="text-align: center"><Button icon="pi pi-check" @click="onClickPost" /></footer>
 			</template>
 		</Card>
-		{{ model }}
+		<Card v-if="justPost">
+			<template #title>방금 등록됨✔</template>
+			<template #content>
+				{{ justPost }}
+			</template>
+		</Card>
 
 		<LoginDialog />
 	</main>
