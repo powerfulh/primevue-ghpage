@@ -34,7 +34,7 @@ function onClickPost() {
 			<template #content>
 				<InputText v-model="model.word" placeholder="Word" />
 				<Select v-model="model.type" :options="options" />
-				<InputText v-model="model.memo" placeholder="Memo" @keypress.enter="onClickPost" />
+				<InputText v-model="model.memo" placeholder="Memo" maxlength="29" @keypress.enter="onClickPost" />
 				<hr />
 				<footer style="text-align: center"><Button icon="pi pi-check" @click="onClickPost" /></footer>
 			</template>
