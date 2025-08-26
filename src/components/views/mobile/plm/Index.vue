@@ -42,7 +42,7 @@ const po = ref()
 		<Card>
 			<template #title>단어 조회</template>
 			<template #content>
-				<form>
+				<form onsubmit="return false">
 					<InputText v-model="p.s" maxlength="10" style="width: 14rem" @keypress.enter="onClickGet" />
 					<Button icon="pi pi-check" @click="onClickGet"></Button>
 				</form>
