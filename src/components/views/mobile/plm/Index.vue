@@ -7,7 +7,10 @@ const api = injectApi()
 
 const p = ref({ s: '' })
 const w = ref([])
-const rowMenu = [{ label: '결합 사용처 조회' }]
+const rowMenu = [{ label: '결합 사용처 조회', command: onClickGetCompound }]
+let currentWord
+const compoundParam = ref({ s: '' })
+const compoundList = ref([])
 
 function onClickGet() {
 	api.load('getWord')
@@ -16,8 +19,18 @@ function onClickGet() {
 		.fire()
 }
 function onRowSelect(e: DataTableRowSelectEvent) {
-	console.log(e.data)
+	currentWord = e.data.n
 	po.value.toggle(e.originalEvent)
+}
+function onEnterGetCompound() {
+	api.load('getCompound')
+		.setParameter(compoundParam)
+		.setWhenSuccess(res => (compoundList.value = res))
+		.fire()
+}
+function onClickGetCompound() {
+	compoundParam.value.s = currentWord
+	onEnterGetCompound()
 }
 
 // am
@@ -42,11 +55,11 @@ const po = ref()
 		<Card>
 			<template #title>결합 사용처 조회</template>
 			<template #content>
-				<input type="number" />
-				<DataTable :value="w" selection-mode="single" @row-select="onRowSelect">
-					<Column field="word" header="🆎" />
-					<Column field="l" header="⬅" />
-					<Column field="r" header="➡" />
+				<input v-model="compoundParam.s" type="number" @keypress.enter="onEnterGetCompound" />
+				<DataTable :value="compoundList">
+					<Column field="cw" header="🆎" />
+					<Column field="lw" header="⬅" />
+					<Column field="rw" header="➡" />
 				</DataTable>
 			</template>
 		</Card>

@@ -16,4 +16,15 @@ export default {
 		url: 'https://port-0-powerful-spring-boot-5o1j2llh1wq9rp.sel4.cloudtype.app/plm/word',
 		param: [{ name: 'word' }, { name: 'type' }, { name: 'memo' }],
 	} as ApiOperation<void>,
+	getCompound: {
+		type: 'get',
+		url: 'https://port-0-powerful-spring-boot-5o1j2llh1wq9rp.sel4.cloudtype.app/plm/compound/{s}',
+		param: [{ name: 's', path: true }],
+	} as ApiOperation<
+		Array<{
+			cw: string
+			lw: string
+			rw: string
+		}>
+	>,
 }
