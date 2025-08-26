@@ -1,12 +1,13 @@
 <script setup lang="ts">
 import { injectApi } from 'powerful-api-vue3'
-import { Button, Card, Column, DataTable, InputText } from 'primevue'
+import { Button, Card, Column, DataTable, DataTableRowSelectEvent, InputText, Menu } from 'primevue'
 import { ref } from 'vue'
 
 const api = injectApi()
 
 const p = ref({ s: '' })
 const w = ref([])
+const rowMenu = [{ label: '결합 사용처 조회' }]
 
 function onClickGet() {
 	api.load('getWord')
@@ -14,6 +15,13 @@ function onClickGet() {
 		.setWhenSuccess(res => (w.value = res))
 		.fire()
 }
+function onRowSelect(e: DataTableRowSelectEvent) {
+	console.log(e.data)
+	po.value.toggle(e.originalEvent)
+}
+
+// am
+const po = ref()
 </script>
 
 <template>
@@ -23,7 +31,7 @@ function onClickGet() {
 			<template #content>
 				<InputText v-model="p.s" maxlength="10" style="width: 14rem" @keypress.enter="onClickGet" />
 				<Button icon="pi pi-check" @click="onClickGet"></Button>
-				<DataTable :value="w">
+				<DataTable :value="w" selection-mode="single" @row-select="onRowSelect">
 					<Column field="n" header="🆔" />
 					<Column field="word" header="🆎" />
 					<Column field="type" header="🏷" />
@@ -31,5 +39,18 @@ function onClickGet() {
 				</DataTable>
 			</template>
 		</Card>
+		<Card>
+			<template #title>결합 사용처 조회</template>
+			<template #content>
+				<input type="number" />
+				<DataTable :value="w" selection-mode="single" @row-select="onRowSelect">
+					<Column field="word" header="🆎" />
+					<Column field="l" header="⬅" />
+					<Column field="r" header="➡" />
+				</DataTable>
+			</template>
+		</Card>
+
+		<Menu :model="rowMenu" popup ref="po" />
 	</main>
 </template>
