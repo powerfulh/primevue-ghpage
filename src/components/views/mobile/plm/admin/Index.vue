@@ -30,6 +30,17 @@ function onClickPost() {
 		})
 		.fire({ credentials: true })
 }
+function onClickPostCompound() {
+	api.load('postCompound')
+		.setParameter(compoundModel)
+		.setWhenSuccess(res => {
+			toast.add({ detail: `Post ✔`, life: 2000 })
+			const w = res.at(-1)
+			justPost.value = `${w.cw} = ${w.lw} + ${w.rw}`
+			compoundModel.value.word = compoundModel.value.leftword = compoundModel.value.rightword = null
+		})
+		.fire({ credentials: true })
+}
 </script>
 
 <template>
@@ -53,10 +64,10 @@ function onClickPost() {
 				<InputGroup>
 					<InputNumber v-model="compoundModel.word" placeholder="🆎" />
 					<InputNumber v-model="compoundModel.leftword" placeholder="⬅" />
-					<InputNumber v-model="compoundModel.rightword" placeholder="➡" />
+					<InputNumber v-model="compoundModel.rightword" placeholder="➡" @keypress.enter="onClickPostCompound" />
 				</InputGroup>
 				<hr />
-				<footer style="text-align: center"><Button icon="pi pi-check" @click="onClickPost" /></footer>
+				<footer style="text-align: center"><Button icon="pi pi-check" @click="onClickPostCompound" /></footer>
 			</template>
 		</Card>
 		<Card v-if="justPost">
