@@ -48,7 +48,6 @@ function onClickPostCompound() {
 		<Card>
 			<template #title>단어 등록</template>
 			<template #content>
-				<!-- 250827 버튼이 폼에 포함이 안되면 괜찮은건가? -->
 				<form>
 					<InputText v-model="model.word" placeholder="Word" />
 					<Select v-model="model.type" :options="options" />
