@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { injectApi } from 'powerful-api-vue3'
 import { Button, Card, Column, DataTable, DataTableRowSelectEvent, InputText, Menu } from 'primevue'
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 
 const api = injectApi()
 
@@ -11,6 +11,9 @@ const rowMenu = [{ label: '결합 사용처 조회', command: onClickGetCompound
 let currentWord
 const compoundParam = ref({ s: '' })
 const compoundList = ref([])
+const currentType = ref('')
+
+const finalMenu = computed(() => (currentType.value == '결합' ? [...rowMenu, { label: '결합 재료 조회', command: onClickGetLeftRight }] : rowMenu))
 
 function onClickGet() {
 	api.load('getWord')
@@ -20,6 +23,7 @@ function onClickGet() {
 }
 function onRowSelect(e: DataTableRowSelectEvent) {
 	currentWord = e.data.n
+	currentType.value = e.data.type
 	po.value.toggle(e.originalEvent)
 }
 function onEnterGetCompound() {
@@ -31,6 +35,9 @@ function onEnterGetCompound() {
 function onClickGetCompound() {
 	compoundParam.value.s = currentWord
 	onEnterGetCompound()
+}
+function onClickGetLeftRight() {
+	// todo
 }
 
 // am
@@ -66,6 +73,6 @@ const po = ref()
 			</template>
 		</Card>
 
-		<Menu :model="rowMenu" popup ref="po" />
+		<Menu :model="finalMenu" popup ref="po" />
 	</main>
 </template>
