@@ -1,6 +1,6 @@
 {
-  "name": "p",
-  "version": "0.0.0",
+  "name": "powerful-primevue",
+  "version": "0.0.1",
   "private": true,
   "type": "module",
   "scripts": {

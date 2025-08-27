@@ -49,9 +49,13 @@ function onClickPostCompound() {
 			<template #title>단어 등록</template>
 			<template #content>
 				<form>
-					<InputText v-model="model.word" placeholder="Word" />
-					<Select v-model="model.type" :options="options" />
-					<InputText v-model="model.memo" placeholder="Memo" maxlength="29" @keypress.enter="onClickPost" />
+					<InputGroup>
+						<InputText v-model="model.word" placeholder="Word" />
+						<Select v-model="model.type" :options="options" />
+					</InputGroup>
+					<InputGroup>
+						<InputText v-model="model.memo" placeholder="Memo" maxlength="29" @keypress.enter="onClickPost" />
+					</InputGroup>
 				</form>
 				<hr />
 				<footer style="text-align: center"><Button icon="pi pi-check" @click="onClickPost" /></footer>
