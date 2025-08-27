@@ -12,7 +12,7 @@ const model = ref({
 	type: '무엇',
 	memo: '',
 })
-const options = ['무엇', '결합', '어미', '0', '조사', '기호', '접속', '부사', '대명사']
+const options = ['무엇', '결합', '어미', '0', '조사', '1', '기호', '대명사', '접속']
 const justPost = ref('')
 const compoundModel = ref({
 	word: null,
