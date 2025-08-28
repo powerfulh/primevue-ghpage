@@ -37,7 +37,10 @@ function onClickGetCompound() {
 	onEnterGetCompound()
 }
 function onClickGetLeftRight() {
-	// todo
+	api.load('getLeftRight')
+		.setParameter(ref({ n: currentWord }))
+		.setWhenSuccess(res => (w.value = res))
+		.fire()
 }
 
 // am
@@ -66,9 +69,9 @@ const po = ref()
 			<template #content>
 				<input v-model="compoundParam.s" type="number" @keypress.enter="onEnterGetCompound" />
 				<DataTable :value="compoundList">
-					<Column field="cw" header="🆎" />
-					<Column field="lw" header="⬅" />
-					<Column field="rw" header="➡" />
+					<Column field="cw" header="🆎🆔" />
+					<Column field="lw" header="⬅🆔" />
+					<Column field="rw" header="➡🆔" />
 				</DataTable>
 			</template>
 		</Card>
