@@ -65,9 +65,9 @@ function onClickPostCompound() {
 			<template #title>결합 등록</template>
 			<template #content>
 				<InputGroup>
-					<InputNumber v-model="compoundModel.word" placeholder="🆎" />
-					<InputNumber v-model="compoundModel.leftword" placeholder="⬅" />
-					<InputNumber v-model="compoundModel.rightword" placeholder="➡" @keypress.enter="onClickPostCompound" />
+					<InputNumber v-model="compoundModel.word" placeholder="🆎🆔" />
+					<InputNumber v-model="compoundModel.leftword" placeholder="⬅🆔" />
+					<InputNumber v-model="compoundModel.rightword" placeholder="➡🆔" @keypress.enter="onClickPostCompound" />
 				</InputGroup>
 				<hr />
 				<footer style="text-align: center"><Button icon="pi pi-check" @click="onClickPostCompound" /></footer>

@@ -12,6 +12,7 @@ let currentWord
 const compoundParam = ref({ s: '' })
 const compoundList = ref([])
 const currentType = ref('')
+const learnList = ref([])
 
 const finalMenu = computed(() => (currentType.value == '결합' ? [...rowMenu, { label: '결합 재료 조회', command: onClickGetLeftRight }] : rowMenu))
 
@@ -69,11 +70,16 @@ const po = ref()
 			<template #content>
 				<input v-model="compoundParam.s" type="number" @keypress.enter="onEnterGetCompound" />
 				<DataTable :value="compoundList">
-					<Column field="cw" header="🆎🆔" />
-					<Column field="lw" header="⬅🆔" />
-					<Column field="rw" header="➡🆔" />
+					<Column field="cw" header="🆎" />
+					<Column field="lw" header="⬅" />
+					<Column field="rw" header="➡" />
 				</DataTable>
 			</template>
+		</Card>
+		<Card v-for="(item, i) in learnList" :key="i">
+			<template #title>{{ item.value }}</template>
+			<template #subtitle>{{ item.rightword }}</template>
+			<template #content>{{ item.src }}</template>
 		</Card>
 
 		<Menu :model="finalMenu" popup ref="po" />
