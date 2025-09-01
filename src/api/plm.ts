@@ -48,4 +48,14 @@ export default {
 			type: string
 		}>
 	>,
+	getLearn: {
+		type: 'get',
+		url: 'https://port-0-powerful-spring-boot-5o1j2llh1wq9rp.sel4.cloudtype.app/plm/learn',
+	} as ApiOperation<
+		Array<{
+			word: string
+			value: string
+			src: string
+		}>
+	>,
 }

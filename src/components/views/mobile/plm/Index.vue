@@ -43,6 +43,13 @@ function onClickGetLeftRight() {
 		.setWhenSuccess(res => (w.value = res))
 		.fire()
 }
+function getLearn() {
+	api.load('getLearn')
+		.setWhenSuccess(res => (learnList.value = res))
+		.fire()
+}
+
+getLearn()
 
 // am
 const po = ref()
@@ -78,7 +85,7 @@ const po = ref()
 		</Card>
 		<Card v-for="(item, i) in learnList" :key="i">
 			<template #title>{{ item.value }}</template>
-			<template #subtitle>{{ item.rightword }}</template>
+			<template #subtitle>{{ item.word }}</template>
 			<template #content>{{ item.src }}</template>
 		</Card>
 
