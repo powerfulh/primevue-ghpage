@@ -19,6 +19,9 @@ const compoundModel = ref({
 	leftword: null,
 	rightword: null,
 })
+const cancelModel = ref({
+	n: null,
+})
 
 function onClickPost() {
 	api.load('postWord')
@@ -40,6 +43,9 @@ function onClickPostCompound() {
 			compoundModel.value.word = compoundModel.value.leftword = compoundModel.value.rightword = null
 		})
 		.fire({ credentials: true })
+}
+function onClickCancel() {
+	api.load
 }
 </script>
 
@@ -77,6 +83,15 @@ function onClickPostCompound() {
 			<template #title>방금 등록됨✔</template>
 			<template #content>
 				{{ justPost }}
+			</template>
+		</Card>
+		<Card>
+			<template #title>학습 취소</template>
+			<template #content>
+				<InputGroup>
+					<InputNumber v-model="cancelModel.n" placeholder="🆎🆔" @keypress.enter="onClickCancel" />
+					<Button icon="pi pi-check" @click="onClickCancel" />
+				</InputGroup>
 			</template>
 		</Card>
 
