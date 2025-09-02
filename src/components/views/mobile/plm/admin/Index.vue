@@ -45,7 +45,13 @@ function onClickPostCompound() {
 		.fire({ credentials: true })
 }
 function onClickCancel() {
-	api.load
+	api.load('deleteLearn')
+		.setParameter(cancelModel)
+		.setWhenSuccess(() => {
+			toast.add({ detail: `Delete ✔`, life: 2000 })
+			cancelModel.value.n = null
+		})
+		.fire({ credentials: true })
 }
 </script>
 
