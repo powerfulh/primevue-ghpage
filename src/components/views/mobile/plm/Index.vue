@@ -1,10 +1,11 @@
 <script setup lang="ts">
 import { injectApi } from 'powerful-api-vue3'
-import { Button, Card, Column, DataTable, DataTableRowSelectEvent, InputText, Menu } from 'primevue'
+import { Button, Card, Column, DataTable, DataTableRowSelectEvent, InputText, Menu, useToast } from 'primevue'
 import { computed, inject, ref } from 'vue'
 
 const api = injectApi()
 const initScroll: Function = inject('initScroll')
+const toast = useToast()
 
 const p = ref({ s: '' })
 const w = ref([])
@@ -20,8 +21,16 @@ const finalMenu = computed(() => {
 	const l = [...rowMenu]
 	if (currentType.value == '결합') l.push({ label: '결합 재료 조회', command: onClickGetLeftRight })
 	if (['학습', '학습 결합'].includes(currentType.value)) {
-		l.push({ label: '학습처 보기', command: () => document.querySelector('#learn' + currentWord).scrollIntoView() })
-		scrollInitReady = true
+		l.push({
+			label: '학습처 보기',
+			command: () => {
+				const e = document.querySelector('#learn' + currentWord)
+				if (e) {
+					e.scrollIntoView()
+					scrollInitReady = true
+				} else toast.add({ detail: `오래된 학습`, life: 2000, severity: 'warn' })
+			},
+		})
 	}
 	return l
 })
