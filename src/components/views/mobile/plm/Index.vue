@@ -102,7 +102,9 @@ function onClickLearn() {
 		</Card>
 		<Card v-for="(item, i) in learnList" :key="i" :id="'learn' + item.word" @click="onClickLearn">
 			<template #title>{{ item.value }}</template>
-			<template #subtitle>{{ item.word }}</template>
+			<template #subtitle
+				>{{ item.word }}<span v-if="item.rightword"> (rw: {{ item.rightword }})</span></template
+			>
 			<template #content>{{ item.src }}</template>
 		</Card>
 
