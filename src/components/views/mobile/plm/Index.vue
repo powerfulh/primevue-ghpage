@@ -1,20 +1,30 @@
 <script setup lang="ts">
 import { injectApi } from 'powerful-api-vue3'
 import { Button, Card, Column, DataTable, DataTableRowSelectEvent, InputText, Menu } from 'primevue'
-import { computed, ref } from 'vue'
+import { computed, inject, ref } from 'vue'
 
 const api = injectApi()
+const initScroll: Function = inject('initScroll')
 
 const p = ref({ s: '' })
 const w = ref([])
 const rowMenu = [{ label: '결합 사용처 조회', command: onClickGetCompound }]
-let currentWord
-const compoundParam = ref({ s: '' })
+let currentWord: number
+const compoundParam = ref({ s: null })
 const compoundList = ref([])
 const currentType = ref('')
 const learnList = ref([])
+let scrollInitReady = false
 
-const finalMenu = computed(() => (currentType.value == '결합' ? [...rowMenu, { label: '결합 재료 조회', command: onClickGetLeftRight }] : rowMenu))
+const finalMenu = computed(() => {
+	const l = [...rowMenu]
+	if (currentType.value == '결합') l.push({ label: '결합 재료 조회', command: onClickGetLeftRight })
+	if (['학습', '학습 결합'].includes(currentType.value)) {
+		l.push({ label: '학습처 보기', command: () => document.querySelector('#learn' + currentWord).scrollIntoView() })
+		scrollInitReady = true
+	}
+	return l
+})
 
 function onClickGet() {
 	api.load('getWord')
@@ -53,6 +63,13 @@ getLearn()
 
 // am
 const po = ref()
+
+function onClickLearn() {
+	if (scrollInitReady) {
+		scrollInitReady = false
+		initScroll()
+	}
+}
 </script>
 
 <template>
@@ -83,7 +100,7 @@ const po = ref()
 				</DataTable>
 			</template>
 		</Card>
-		<Card v-for="(item, i) in learnList" :key="i">
+		<Card v-for="(item, i) in learnList" :key="i" :id="'learn' + item.word" @click="onClickLearn">
 			<template #title>{{ item.value }}</template>
 			<template #subtitle>{{ item.word }}</template>
 			<template #content>{{ item.src }}</template>
