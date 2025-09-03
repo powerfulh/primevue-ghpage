@@ -76,11 +76,13 @@ function onClickCancel() {
 		<Card>
 			<template #title>결합 등록</template>
 			<template #content>
-				<InputGroup>
-					<InputNumber v-model="compoundModel.word" placeholder="🆎🆔" />
-					<InputNumber v-model="compoundModel.leftword" placeholder="⬅🆔" />
-					<InputNumber v-model="compoundModel.rightword" placeholder="➡🆔" @keypress.enter="onClickPostCompound" />
-				</InputGroup>
+				<form>
+					<InputGroup>
+						<InputNumber v-model="compoundModel.word" placeholder="🆎🆔" />
+						<InputNumber v-model="compoundModel.leftword" placeholder="⬅🆔" />
+						<InputNumber v-model="compoundModel.rightword" placeholder="➡🆔" @keypress.enter="onClickPostCompound" />
+					</InputGroup>
+				</form>
 				<hr />
 				<footer style="text-align: center"><Button icon="pi pi-check" @click="onClickPostCompound" /></footer>
 			</template>
