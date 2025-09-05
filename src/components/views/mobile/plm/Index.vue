@@ -28,7 +28,13 @@ const finalMenu = computed(() => {
 				if (e) {
 					e.scrollIntoView()
 					scrollInitReady = true
-				} else toast.add({ detail: `오래된 학습`, life: 2000, severity: 'warn' })
+				} else {
+					toast.add({ detail: `오래된 학습`, life: 2000, severity: 'warn' })
+					api.load('getOneLearn')
+						.setParameter(ref({ n: currentWord }))
+						.setWhenSuccess(res => learnList.value.unshift(res))
+						.fire()
+				}
 			},
 		})
 	}
