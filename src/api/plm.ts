@@ -76,4 +76,9 @@ export default {
 		value: string
 		src: string
 	}>,
+	postContext: {
+		type: 'post',
+		url: 'https://port-0-powerful-spring-boot-5o1j2llh1wq9rp.sel4.cloudtype.app/plm/context',
+		param: [{ name: 'leftword' }, { name: 'rightword' }],
+	} as ApiOperation<{}>, // todo
 }
