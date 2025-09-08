@@ -62,13 +62,17 @@ export default {
 		type: 'DELETE',
 		url: 'https://port-0-powerful-spring-boot-5o1j2llh1wq9rp.sel4.cloudtype.app/plm/learn/{n}',
 		param: [{ name: 'n', path: true }],
-	} as ApiOperation<Array<void>>,
+	} as ApiOperation<{
+		word: number
+		value: string
+		src: string
+	}>,
 	getOneLearn: {
 		type: 'get',
 		url: 'https://port-0-powerful-spring-boot-5o1j2llh1wq9rp.sel4.cloudtype.app/plm/learn/{n}',
 		param: [{ name: 'n', path: true }],
 	} as ApiOperation<{
-		word: string
+		word: number
 		value: string
 		src: string
 	}>,

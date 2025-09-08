@@ -2,6 +2,7 @@
 import { injectApi } from 'powerful-api-vue3'
 import { Button, Card, Column, DataTable, DataTableRowSelectEvent, InputText, Menu, useToast } from 'primevue'
 import { computed, inject, ref } from 'vue'
+import LearnItem from './LearnItem.vue'
 
 const api = injectApi()
 const initScroll: Function = inject('initScroll')
@@ -115,13 +116,7 @@ function onClickLearn() {
 				</DataTable>
 			</template>
 		</Card>
-		<Card v-for="(item, i) in learnList" :key="i" :id="'learn' + item.word" @click="onClickLearn">
-			<template #title>{{ item.value }}</template>
-			<template #subtitle
-				>{{ item.word }}<span v-if="item.rightword"> (rw: {{ item.rightword }})</span></template
-			>
-			<template #content>{{ item.src }}</template>
-		</Card>
+		<LearnItem v-for="(item, i) in learnList" :key="i" :item="item" @click="onClickLearn" />
 
 		<Menu :model="finalMenu" popup ref="po" />
 	</main>
