@@ -3,6 +3,7 @@ import LoginDialog from '@/components/views/LoginDialog.vue'
 import { injectApi } from 'powerful-api-vue3'
 import { Button, Card, InputGroup, InputNumber, InputText, Select, useToast } from 'primevue'
 import { ref } from 'vue'
+import LearnItem from '../LearnItem.vue'
 
 const api = injectApi()
 const toast = useToast()
@@ -22,6 +23,7 @@ const compoundModel = ref({
 const cancelModel = ref({
 	n: null,
 })
+const justDelete = ref(null)
 
 function onClickPost() {
 	api.load('postWord')
@@ -29,6 +31,7 @@ function onClickPost() {
 		.setWhenSuccess(() => {
 			toast.add({ detail: `Post ✔`, life: 2000 })
 			justPost.value = [model.value.word, model.value.type, model.value.memo].filter(item => item).join()
+			justDelete.value = null
 			model.value.word = model.value.memo = ''
 		})
 		.fire({ credentials: true })
@@ -47,8 +50,10 @@ function onClickPostCompound() {
 function onClickCancel() {
 	api.load('deleteLearn')
 		.setParameter(cancelModel)
-		.setWhenSuccess(() => {
+		.setWhenSuccess(res => {
 			toast.add({ detail: `Delete ✔`, life: 2000 })
+			justPost.value = ''
+			justDelete.value = res
 			cancelModel.value.n = null
 		})
 		.fire({ credentials: true })
@@ -102,6 +107,7 @@ function onClickCancel() {
 				</InputGroup>
 			</template>
 		</Card>
+		<LearnItem v-if="justDelete" :item="justDelete" />
 
 		<LoginDialog />
 	</main>
