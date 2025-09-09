@@ -24,6 +24,10 @@ const cancelModel = ref({
 	n: null,
 })
 const justDelete = ref(null)
+const contextModel = ref({
+	leftword: null,
+	rightword: null,
+})
 
 function onClickPost() {
 	api.load('postWord')
@@ -58,6 +62,9 @@ function onClickCancel() {
 		})
 		.fire({ credentials: true })
 }
+function onClickContext() {
+	api.load('postContext')
+}
 </script>
 
 <template>
@@ -90,6 +97,18 @@ function onClickCancel() {
 				</form>
 				<hr />
 				<footer style="text-align: center"><Button icon="pi pi-check" @click="onClickPostCompound" /></footer>
+			</template>
+		</Card>
+		<Card>
+			<template #title>문맥 조정</template>
+			<template #content>
+				<form>
+					<InputGroup>
+						<InputNumber v-model="contextModel.leftword" placeholder="⬅🆔" />
+						<InputNumber v-model="contextModel.rightword" placeholder="➡🆔" />
+						<Button icon="pi pi-check" @click="onClickContext" />
+					</InputGroup>
+				</form>
 			</template>
 		</Card>
 		<Card v-if="justPost">
