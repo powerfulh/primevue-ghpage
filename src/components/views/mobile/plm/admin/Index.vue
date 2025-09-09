@@ -47,6 +47,7 @@ function onClickPostCompound() {
 			toast.add({ detail: `Post ✔`, life: 2000 })
 			const w = res.at(-1)
 			justPost.value = `${w.cw} = ${w.lw} + ${w.rw}`
+			justDelete.value = null
 			compoundModel.value.word = compoundModel.value.leftword = compoundModel.value.rightword = null
 		})
 		.fire({ credentials: true })
@@ -64,6 +65,14 @@ function onClickCancel() {
 }
 function onClickContext() {
 	api.load('postContext')
+		.setParameter(contextModel)
+		.setWhenSuccess(res => {
+			toast.add({ detail: `Post ✔`, life: 2000 })
+			justPost.value = `${res.lw} + ${res.rw} 🔼 ${res.cnt}`
+			justDelete.value = null
+			contextModel.value.leftword = contextModel.value.rightword = null
+		})
+		.fire({ credentials: true })
 }
 </script>
 
@@ -105,7 +114,7 @@ function onClickContext() {
 				<form>
 					<InputGroup>
 						<InputNumber v-model="contextModel.leftword" placeholder="⬅🆔" />
-						<InputNumber v-model="contextModel.rightword" placeholder="➡🆔" />
+						<InputNumber v-model="contextModel.rightword" placeholder="➡🆔" @keypress.enter="onClickContext" />
 						<Button icon="pi pi-check" @click="onClickContext" />
 					</InputGroup>
 				</form>
