@@ -10,13 +10,18 @@ const toast = useToast()
 
 const p = ref({ s: '' })
 const w = ref([])
-const rowMenu = [{ label: '결합 사용처 조회', command: onClickGetCompound }]
+const rowMenu = [
+	{ label: '결합 사용처 조회', command: onClickGetCompound },
+	{ label: '문맥 조회', command: getContext },
+]
 let currentWord: number
 const compoundParam = ref({ s: null })
 const compoundList = ref([])
 const currentType = ref('')
 const learnList = ref([])
 let scrollInitReady = false
+const contextParam = ref({ n: null })
+const contextList = ref([])
 
 const finalMenu = computed(() => {
 	const l = [...rowMenu]
@@ -74,6 +79,7 @@ function getLearn() {
 		.setWhenSuccess(res => (learnList.value = res))
 		.fire()
 }
+function getContext() {}
 
 getLearn()
 
@@ -113,6 +119,17 @@ function onClickLearn() {
 					<Column field="cw" header="🆎" />
 					<Column field="lw" header="⬅" />
 					<Column field="rw" header="➡" />
+				</DataTable>
+			</template>
+		</Card>
+		<Card>
+			<template #title>문맥 조회</template>
+			<template #content>
+				<input v-model="contextParam.n" type="number" @keypress.enter="getContext" />
+				<DataTable :value="contextList">
+					<Column field="lw" header="⬅" />
+					<Column field="rw" header="➡" />
+					<Column field="cnt" header="🎲" />
 				</DataTable>
 			</template>
 		</Card>
