@@ -17,11 +17,6 @@ const items = computed(() => {
 	return mobile.value
 		? [
 				{
-					label: '모바일 커텐',
-					icon: 'pi pi-list',
-					command: () => router.push({ name: 'Blindmobile' }),
-				},
-				{
 					label: '강력한 언어 모델',
 					icon: 'pi pi-language',
 					command: () => router.push({ name: 'Plm' }),
@@ -30,6 +25,16 @@ const items = computed(() => {
 					label: '강력한 언어 모델 관리',
 					icon: 'pi pi-language',
 					command: () => router.push({ name: 'PlmAdmin' }),
+				},
+				{
+					label: '강력한 언어 모델 개선',
+					icon: 'pi pi-language',
+					command: () => router.push({ name: 'PlmImprove' }),
+				},
+				{
+					label: '모바일 커텐',
+					icon: 'pi pi-list',
+					command: () => router.push({ name: 'Blindmobile' }),
 				},
 				{
 					label: '강력한 데이타',

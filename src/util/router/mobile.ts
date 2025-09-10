@@ -48,6 +48,11 @@ const r: routeMenu = {
 				solo: true,
 			},
 		},
+		{
+			name: 'PlmImprove',
+			path: '/plmimprove',
+			component: () => import('@/components/views/mobile/plm/improve/Index.vue'),
+		},
 	],
 	name: 'Mobile',
 }
