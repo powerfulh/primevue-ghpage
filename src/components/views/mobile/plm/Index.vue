@@ -12,7 +12,7 @@ const p = ref({ s: '' })
 const w = ref([])
 const rowMenu = [
 	{ label: '결합 사용처 조회', command: onClickGetCompound },
-	{ label: '문맥 조회', command: getContext },
+	{ label: '문맥 조회', command: onClickGetContext },
 ]
 let currentWord: number
 const compoundParam = ref({ s: null })
@@ -79,7 +79,16 @@ function getLearn() {
 		.setWhenSuccess(res => (learnList.value = res))
 		.fire()
 }
-function getContext() {}
+function getContext() {
+	api.load('getContext')
+		.setParameter(contextParam)
+		.setWhenSuccess(res => (contextList.value = res))
+		.fire()
+}
+function onClickGetContext() {
+	contextParam.value.n = currentWord
+	getContext()
+}
 
 getLearn()
 
