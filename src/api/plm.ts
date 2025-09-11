@@ -96,4 +96,18 @@ export default {
 			cnt: number
 		}>
 	>,
+	getUnderstandBox: {
+		type: 'GET',
+		url: 'https://port-0-powerful-spring-boot-5o1j2llh1wq9rp.sel4.cloudtype.app/plm/understand/box',
+	} as ApiOperation<
+		Array<{
+			src: string
+			sentence: Array<{
+				n: number
+				word: string
+				type: string
+				memo: string
+			}>
+		}>
+	>,
 }

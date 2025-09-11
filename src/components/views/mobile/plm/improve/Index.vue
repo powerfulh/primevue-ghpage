@@ -1,17 +1,25 @@
 <script setup lang="ts">
+import { injectApi } from 'powerful-api-vue3'
 import { Card } from 'primevue'
+import { ref } from 'vue'
 import JsonPretty from 'vue-json-pretty'
 import 'vue-json-pretty/lib/styles.css'
 
-const t = { list: [{ n: 0, word: 'word' }, { n: 0 }], point: 0 }
+const api = injectApi()
+
+const understand = ref([])
+
+api.load('getUnderstandBox')
+	.setWhenSuccess(res => (understand.value = res))
+	.fire()
 </script>
 
 <template>
 	<main>
-		<Card>
-			<template #title>Src</template>
+		<Card v-for="(item, i) in understand" :key="i">
+			<template #title>{{ item.src }}</template>
 			<template #content>
-				<JsonPretty :data="t" />
+				<JsonPretty :data="item.sentence" />
 			</template>
 		</Card>
 	</main>
