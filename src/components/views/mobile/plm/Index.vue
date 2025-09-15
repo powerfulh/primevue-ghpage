@@ -11,8 +11,8 @@ const toast = useToast()
 const p = ref({ s: '' })
 const w = ref([])
 const rowMenu = [
-	{ label: '결합 사용처 조회', command: onClickGetCompound },
-	{ label: '문맥 조회', command: onClickGetContext },
+	{ label: '결합 사용처 조회 📋', command: onClickGetCompound },
+	{ label: '문맥 조회 📋', command: onClickGetContext },
 ]
 let currentWord: number
 const compoundParam = ref({ s: null })
@@ -66,6 +66,7 @@ function onEnterGetCompound() {
 }
 function onClickGetCompound() {
 	compoundParam.value.s = currentWord
+	navigator.clipboard.writeText(currentWord.toString())
 	onEnterGetCompound()
 }
 function onClickGetLeftRight() {
@@ -87,6 +88,7 @@ function getContext() {
 }
 function onClickGetContext() {
 	contextParam.value.n = currentWord
+	navigator.clipboard.writeText(currentWord.toString())
 	getContext()
 }
 
