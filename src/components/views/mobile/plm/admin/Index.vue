@@ -109,7 +109,7 @@ function onClickContext() {
 			</template>
 		</Card>
 		<Card>
-			<template #title>문맥 조정</template>
+			<template #title>문맥 조정 <button @click="contextModel.leftword = 2903">Opener</button></template>
 			<template #content>
 				<form>
 					<InputGroup>
