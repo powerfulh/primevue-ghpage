@@ -28,6 +28,7 @@ init()
 			<template #subtitle>{{ item.n }}</template>
 			<template #content>
 				<JsonPretty :data="item.sentence" />
+				<br />
 				<Button icon="pi pi-check" @click="deactivate(item.n)" />
 			</template>
 		</Card>
