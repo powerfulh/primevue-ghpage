@@ -140,7 +140,8 @@ function onClickLearn() {
 				<DataTable :value="contextList">
 					<Column field="lw" header="⬅" />
 					<Column field="rw" header="➡" />
-					<Column field="cnt" header="🎲" />
+					<Column field="cnt" header="▶" />
+					<Column field="space" header="⏩" />
 				</DataTable>
 			</template>
 		</Card>
