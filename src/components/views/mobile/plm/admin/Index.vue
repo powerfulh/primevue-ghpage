@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import LoginDialog from '@/components/views/LoginDialog.vue'
 import { injectApi } from 'powerful-api-vue3'
-import { Button, Card, InputGroup, InputNumber, InputText, Select, useToast } from 'primevue'
+import { Button, Card, InputGroup, InputNumber, InputText, Select, ToggleButton, useToast } from 'primevue'
 import { ref } from 'vue'
 import LearnItem from '../LearnItem.vue'
 
@@ -28,6 +28,7 @@ const contextModel = ref({
 	leftword: null,
 	rightword: null,
 })
+const contextCnt = ref(true)
 
 function onClickPost() {
 	api.load('postWord')
@@ -64,15 +65,27 @@ function onClickCancel() {
 		.fire({ credentials: true })
 }
 function onClickContext() {
-	api.load('postContext')
-		.setParameter(contextModel)
-		.setWhenSuccess(res => {
-			toast.add({ detail: `Post ✔`, life: 2000 })
-			justPost.value = `${res.lw} + ${res.rw} 🔼 ${res.cnt}`
-			justDelete.value = null
-			contextModel.value.leftword = contextModel.value.rightword = null
-		})
-		.fire({ credentials: true })
+	if (contextCnt.value) {
+		api.load('postContext')
+			.setParameter(contextModel)
+			.setWhenSuccess(res => {
+				toast.add({ detail: `Post ✔`, life: 2000 })
+				justPost.value = `${res.lw} + ${res.rw} 🔼 ${res.cnt}`
+				justDelete.value = null
+				contextModel.value.leftword = contextModel.value.rightword = null
+			})
+			.fire({ credentials: true })
+	} else {
+		api.load('postContextSpace')
+			.setParameter(contextModel)
+			.setWhenSuccess(res => {
+				toast.add({ detail: `Post ✔`, life: 2000 })
+				justPost.value = `${res.lw} + ${res.rw} 🔼 ${res.space}`
+				justDelete.value = null
+				contextModel.value.leftword = contextModel.value.rightword = null
+			})
+			.fire({ credentials: true })
+	}
 }
 </script>
 
@@ -115,6 +128,7 @@ function onClickContext() {
 					<InputGroup>
 						<InputNumber v-model="contextModel.leftword" placeholder="⬅🆔" />
 						<InputNumber v-model="contextModel.rightword" placeholder="➡🆔" @keypress.enter="onClickContext" />
+						<ToggleButton v-model="contextCnt" on-label="cnt" off-label="space" style="width: 30%" />
 						<Button icon="pi pi-check" @click="onClickContext" />
 					</InputGroup>
 				</form>

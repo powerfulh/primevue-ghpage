@@ -115,4 +115,13 @@ export default {
 		url: 'https://port-0-powerful-spring-boot-5o1j2llh1wq9rp.sel4.cloudtype.app/plm/understand/box/{n}',
 		param: [{ name: 'n', path: true }],
 	} as ApiOperation<void>,
+	postContextSpace: {
+		type: 'post',
+		url: 'https://port-0-powerful-spring-boot-5o1j2llh1wq9rp.sel4.cloudtype.app/plm/context/space',
+		param: [{ name: 'leftword' }, { name: 'rightword' }],
+	} as ApiOperation<{
+		lw: string
+		rw: string
+		space: number
+	}>,
 }
