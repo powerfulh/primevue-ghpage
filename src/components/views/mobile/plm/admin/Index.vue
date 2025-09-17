@@ -12,6 +12,7 @@ const model = ref({
 	word: '',
 	type: '무엇',
 	memo: '',
+	n: null,
 })
 const options = ['무엇', '결합', '0', '어미', '조사', '1', '기호', '대명사', '감탄사', '접속']
 const justPost = ref('')
@@ -29,17 +30,25 @@ const contextModel = ref({
 	rightword: null,
 })
 const contextCnt = ref(true)
+const newWord = ref(true)
 
-function onClickPost() {
-	api.load('postWord')
-		.setParameter(model)
-		.setWhenSuccess(() => {
-			toast.add({ detail: `Post ✔`, life: 2000 })
-			justPost.value = [model.value.word, model.value.type, model.value.memo].filter(item => item).join()
-			justDelete.value = null
-			model.value.word = model.value.memo = ''
-		})
-		.fire({ credentials: true })
+function afterSubmitWord() {
+	justPost.value = [model.value.word, model.value.type, model.value.memo].filter(item => item).join()
+	justDelete.value = null
+	model.value.word = model.value.memo = ''
+	model.value.n = null
+	newWord.value = true
+}
+function onSubmitWord() {
+	if (newWord.value) {
+		api.load('postWord')
+			.setParameter(model)
+			.setWhenSuccess(() => {
+				toast.add({ detail: `Post ✔`, life: 2000 })
+				afterSubmitWord()
+			})
+			.fire({ credentials: true })
+	}
 }
 function onClickPostCompound() {
 	api.load('postCompound')
@@ -100,11 +109,17 @@ function onClickContext() {
 						<Select v-model="model.type" :options="options" />
 					</InputGroup>
 					<InputGroup>
-						<InputText v-model="model.memo" placeholder="Memo" maxlength="29" @keypress.enter="onClickPost" />
+						<InputText v-model="model.memo" placeholder="Memo" maxlength="29" @keypress.enter="onSubmitWord" />
 					</InputGroup>
 				</form>
 				<hr />
-				<footer style="text-align: center"><Button icon="pi pi-check" @click="onClickPost" /></footer>
+				<footer style="text-align: center">
+					<InputGroup>
+						<InputNumber v-model="model.n" placeholder="🆎🆔" />
+						<ToggleButton v-model="newWord" on-label="➕" off-label="🔧" />
+						<Button icon="pi pi-check" @click="onSubmitWord" />
+					</InputGroup>
+				</footer>
 			</template>
 		</Card>
 		<Card>
