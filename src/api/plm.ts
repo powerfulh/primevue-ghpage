@@ -124,4 +124,9 @@ export default {
 		rw: string
 		space: number
 	}>,
+	putWord: {
+		type: 'put',
+		url: 'https://port-0-powerful-spring-boot-5o1j2llh1wq9rp.sel4.cloudtype.app/plm/word',
+		param: [{ name: 'n' }, { name: 'word' }, { name: 'type' }, { name: 'memo' }],
+	} as ApiOperation<void>,
 }

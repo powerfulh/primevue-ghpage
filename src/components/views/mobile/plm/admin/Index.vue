@@ -48,6 +48,15 @@ function onSubmitWord() {
 				afterSubmitWord()
 			})
 			.fire({ credentials: true })
+	} else {
+		model.value.word = '(유지)'
+		api.load('putWord')
+			.setParameter(model)
+			.setWhenSuccess(() => {
+				toast.add({ detail: `Put ✔`, life: 2000 })
+				afterSubmitWord()
+			})
+			.fire({ credentials: true })
 	}
 }
 function onClickPostCompound() {
