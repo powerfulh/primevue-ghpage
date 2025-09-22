@@ -31,6 +31,10 @@ const contextModel = ref({
 })
 const contextCnt = ref(true)
 const newWord = ref(true)
+const chainModel = ref({
+	n: null,
+	expect: [],
+})
 
 function afterSubmitWord() {
 	justPost.value = [model.value.word, model.value.type, model.value.memo].filter(item => item).join()
@@ -43,9 +47,10 @@ function onSubmitWord() {
 	if (newWord.value) {
 		api.load('postWord')
 			.setParameter(model)
-			.setWhenSuccess(() => {
+			.setWhenSuccess(res => {
 				toast.add({ detail: `Post ✔`, life: 2000 })
 				afterSubmitWord()
+				chainModel.value = res
 			})
 			.fire({ credentials: true })
 	} else {
@@ -105,6 +110,15 @@ function onClickContext() {
 			.fire({ credentials: true })
 	}
 }
+function onClickChain() {
+	api.load('post0Compound')
+		.setParameter(chainModel)
+		.setWhenSuccess(() => {
+			toast.add({ detail: `Post ✔`, life: 2000 })
+			chainModel.value = null
+		})
+		.fire({ credentials: true })
+}
 </script>
 
 <template>
@@ -162,6 +176,10 @@ function onClickContext() {
 			<template #title>방금 등록됨✔</template>
 			<template #content>
 				{{ justPost }}
+				<template v-if="chainModel">
+					<hr />
+					<Button :label="`추가 등록 가능: ${chainModel.expect}`" @click="onClickChain" />
+				</template>
 			</template>
 		</Card>
 		<Card>

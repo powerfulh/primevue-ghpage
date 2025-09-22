@@ -15,7 +15,10 @@ export default {
 		type: 'post',
 		url: 'https://port-0-powerful-spring-boot-5o1j2llh1wq9rp.sel4.cloudtype.app/plm/word',
 		param: [{ name: 'word' }, { name: 'type' }, { name: 'memo' }],
-	} as ApiOperation<void>,
+	} as ApiOperation<{
+		n: number
+		expect: Array<string>
+	}>,
 	getCompound: {
 		type: 'get',
 		url: 'https://port-0-powerful-spring-boot-5o1j2llh1wq9rp.sel4.cloudtype.app/plm/compound/{s}',
@@ -128,5 +131,10 @@ export default {
 		type: 'put',
 		url: 'https://port-0-powerful-spring-boot-5o1j2llh1wq9rp.sel4.cloudtype.app/plm/word',
 		param: [{ name: 'n' }, { name: 'word' }, { name: 'type' }, { name: 'memo' }],
+	} as ApiOperation<void>,
+	post0Compound: {
+		type: 'post',
+		url: 'https://port-0-powerful-spring-boot-5o1j2llh1wq9rp.sel4.cloudtype.app/plm/compound/{n}',
+		param: [{ name: 'n', path: true }],
 	} as ApiOperation<void>,
 }
