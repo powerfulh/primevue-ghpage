@@ -31,10 +31,7 @@ const contextModel = ref({
 })
 const contextCnt = ref(true)
 const newWord = ref(true)
-const chainModel = ref({
-	n: null,
-	expect: [],
-})
+const chainModel = ref(null)
 
 function afterSubmitWord() {
 	justPost.value = [model.value.word, model.value.type, model.value.memo].filter(item => item).join()
