@@ -51,7 +51,7 @@ function onSubmitWord() {
 			})
 			.fire({ credentials: true })
 	} else {
-		model.value.word = '(유지)'
+		model.value.word = `(유지: ${model.value.n})`
 		api.load('putWord')
 			.setParameter(model)
 			.setWhenSuccess(() => {
