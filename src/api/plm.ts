@@ -137,4 +137,9 @@ export default {
 		url: 'https://port-0-powerful-spring-boot-5o1j2llh1wq9rp.sel4.cloudtype.app/plm/compound/{n}',
 		param: [{ name: 'n', path: true }],
 	} as ApiOperation<void>,
+	postUnderstandBox: {
+		type: 'post',
+		url: 'https://port-0-powerful-spring-boot-5o1j2llh1wq9rp.sel4.cloudtype.app/plm/understand/box',
+		param: [{ name: 'src' }],
+	} as ApiOperation<void>,
 }

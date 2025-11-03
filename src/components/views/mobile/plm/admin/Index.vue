@@ -32,6 +32,7 @@ const contextModel = ref({
 const contextCnt = ref(true)
 const newWord = ref(true)
 const chainModel = ref(null)
+const srcModel = ref({ src: '' })
 
 function afterSubmitWord() {
 	justPost.value = [model.value.word, model.value.type, model.value.memo].filter(item => item).join()
@@ -116,6 +117,17 @@ function onClickChain() {
 		})
 		.fire({ credentials: true })
 }
+function onClickPostSrc() {
+	api.load('postUnderstandBox')
+		.setParameter(srcModel)
+		.setWhenSuccess(() => {
+			toast.add({ detail: `Post ✔`, life: 2000 })
+			justPost.value = `${srcModel.value.src}`
+			justDelete.value = null
+			srcModel.value.src = ''
+		})
+		.fire({ credentials: true })
+}
 </script>
 
 <template>
@@ -182,10 +194,27 @@ function onClickChain() {
 		<Card>
 			<template #title>학습 취소</template>
 			<template #content>
-				<InputGroup>
-					<InputNumber v-model="cancelModel.n" placeholder="🆎🆔" @keypress.enter="onClickCancel" />
-					<Button icon="pi pi-check" @click="onClickCancel" />
-				</InputGroup>
+				<form>
+					<InputGroup>
+						<InputNumber v-model="cancelModel.n" placeholder="🆎🆔" @keypress.enter="onClickCancel" />
+						<Button icon="pi pi-check" @click="onClickCancel" />
+					</InputGroup>
+				</form>
+			</template>
+		</Card>
+		<Card>
+			<template #title>문장 등록</template>
+			<template #content>
+				<!-- 지피티 말로는 폼 안에 인풋 텍스트가 하나 있으면 제출한다고 한다 -->
+				<form onsubmit="return false">
+					<InputGroup>
+						<InputText v-model="srcModel.src" placeholder="📋" @keypress.enter="onClickPostSrc" />
+					</InputGroup>
+				</form>
+				<hr />
+				<footer style="text-align: center">
+					<Button icon="pi pi-check" :disabled="srcModel.src.trim() == ''" @click="onClickPostSrc" />
+				</footer>
 			</template>
 		</Card>
 		<LearnItem v-if="justDelete" :item="justDelete" />
