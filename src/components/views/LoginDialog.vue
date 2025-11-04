@@ -37,11 +37,13 @@ if (headerStore.login) emit('login')
 
 <template>
 	<Dialog v-model:visible="visible" modal header="Login">
-		<InputText v-model.trim="param.id" placeholder="ID" maxlength="9" minlength="3" @keypress.enter="authencicate" />
-		<Password v-model="param.pw" placeholder="Password" maxlength="11" minlength="4" :feedback="false" @keypress.enter="authencicate" />
-		<Message v-if="param.id.length == 0" severity="error">Input ID</Message>
-		<Message v-else-if="param.pw.length == 0" severity="error">Input Password</Message>
-		<Message v-else-if="param.pw.length > 11" severity="error">Too long Password</Message>
-		<Button v-else icon="pi pi-check" @click="authencicate"></Button>
+		<form>
+			<InputText v-model.trim="param.id" placeholder="ID" maxlength="9" minlength="3" @keypress.enter="authencicate" />
+			<Password v-model="param.pw" placeholder="Password" maxlength="11" minlength="4" :feedback="false" @keypress.enter="authencicate" />
+			<Message v-if="param.id.length == 0" severity="error">Input ID</Message>
+			<Message v-else-if="param.pw.length == 0" severity="error">Input Password</Message>
+			<Message v-else-if="param.pw.length > 11" severity="error">Too long Password</Message>
+			<Button v-else icon="pi pi-check" @click="authencicate"></Button>
+		</form>
 	</Dialog>
 </template>
