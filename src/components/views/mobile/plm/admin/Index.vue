@@ -194,7 +194,7 @@ function onClickPostSrc() {
 		<Card>
 			<template #title>학습 취소</template>
 			<template #content>
-				<form>
+				<form onsubmit="return false">
 					<InputGroup>
 						<InputNumber v-model="cancelModel.n" placeholder="🆎🆔" @keypress.enter="onClickCancel" />
 						<Button icon="pi pi-check" @click="onClickCancel" />
