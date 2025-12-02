@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import LoginDialog from '@/components/views/LoginDialog.vue'
 import { injectApi } from 'powerful-api-vue3'
-import { Button, Card, InputGroup, InputNumber, InputText, Select, ToggleButton, useToast } from 'primevue'
+import { Button, Card, Checkbox, InputGroup, InputNumber, InputText, Select, ToggleButton, useToast } from 'primevue'
 import { ref } from 'vue'
 import LearnItem from '../LearnItem.vue'
 
@@ -33,6 +33,7 @@ const contextCnt = ref(true)
 const newWord = ref(true)
 const chainModel = ref(null)
 const srcModel = ref({ src: '' })
+const sentenceCheckModel = ref(false)
 
 function afterSubmitWord() {
 	justPost.value = [model.value.word, model.value.type, model.value.memo].filter(item => item).join()
@@ -203,12 +204,15 @@ function onClickPostSrc() {
 			</template>
 		</Card>
 		<Card>
-			<template #title>문장 등록</template>
+			<template #title>
+				문장 등록
+				<Checkbox v-model="sentenceCheckModel" binary />
+			</template>
 			<template #content>
 				<!-- 지피티 말로는 폼 안에 인풋 텍스트가 하나 있으면 제출한다고 한다 -->
 				<form onsubmit="return false">
 					<InputGroup>
-						<InputText v-model="srcModel.src" placeholder="📋" @keypress.enter="onClickPostSrc" />
+						<InputText v-model="srcModel.src" placeholder="📋" :maxlength="sentenceCheckModel ? '60' : '40'" @keypress.enter="onClickPostSrc" />
 					</InputGroup>
 				</form>
 				<hr />
