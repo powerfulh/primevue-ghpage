@@ -47,7 +47,6 @@ const finalMenu = computed(() => {
 	return l
 })
 
-const wTable = ref()
 function onClickGet() {
 	api.load('getWord')
 		.setParameter(p)
@@ -105,6 +104,7 @@ getLearn()
 
 // am
 const po = ref()
+const wTable = ref()
 
 function onClickLearn() {
 	if (scrollInitReady) {
