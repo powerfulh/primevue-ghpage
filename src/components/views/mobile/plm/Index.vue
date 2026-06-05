@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { injectApi } from 'powerful-api-vue3'
 import { Button, Card, Column, DataTable, DataTableRowSelectEvent, InputText, Menu, useToast } from 'primevue'
-import { computed, inject, ref } from 'vue'
+import { computed, inject, nextTick, ref } from 'vue'
 import LearnItem from './LearnItem.vue'
 
 const api = injectApi()
@@ -47,10 +47,19 @@ const finalMenu = computed(() => {
 	return l
 })
 
+const wTable = ref()
 function onClickGet() {
 	api.load('getWord')
 		.setParameter(p)
-		.setWhenSuccess(res => (w.value = res))
+		.setWhenSuccess(res => {
+			w.value = res
+			if (res.length) {
+				nextTick(() => {
+					const firstRow = wTable.value?.$el?.querySelector('.p-datatable-tbody > tr')
+					firstRow?.focus()
+				})
+			}
+		})
 		.fire()
 }
 function onRowSelect(e: DataTableRowSelectEvent) {
@@ -114,7 +123,7 @@ function onClickLearn() {
 					<InputText v-model="p.s" maxlength="10" autofocus style="width: 14rem" @keypress.enter="onClickGet" />
 					<Button icon="pi pi-check" @click="onClickGet"></Button>
 				</form>
-				<DataTable :value="w" selection-mode="single" @row-select="onRowSelect">
+				<DataTable ref="wTable" :value="w" selection-mode="single" @row-select="onRowSelect">
 					<Column field="n" header="🆔" />
 					<Column field="word" header="🆎" />
 					<Column field="type" header="🏷" />
