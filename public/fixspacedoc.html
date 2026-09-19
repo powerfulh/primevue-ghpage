@@ -530,6 +530,7 @@
 				<div class="panel-foot">
 					<span class="hint">Enter를 누르면 실제 서버로 요청이 전송됩니다.</span>
 					<button id="runBtn" type="button">교정 실행</button>
+					<button id="copy-btn" type="button" hidden>결과 복사</button>
 				</div>
 
 				<div class="error-box" id="errorBox"></div>
@@ -555,6 +556,7 @@
 		const ENDPOINT = "https://port-0-powerful-spring-boot-5o1j2llh1wq9rp.sel4.cloudtype.app/powerful/fix/space";
 
 		const runBtn = document.getElementById('runBtn');
+		const copyBtn = document.getElementById('copy-btn');
 		const input = document.getElementById('pureSrc');
 		const resultBox = document.getElementById('resultBox');
 		const resultText = document.getElementById('resultText');
@@ -580,6 +582,8 @@
 
 			runBtn.disabled = true;
 			runBtn.textContent = '요청 중…';
+			copyBtn.hidden = true
+			copyBtn.disabled = false
 
 			try {
 				const url = ENDPOINT + '?pureSrc=' + encodeURIComponent(text);
@@ -626,6 +630,7 @@
 					chip.textContent = '교정된 지점 없음';
 					corrections.appendChild(chip);
 				} else {
+					copyBtn.hidden = false
 					list.forEach((item, i) => {
 						const chip = document.createElement('span');
 						chip.className = 'chip';
@@ -649,6 +654,11 @@
 		}
 
 		runBtn.addEventListener('click', runTest);
+
+		function copyResult() {
+			navigator.clipboard.writeText(resultText.textContent).then(() => copyBtn.disabled = true)
+		}
+		copyBtn.addEventListener('click', copyResult);
 		input.addEventListener('keydown', (e) => {
 			if (e.key === 'Enter') {
 				e.preventDefault();
