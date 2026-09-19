@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>문장 체인 조회</title>
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link
+		href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans+KR:wght@400;500;600&display=swap"
+		rel="stylesheet">
+	<style>
+		:root {
+			--bg: #101215;
+			--panel: #16191d;
+			--panel-2: #1c2025;
+			--border: #262b31;
+			--text: #e7e5e0;
+			--text-dim: #8c9096;
+			--accent: #e0a458;
+			--accent-dim: #7a5a2f;
+			--danger: #d9756a;
+			--mono: 'IBM Plex Mono', monospace;
+			--sans: 'IBM Plex Sans KR', sans-serif;
+		}
+
+		* {
+			box-sizing: border-box;
+		}
+
+		body {
+			margin: 0;
+			min-height: 100vh;
+			background: var(--bg);
+			color: var(--text);
+			font-family: var(--sans);
+			display: flex;
+			justify-content: center;
+			padding: 56px 20px 80px;
+		}
+
+		main {
+			width: 100%;
+			max-width: 680px;
+		}
+
+		h1 {
+			font-family: var(--mono);
+			font-size: 15px;
+			font-weight: 500;
+			letter-spacing: 0.02em;
+			color: var(--text-dim);
+			margin: 0 0 28px;
+		}
+
+		h1 span {
+			color: var(--accent);
+		}
+
+		form {
+			display: flex;
+			gap: 10px;
+			margin-bottom: 8px;
+		}
+
+		input[type="text"] {
+			flex: 1;
+			background: var(--panel);
+			border: 1px solid var(--border);
+			color: var(--text);
+			font-family: var(--sans);
+			font-size: 15px;
+			padding: 13px 16px;
+			border-radius: 8px;
+			outline: none;
+			transition: border-color .15s ease;
+		}
+
+		input[type="text"]:focus {
+			border-color: var(--accent-dim);
+		}
+
+		input[type="text"]::placeholder {
+			color: var(--text-dim);
+		}
+
+		button {
+			background: var(--accent);
+			color: #1a1206;
+			border: none;
+			font-family: var(--sans);
+			font-weight: 600;
+			font-size: 15px;
+			padding: 13px 22px;
+			border-radius: 8px;
+			cursor: pointer;
+			transition: filter .15s ease, transform .05s ease;
+		}
+
+		button:hover {
+			filter: brightness(1.08);
+		}
+
+		button:active {
+			transform: translateY(1px);
+		}
+
+		button:disabled {
+			opacity: .5;
+			cursor: default;
+		}
+
+		.meta {
+			font-family: var(--mono);
+			font-size: 12.5px;
+			color: var(--text-dim);
+			margin: 14px 2px 30px;
+			min-height: 16px;
+		}
+
+		.meta.error {
+			color: var(--danger);
+		}
+
+		.chain {
+			display: flex;
+			flex-direction: column;
+			gap: 18px;
+		}
+
+		.pair {
+			display: flex;
+			flex-direction: column;
+			gap: 0;
+			animation: rise .35s ease both;
+			background: var(--panel-2);
+			border: 1px solid var(--border);
+			border-radius: 14px;
+			padding: 16px;
+		}
+
+		.pair-index {
+			font-family: var(--mono);
+			font-size: 11px;
+			letter-spacing: 0.06em;
+			color: var(--text-dim);
+			margin: 0 0 12px 2px;
+		}
+
+		@keyframes rise {
+			from {
+				opacity: 0;
+				transform: translateY(6px);
+			}
+
+			to {
+				opacity: 1;
+				transform: translateY(0);
+			}
+		}
+
+		.card {
+			background: var(--panel);
+			border: 1px solid var(--border);
+			border-radius: 10px;
+			padding: 16px 18px;
+		}
+
+		.card-row {
+			display: flex;
+			align-items: baseline;
+			gap: 10px;
+			margin-bottom: 6px;
+		}
+
+		.card-n {
+			font-family: var(--mono);
+			font-size: 12px;
+			color: var(--accent);
+			background: rgba(224, 164, 88, 0.12);
+			border-radius: 5px;
+			padding: 2px 7px;
+		}
+
+		.card-date {
+			font-family: var(--mono);
+			font-size: 11px;
+			color: var(--text-dim);
+			margin-left: auto;
+		}
+
+		.card-sentence {
+			font-size: 15px;
+			line-height: 1.6;
+			color: var(--text);
+		}
+
+		.arrow {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			padding: 6px 0;
+			color: var(--accent);
+			font-size: 17px;
+		}
+
+		.empty {
+			font-family: var(--mono);
+			font-size: 13px;
+			color: var(--text-dim);
+			text-align: center;
+			padding: 60px 0;
+		}
+
+		.target-badge {
+			font-family: var(--mono);
+			font-size: 11px;
+			color: var(--text-dim);
+		}
+	</style>
+</head>
+
+<body>
+	<main>
+		<h1>문장 체인 조회 <span>/plm/sentence/string</span></h1>
+		<form id="searchForm">
+			<input type="text" id="keywordInput" placeholder="키워드 입력" autocomplete="off" autofocus>
+			<button type="submit" id="searchBtn">조회</button>
+		</form>
+		<div class="meta" id="meta"></div>
+		<div class="chain" id="chain"></div>
+	</main>
+
+	<script>
+		const API_BASE = "https://port-0-powerful-spring-boot-5o1j2llh1wq9rp.sel4.cloudtype.app/plm/sentence/string/";
+
+		const form = document.getElementById('searchForm');
+		const input = document.getElementById('keywordInput');
+		const btn = document.getElementById('searchBtn');
+		const metaEl = document.getElementById('meta');
+		const chainEl = document.getElementById('chain');
+
+		form.addEventListener('submit', async (e) => {
+			e.preventDefault();
+			const keyword = input.value.trim();
+			if (!keyword) return;
+
+			btn.disabled = true;
+			btn.textContent = '조회 중…';
+			metaEl.classList.remove('error');
+			metaEl.textContent = '조회 중…';
+			chainEl.innerHTML = '';
+
+			try {
+				const res = await fetch(API_BASE + encodeURIComponent(keyword));
+				if (!res.ok) {
+					throw new Error(`요청 실패 (status ${res.status})`);
+				}
+				const items = await res.json();
+				render(items);
+			} catch (err) {
+				metaEl.classList.add('error');
+				metaEl.textContent = '오류: ' + err.message;
+			} finally {
+				btn.disabled = false;
+				btn.textContent = '조회';
+			}
+		});
+
+		function formatDate(str) {
+			if (!str) return '';
+			return str.replace('T', ' ').slice(0, 16);
+		}
+
+		function cardHtml(item) {
+			return `
+    <div class="card">
+      <div class="card-row">
+        <span class="card-n">n=${item.n}</span>
+        <span class="target-badge">target=${item.target}</span>
+        <span class="card-date">${formatDate(item.updatedDate)}</span>
+      </div>
+      <div class="card-sentence">${escapeHtml(item.sentence)}</div>
+    </div>
+  `;
+		}
+
+		function escapeHtml(str) {
+			const div = document.createElement('div');
+			div.textContent = str ?? '';
+			return div.innerHTML;
+		}
+
+		function render(items) {
+			if (!Array.isArray(items) || items.length === 0) {
+				metaEl.textContent = '결과 없음';
+				chainEl.innerHTML = '<div class="empty">결과가 없습니다.</div>';
+				return;
+			}
+
+			const byN = new Map();
+			items.forEach(item => byN.set(item.n, item));
+
+			const pairs = [];
+			const unmatched = [];
+			items.forEach(item => {
+				if (item.target >= 0) {
+					const source = byN.get(item.target);
+					if (source) {
+						pairs.push([source, item]);
+					} else {
+						unmatched.push(item);
+					}
+				}
+			});
+
+			metaEl.textContent = `총 ${items.length}건 · 페어 ${pairs.length}개` + (unmatched.length ? ` · 미매칭 ${unmatched.length}개` : '');
+
+			if (pairs.length === 0) {
+				chainEl.innerHTML = '<div class="empty">target ≥ 0 이면서 매칭되는 항목이 없습니다.</div>';
+				return;
+			}
+
+			chainEl.innerHTML = pairs.map(([source, target], idx) => `
+    <div class="pair">
+      <div class="pair-index">PAIR ${idx + 1}</div>
+      ${cardHtml(source)}
+      <div class="arrow">➡️</div>
+      ${cardHtml(target)}
+    </div>
+  `).join('');
+		}
+	</script>
+</body>
+
+</html>
