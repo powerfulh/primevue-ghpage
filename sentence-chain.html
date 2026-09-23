@@ -223,7 +223,7 @@
 
 <body>
 	<main>
-		<h1>문장 체인 조회 <span>/plm/sentence/string</span></h1>
+		<h1>문장 체인 조회</h1>
 		<form id="searchForm">
 			<input type="text" id="keywordInput" placeholder="키워드 입력" autocomplete="off" autofocus>
 			<button type="submit" id="searchBtn">조회</button>
@@ -233,7 +233,8 @@
 	</main>
 
 	<script>
-		const API_BASE = "https://port-0-powerful-spring-boot-5o1j2llh1wq9rp.sel4.cloudtype.app/plm/sentence/string/";
+		// const API_BASE = "https://port-0-powerful-spring-boot-5o1j2llh1wq9rp.sel4.cloudtype.app/plm/sentence/string/";
+		const API_BASE = "https://port-0-powerful-spring-boot-5o1j2llh1wq9rp.sel4.cloudtype.app/plm/sentence/string";
 
 		const form = document.getElementById('searchForm');
 		const input = document.getElementById('keywordInput');
@@ -244,7 +245,7 @@
 		form.addEventListener('submit', async (e) => {
 			e.preventDefault();
 			const keyword = input.value.trim();
-			if (!keyword) return;
+			// if (!keyword) return;
 
 			btn.disabled = true;
 			btn.textContent = '조회 중…';
@@ -253,7 +254,7 @@
 			chainEl.innerHTML = '';
 
 			try {
-				const res = await fetch(API_BASE + encodeURIComponent(keyword));
+				const res = await fetch(API_BASE + (keyword ? `?keyword=${encodeURIComponent(keyword)}` : ''));
 				if (!res.ok) {
 					throw new Error(`요청 실패 (status ${res.status})`);
 				}
